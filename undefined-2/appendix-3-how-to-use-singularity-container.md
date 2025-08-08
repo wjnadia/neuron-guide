@@ -63,8 +63,10 @@ local image : 싱귤레러티 이미지 파일 혹은 샌드박스 디렉터리(
 URI 
 library:// 컨테이너 라이브러리 (default https://cloud.sylabs.io/library) 
 docker:// 도커 레지스트리 (default 도커 허브)
+docker-archive:// 도커 아카이브 파일
 shub:// 싱규레러티 레지스트리 (default 싱귤레러티 허브)
 oras:// OCI 레지스트리
+oci-archive:// OCI 아카이브 파일
 ```
 {% endcode %}
 
@@ -80,14 +82,17 @@ oras:// OCI 레지스트리
 
 ③ 도커 허브로부터 ubuntu3.sif 이미지 빌드하기
  $ singularity build --fakeroot ubuntu3.sif docker://ubuntu:18.04 
-
-④ NGC(Nvidia GPU Cloud) 도커 레지스트리로부터 '22년 03월 배포 pytorch 이미지 빌드하기
+ 
+④ 도커 tar 파일로부터 pytorch.sif 이미지 빌드하기
+ $ singularity build --fakeroot pytorch.sif docker-archive://pytorch.tar
+ 
+⑤ NGC(Nvidia GPU Cloud) 도커 레지스트리로부터 '22년 03월 배포 pytorch 이미지 빌드하기
  $ singularity build --fakeroot pytorch1.sif docker://nvcr.io/nvidia/pytorch:22.03-py3
 
-⑤ Definition 파일로부터 pytorch.sif 이미지 빌드하기
+⑥ Definition 파일로부터 pytorch.sif 이미지 빌드하기
  $ singularity build --fakeroot pytorch2.sif pytorch.def**
 
-⑥ fakeroot 사용하지 않고 Definition 파일로부터  ubuntu4.sif 이미지 빌드하기
+⑦ fakeroot 사용하지 않고 Definition 파일로부터  ubuntu4.sif 이미지 빌드하기
    # singularity 3.11.0 버전 이상에서 지원
    # Definition 파일에서 기존 컨테이너 이미지 기반 패키지 설치에 적합하며,     
      apt-get과 같은 시스템패키지 관리자를 사용하는 경우 일부 패키지(git 등) 설치 과정에서 
