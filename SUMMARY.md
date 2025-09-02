@@ -26,6 +26,7 @@
 * [딥러닝 프레임워크 병렬화 (Horovod)](undefined-2/appendix-8-how-to-use-deep-learning-framework-parallelization-horovod.md)
 * [AI 멀티노드 활용](undefined-2/ai.md)
 * [SSH Port Forwarding 을 통한 Jupyter 작업 실행](undefined-2/ssh-port-forwarding-jupyter.md)
+* [NVIDIA GPU Profiling](undefined-2/nvidia-gpu-profiling.md)
 
 ## External Link
 
