@@ -50,6 +50,8 @@ Neuron 시스템의 작업 스케쥴러는 SLURM을 사용한다. 이 장에서�
 
 ***
 
+***
+
 **\[Application 별 SBATCH 옵션 이름표]**
 
 | **Application종류** | **SBATCH 옵션 이름** | **Application종류** | **SBATCH 옵션 이름** |
@@ -63,6 +65,8 @@ Neuron 시스템의 작업 스케쥴러는 SLURM을 사용한다. 이 장에서�
 | R                 | R                | Pytorch           | pytorch          |
 | VASP              | vasp             | Sklearn           | sklearn          |
 | Gromacs           | gromacs          | 그 외 applications  | etc              |
+
+***
 
 ***
 
@@ -122,6 +126,8 @@ $ nvidia-smi -l 2
 | #SBATCH --cpus-per-task=(cpu core 수) | 프로세스 당 할당될 cpu core 수 |
 | #SBATCH --cpus-per-gpu=(cpu core 수)  | GPU 당 할당될 cpu core 수  |
 | #SBATCH --exclusive                  | 노드를 전용으로 사용하기 위한 옵션   |
+
+***
 
 ***
 
@@ -423,6 +429,8 @@ $ scancel [Job_ID]
 ```
 
 ※ Job ID는 squeue 명령으로 확인 가능
+
+***
 
 ***
 

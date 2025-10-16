@@ -10,16 +10,16 @@
 [neuron-system-overview-and-configuration.md](undefined/neuron-system-overview-and-configuration.md)
 {% endcontent-ref %}
 
-{% content-ref url="undefined/user-environment.md" %}
-[user-environment.md](undefined/user-environment.md)
+{% content-ref url="system/user-environment.md" %}
+[user-environment.md](system/user-environment.md)
 {% endcontent-ref %}
 
 {% content-ref url="undefined/user-programming-environment.md" %}
 [user-programming-environment.md](undefined/user-programming-environment.md)
 {% endcontent-ref %}
 
-{% content-ref url="undefined/running-jobs-through-scheduler-slurm.md" %}
-[running-jobs-through-scheduler-slurm.md](undefined/running-jobs-through-scheduler-slurm.md)
+{% content-ref url="system/running-jobs-through-scheduler-slurm.md" %}
+[running-jobs-through-scheduler-slurm.md](system/running-jobs-through-scheduler-slurm.md)
 {% endcontent-ref %}
 
 {% content-ref url="undefined/user-support.md" %}
@@ -46,12 +46,12 @@
 [appendix-3-how-to-use-singularity-container.md](undefined-2/appendix-3-how-to-use-singularity-container.md)
 {% endcontent-ref %}
 
-{% content-ref url="undefined-2/appendix-4-how-to-use-lustre-striping.md" %}
-[appendix-4-how-to-use-lustre-striping.md](undefined-2/appendix-4-how-to-use-lustre-striping.md)
+{% content-ref url="appendix/appendix-4-how-to-use-lustre-striping.md" %}
+[appendix-4-how-to-use-lustre-striping.md](appendix/appendix-4-how-to-use-lustre-striping.md)
 {% endcontent-ref %}
 
-{% content-ref url="undefined-2/appendix-5-neuron-jupyter-user-guideline.md" %}
-[appendix-5-neuron-jupyter-user-guideline.md](undefined-2/appendix-5-neuron-jupyter-user-guideline.md)
+{% content-ref url="appendix/appendix-5-neuron-jupyter-user-guideline.md" %}
+[appendix-5-neuron-jupyter-user-guideline.md](appendix/appendix-5-neuron-jupyter-user-guideline.md)
 {% endcontent-ref %}
 
 {% content-ref url="undefined-2/appendix-6-how-to-use-keras-based-multi-gpu.md" %}
