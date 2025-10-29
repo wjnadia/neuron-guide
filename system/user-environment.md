@@ -100,7 +100,7 @@ $ sftp [사용자ID@]neuron-dm.ksc.re.kr [-P 22]
 
 ### 4. 노드구성
 
-<table><thead><tr><th width="146" align="center">노드</th><th width="189" align="center">호스트명</th><th width="145" align="center">CPU Limit</th><th align="center">비고</th></tr></thead><tbody><tr><td align="center">로그인 노드</td><td align="center"><p>neuron.ksc.re.kr</p><p><em>(</em>neuron01.ksc.re.kr, neuron02.ksc.re.kr, neuron03.ksc.re.kr)</p></td><td align="center">20분</td><td align="center"><p>• ssh/scp 접속 가능</p><p>• 컴파일 및 batch 작업제출용</p><p>• ftp/sftp 접속 불가</p></td></tr><tr><td align="center">Datamover 노드</td><td align="center">neuron-dm.ksc.re.kr</td><td align="center">-</td><td align="center"><p>• ssh/scp/sftp/ftp 접속 가능</p><p>• 컴파일 및 작업제출 불가</p></td></tr></tbody></table>
+<table><thead><tr><th width="146" align="center">노드</th><th width="189" align="center">호스트명</th><th width="145" align="center">CPU Limit</th><th align="center">비고</th></tr></thead><tbody><tr><td align="center">로그인 노드</td><td align="center"><p>neuron.ksc.re.kr</p><p><em>(</em>neuron01.ksc.re.kr, neuron02.ksc.re.kr, neuron03.ksc.re.kr)</p></td><td align="center">2시간</td><td align="center"><p>• ssh/scp 접속 가능</p><p>• 컴파일 및 batch 작업제출용</p><p>• ftp/sftp 접속 불가</p></td></tr><tr><td align="center">Datamover 노드</td><td align="center">neuron-dm.ksc.re.kr</td><td align="center">-</td><td align="center"><p>• ssh/scp/sftp/ftp 접속 가능</p><p>• 컴파일 및 작업제출 불가</p></td></tr></tbody></table>
 
 
 
