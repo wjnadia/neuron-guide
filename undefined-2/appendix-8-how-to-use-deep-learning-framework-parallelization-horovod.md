@@ -2,10 +2,10 @@
 
 ## 가. Tensorflow에서 Horovod 사용법
 
-다중노드에서 멀티 GPU를 활용할 경우 Horovod를 Tensorflow와 연동하여 병렬화가 가능하다. 아래 예시와 같이 Horovod 사용을 위한 코드를 추가해주면 Tensorflow와 연동이 가능하다. Tensorflow 및 Tensorflow에서 활용 가능한 Keras API 모두 Horovod와 연동이 가능하며 우선 Tensorflow에서 Horovod와 연동하는 방법을 소개한다.\
+다중노드에서 멀티 GPU를 활용할 경우 Horovod를 Tensorflow와 연동하여 병렬화가 가능합니다. 아래 예시와 같이 Horovod 사용을 위한 코드를 추가해주면 Tensorflow와 연동이 가능합니다. Tensorflow 및 Tensorflow에서 활용 가능한 Keras API 모두 Horovod와 연동이 가능하며 우선 Tensorflow에서 Horovod와 연동하는 방법을 소개합니다.\
 (예시: MNIST Dataset 및 LeNet-5 CNN 구조)
 
-※ Tensorflow에서 Horovod 활용을 위한 자세한 사용법은 Horovod 공식 가이드 참조\
+※ Tensorflow에서 Horovod 활용을 위한 자세한 사용법은 Horovod 공식 가이드 참조 바랍니다.\
 (https://github.com/horovod/horovod#usage)
 
 
@@ -20,7 +20,7 @@ hvd.init()
 
 ※ horovod.tensorflow: Horovod를 Tensorflow와 연동하기 위한 모듈
 
-※ Horovod를 사용하기 위하여 초기화한다.
+※ Horovod를 사용하기 위하여 초기화합니다.
 
 
 
@@ -31,7 +31,7 @@ hvd.init()
 keras.datasets.mnist.load_data('MNIST-data-%d' % hvd.rank())
 ```
 
-※ 각 작업별로 접근할 dataset을 설정하기 위하여 Horovod rank에 따라 설정 및 생성한다.
+※ 각 작업별로 접근할 dataset을 설정하기 위하여 Horovod rank에 따라 설정 및 생성합니다.
 
 
 
@@ -46,9 +46,9 @@ hooks = [hvd.BroadcastGlobalVariablesHook(0),
 tf.train.StopAtStepHook(last_step=20000 // hvd.size()), ... ]
 ```
 
-※ Optimizer에 Horovod 관련 설정을 적용하고 각 작업에 broadcast를 활용하여 전달함
+※ Optimizer에 Horovod 관련 설정을 적용하고 각 작업에 broadcast를 활용하여 전달합니다.
 
-※ 각 작업들의 학습과정 step을 Horovod 작업 수에 따라 설정함
+※ 각 작업들의 학습과정 step을 Horovod 작업 수에 따라 설정합니다.
 
 
 
@@ -60,7 +60,7 @@ config.gpu_options.allow_growth = True
 config.gpu_options.visible_device_list = str(hvd.local_rank())
 ```
 
-※ 각 GPU 별로 하나의 작업을 Horovod의 local rank에 따라 할당함
+※ 각 GPU 별로 하나의 작업을 Horovod의 local rank에 따라 할당합니다.
 
 
 
@@ -74,13 +74,13 @@ hooks=hooks,
 config=config) as mon_sess:
 ```
 
-※ Checkpoint 저장 및 불러오는 작업은 하나의 프로세스에서 수행되어야 하므로 rank 0번에 설정함
+※ Checkpoint 저장 및 불러오는 작업은 하나의 프로세스에서 수행되어야 하므로 rank 0번에 설정합니다.
 
 
 
 ## 나. Keras에서 Horovod 사용법
 
-Tensorflow에서는 Keras API를 활용할 경우에도 Horovod와 연동하여 병렬화가 가능하다. 아래 예시와 같이 Horovod 사용을 위한 코드를 추가해주면 Keras와 연동이 가능하다.\
+Tensorflow에서는 Keras API를 활용할 경우에도 Horovod와 연동하여 병렬화가 가능합니다. 아래 예시와 같이 Horovod 사용을 위한 코드를 추가해주면 Keras와 연동이 가능합니다.\
 (예시: MNIST Dataset 및 LeNet-5 CNN 구조)
 
 ※ Keras에서 Horovod 활용을 위한 자세한 사용법은 Horovod 공식 가이드 참조\
@@ -98,7 +98,7 @@ hvd.init()
 
 ※ horovod.tensorflow.keras: Horovod를 Tensorflow 내의 Keras와 연동하기 위한 모듈
 
-※ Horovod를 사용하기 위하여 초기화한다.
+※ Horovod를 사용하기 위하여 초기화 합니다.
 
 
 
@@ -110,7 +110,7 @@ config.gpu_options.allow_growth = True
 config.gpu_options.visible_device_list = str(hvd.local_rank())
 ```
 
-※ 각 GPU 별로 하나의 작업을 Horovod의 local rank에 따라 할당함
+※ 각 GPU 별로 하나의 작업을 Horovod의 local rank에 따라 할당합니다.
 
 
 
@@ -124,9 +124,9 @@ opt = hvd.DistributedOptimizer(opt)
 callbacks = [ hvd.callbacks.BroadcastGlobalVariablesCallback(0), ]
 ```
 
-※ 각 작업들의 학습과정 step을 Horovod 작업 수에 따라 설정함
+※ 각 작업들의 학습과정 step을 Horovod 작업 수에 따라 설정합니다.
 
-※ Optimizer에 Horovod 관련 설정을 적용하고 각 작업에 broadcast를 활용하여 전달함
+※ Optimizer에 Horovod 관련 설정을 적용하고 각 작업에 broadcast를 활용하여 전달합니다.
 
 
 
@@ -138,7 +138,7 @@ if hvd.rank() == 0:
     callbacks.append(keras.callbacks.ModelCheckpoint('./checkpoint-{epoch}.h5'))
 ```
 
-※ Checkpoint 저장 및 불러오는 작업은 하나의 프로세스에서 수행되어야 하여 rank 0번에 설정함
+※ Checkpoint 저장 및 불러오는 작업은 하나의 프로세스에서 수행되어야 하여 rank 0번에 설정합니다.
 
 
 
@@ -149,16 +149,16 @@ model.fit(x_train, y_train, batch_size=batch_size, callbacks=callbacks, epochs=e
 verbose=1 if hvd.rank() == 0 else 0, validation_data=(x_test, y_test))
 ```
 
-※ 학습 중 출력되는 문구를 Rank 0번 작업에서만 출력하기 위하여 Rank 0번 작업만 verbose 값을 1로 설정함
+※ 학습 중 출력되는 문구를 Rank 0번 작업에서만 출력하기 위하여 Rank 0번 작업만 verbose 값을 1로 설정합니다.
 
 
 
 ## 다. PyTorch에서 Horovod 사용법
 
-다중노드에서 멀티 GPU를 활용할 경우 Horovod를 PyTorch와 연동하여 병렬화가 가능하다. 아래 예시와 같이 Horovod 사용을 위한 코드를 추가해주면 PyTorch와 연동이 가능하다.\
+다중노드에서 멀티 GPU를 활용할 경우 Horovod를 PyTorch와 연동하여 병렬화가 가능합니다. 아래 예시와 같이 Horovod 사용을 위한 코드를 추가해주면 PyTorch와 연동이 가능합니다.\
 (예시: MNIST Dataset 및 LeNet-5 CNN 구조)
 
-※ PyTorch에서 Horovod 활용을 위한 자세한 사용법은 Horovod 공식 가이드 참조\
+※ PyTorch에서 Horovod 활용을 위한 자세한 사용법은 Horovod 공식 가이드 참조 바랍니다.\
 ([https://github.com/horovod/horovod/blob/master/docs/pytorch.rst](https://github.com/horovod/horovod/blob/master/docs/pytorch.rst))
 
 
@@ -179,9 +179,9 @@ if args.cuda:
 
 ※ horovod.torch: Horovod를 PyTorch와 연동하기 위한 모듈
 
-※ Horovod 초기화 및 초기화 과정에서 설정된 rank에 따라 작업을 수행할 device를 설정한다.
+※ Horovod 초기화 및 초기화 과정에서 설정된 rank에 따라 작업을 수행할 device를 설정합니다.
 
-※ 각 작업별로 CPU thread 1개를 사용하기 위해 torch.set\_num\_threads(1)를 사용한다.
+※ 각 작업별로 CPU thread 1개를 사용하기 위해 torch.set\_num\_threads(1)를 사용합니다.
 
 
 
@@ -200,7 +200,7 @@ train_sampler.set_epoch(epoch)
 
 ※ train\_sampler.set\_epoch(epoch): train sampler의 epoch 설정
 
-※ Training dataset이 여러 작업들에 나뉘어서 처리되므로 전체 dataset 크기 확인을 위하여 len(train\_sampler)을 사용한다.
+※ Training dataset이 여러 작업들에 나뉘어서 처리되므로 전체 dataset 크기 확인을 위하여 len(train\_sampler)을 사용합니다.
 
 
 
@@ -213,7 +213,7 @@ avg_tensor = hvd.allreduce(tensor, name=name)
 return avg_tensor.item()
 ```
 
-※ 여러 노드에 걸쳐 평균값을 계산하기 위하여 Horovod의 Allreduce 통신을 활용하여 계산한다.
+※ 여러 노드에 걸쳐 평균값을 계산하기 위하여 Horovod의 Allreduce 통신을 활용하여 계산합니다.
 
 
 
@@ -229,9 +229,9 @@ if hvd.rank() == 0:
            test_loss, 100. * test_accuracy))
 ```
 
-※ 여러 노드에 걸쳐 평균값을 계산해야 하므로 위에서 선언된 metric\_average 함수를 활용한다.
+※ 여러 노드에 걸쳐 평균값을 계산해야 하므로 위에서 선언된 metric\_average 함수를 활용합니다.
 
-※ 각 노드별로 Allreduce 통신을 거쳐 loss 및 accuracy에 대해 계산된 값을 동일하게 가지고 있으므로 rank 0번에서 print 함수를 수행한다.
+※ 각 노드별로 Allreduce 통신을 거쳐 loss 및 accuracy에 대해 계산된 값을 동일하게 가지고 있으므로 rank 0번에서 print 함수를 수행합니다.
 
 
 
@@ -253,9 +253,9 @@ test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=args.test_bat
 sampler=test_sampler, **kwargs)
 ```
 
-※ 각 작업별로 접근할 dataset을 설정하기 위하여 Horovod rank에 따라 설정 및 생성한다.
+※ 각 작업별로 접근할 dataset을 설정하기 위하여 Horovod rank에 따라 설정 및 생성합니다.
 
-※ PyTorch의 distributed sampler를 설정하여 이를 data loader에 할당한다.
+※ PyTorch의 distributed sampler를 설정하여 이를 data loader에 할당합니다.
 
 
 
@@ -271,10 +271,10 @@ for epoch in range(1, args.epochs + 1):
     test(args, model, test_loader, test_sampler)
 ```
 
-※ Optimizer에 Horovod 관련 설정을 적용하고 각 작업에 broadcast를 활용하여 전달함
+※ Optimizer에 Horovod 관련 설정을 적용하고 각 작업에 broadcast를 활용하여 전달합니다.
 
-※ Training 및 test 과정에 sampler를 추가하여 각 함수에 전달함
+※ Training 및 test 과정에 sampler를 추가하여 각 함수에 전달합니다.
 
 {% hint style="info" %}
-2022년 9월 22일에 마지막으로 업데이트되었습니다.
+2022년 9월 22일에 마지막으로 업데이트 되었습니다.
 {% endhint %}

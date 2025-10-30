@@ -8,7 +8,7 @@ Jupyter Notebook은 웹 기반의 오픈소스 어플리케이션으로 프로�
 
 이 문서에서는 뉴론 시스템에서 SSH Port Forwarding 을 통한 Jupyter Notebook 작업 실행 방법에 대해 안내 드립니다.
 
-<mark style="color:red;">**※ 작업 디렉터리 : /scratch/$USER**</mark> <mark style="color:red;">**(사용자 작업은 /scratch/$USER 및 하위 경로에서만 제출 가능)**</mark>
+<mark style="color:red;">**※ 작업 디렉터리 : /scratch/$USER**</mark> <mark style="color:red;">**(사용자 작업은 /scratch/$USER 및 하위 경로에서만 제출 가능합니다.)**</mark>
 
 
 
@@ -56,11 +56,11 @@ jupyter lab --ip=0.0.0.0 --port=${PORT_JU} --NotebookApp.token=${USER}
 echo "end of the job"
 ```
 
-<mark style="color:red;">※ jupyter 파티션은 작업 제출이 불가</mark>
+<mark style="color:red;">※ jupyter 파티션은 작업 제출이 불가합니다.</mark>
 
-<mark style="color:red;">※ --gres, --cpus-per-task로 GPU, CPU 개수 설정 가능</mark>
+<mark style="color:red;">※ --gres, --cpus-per-task로 GPU, CPU 개수 설정 가능합니다.</mark>
 
-<mark style="color:red;">※ conda 가상환경 notebook에 jupyter notebook, jupyterlab 등 설치되어 있어야 합니다.</mark> \ <mark style="color:red;">(기존</mark> [<mark style="color:red;">Neuron Jupyter 사용자</mark>](broken-reference)<mark style="color:red;">는 별도로 설치할 필요가 없습니다.)</mark>
+<mark style="color:red;">※ conda 가상환경 notebook에 jupyter notebook, jupyterlab 등 설치되어 있어야 합니다.</mark> \ <mark style="color:red;">(기존 뉴론 Jupyter 사용자는 별도로 설치할 필요가 없습니다.</mark>  [appendix-5-neuron-jupyter-user-guideline.md](../appendix/appendix-5-neuron-jupyter-user-guideline.md "mention")<mark style="color:red;">)</mark>
 
 ### 2. 작업 스크립트 제출 <a href="#submit" id="submit"></a>
 
@@ -78,7 +78,7 @@ $ cat port_forwarding_command
 ssh -L localhost:8888:gpu30:22782 $USER@neuron.ksc.re.kr
 ```
 
-<mark style="color:red;">※ port\_forwarding\_command 파일의 gpu30:22782 는 실행할 때 마다 바뀌기 때문에 꼭 확인 필요</mark>
+<mark style="color:red;">※ port\_forwarding\_command 파일의 gpu30:22782 는 실행할 때 마다 바뀌기 때문에 꼭 확인이 필요합니다.</mark>
 
 
 

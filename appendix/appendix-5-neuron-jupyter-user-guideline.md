@@ -147,15 +147,15 @@ done
 
 ※ 유료 과금 정책은 기존 Neuron 시스템 과금 정책을 따르고 정보는 국가슈퍼컴퓨팅 홈페이지 요금 안내 페이지 (https://www.ksc.re.kr/jwjg/gjbg/ygan) 에서 확인 가능합니다.
 
-* Job queue 에서 해당 queue를 선택하고 Submit버튼을 클릭하여 Jupyter Notebook 실행 (other queues로도 실행 가능하나, 다만 과금 발생함, 과금 정보는 KSC 홈페이지 Neuron 과금 정보 참고)
+* Job queue 에서 해당 queue를 선택하고 Submit버튼을 클릭하여 Jupyter Notebook 실행 (other queues로도 실행 가능하나, 다만 과금 발생함, 과금 정보는 KSC 홈페이지 Neuron 과금 정보 참고 바랍니다.)
 
 <figure><img src="../.gitbook/assets/jupyter_queue_selection_v2.png" alt=""><figcaption></figcaption></figure>
 
-* 다음과 같은 화면이 몇 초간 진행 되면서 자원 할당이 진행된다.
+* 다음과 같은 화면이 몇 초간 진행 되면서 자원 할당이 진행됩니다.
 
 <figure><img src="../.gitbook/assets/processing (1).png" alt=""><figcaption></figcaption></figure>
 
-* Default로 https://jupyter.ksc.re.kr/user/a1113a01/lab JupyterLab 화면이 실행된다.
+* Default로 https://jupyter.ksc.re.kr/user/a1113a01/lab JupyterLab 화면이 실행됩니다.
 
 <figure><img src="../.gitbook/assets/jupyterlab.png" alt=""><figcaption></figcaption></figure>
 
@@ -169,22 +169,22 @@ done
 * <mark style="color:red;">**로그 저장 디렉터리: /scratch/\[사용자ID]/log/작업ID.log**</mark>
 * <mark style="color:red;">**작업 파일 저장 디렉터리: /scratch/\[사용자ID]/workspace/**</mark>
 
-※ 사용자는 본인이 필요로 하는 머신러닝/딥러닝 라이브러리들을 .../notebook conda 환경에 설치하기 때문에 기본 쿼터가 큰 /scratch/사용자ID/ 에 설치된다. (Jupyter 실행 후 발생하는 로그파일도 /scratch/사용자ID 에 저장)
+※ 사용자는 본인이 필요로 하는 머신러닝/딥러닝 라이브러리들을 .../notebook conda 환경에 설치하기 때문에 기본 쿼터가 큰 /scratch/사용자ID/ 에 설치됩니다. (Jupyter 실행 후 발생하는 로그파일도 /scratch/사용자ID 에 저장)
 
-※ 사용자가 작성한 코드는 /scratch/사용자ID/에 저장된다.
+※ 사용자가 작성한 코드는 /scratch/사용자ID/에 저장됩니다.
 
-※ conda 환경 백업을 위한 conda 환경 내보내기 및 가져오기 관련 정보는 KISTI 홈페이지 소프트웨어 지침서에서 확인할 수 있다.
+※ conda 환경 백업을 위한 conda 환경 내보내기 및 가져오기 관련 정보는 KISTI 홈페이지 소프트웨어 지침서에서 확인할 수 있습니다.
 
 
 
-* Terminal 실행, Launcher 탭에서 Terminal 아이콘을 클릭한다.
-  * Launcher 탭이 보이지 않을 경우 Menu Bars에서 + 아이콘을 클릭한다.
+* Terminal 실행, Launcher 탭에서 Terminal 아이콘을 클릭합니다.
+  * Launcher 탭이 보이지 않을 경우 Menu Bars에서 + 아이콘을 클릭합니다.
 
 ![](../.gitbook/assets/eDtreex0IDwyL3d.png)
 
 ![](../.gitbook/assets/1pQTEGKnXpoCpqm.png)
 
-* Tensorboard 실행, Menu Bars->+아이콘->Launcher->Tensorboard를 클릭한다.
+* Tensorboard 실행, Menu Bars->+아이콘->Launcher->Tensorboard를 클릭합니다.
 
 ![](../.gitbook/assets/zoYS0S9gCXUvx4R.png)
 
@@ -192,9 +192,9 @@ done
 
 #### **2) 실행중인 세션 종료**
 
-* 다음과 같이, Left Side Bar에서 Session 탭을 클릭하여 실행중인 Terminal Sessions 이나 Kernel Sessions들을 Shut Down 버튼을 클릭하여 종료한다.
+* 다음과 같이, Left Side Bar에서 Session 탭을 클릭하여 실행중인 Terminal Sessions 이나 Kernel Sessions들을 Shut Down 버튼을 클릭하여 종료합니다.
 
-※ 세션을 종료시키지 않고 JupyterHub 웹페이지를 종료하는 경우, 다음 Jupyter 실행 시에도 그대로 남아있게 된다. (과금은 진행되지 않음)
+※ 세션을 종료시키지 않고 JupyterHub 웹페이지를 종료하는 경우, 다음 Jupyter 실행 시에도 그대로 남아있게 됩니다. (과금은 진행되지 않습니다)
 
 <figure><img src="../.gitbook/assets/shutdown.png" alt=""><figcaption></figcaption></figure>
 
@@ -206,10 +206,7 @@ File -> Hub Control Panel -> Stop My Server
 
 <figure><img src="../.gitbook/assets/stop.png" alt=""><figcaption></figcaption></figure>
 
-<mark style="color:red;">**※ 홈페이지 Logout 시 실행중인 Jupyter 및 세션들은 모두 자동으로 종료된다.**</mark>
-
-\
-
+<mark style="color:red;">**※ 홈페이지 Logout 시 실행중인 Jupyter 및 세션들은 모두 자동으로 종료됩니다.**</mark>
 
 
 
@@ -217,17 +214,17 @@ File -> Hub Control Panel -> Stop My Server
 
 ### **1. 예제 코드 실행에 필요한 라이브러리 설치**
 
-* Launcher에서 Terminal 클릭하여 머신러닝/딥러닝에 필요한 라이브러리 설치한다.
+* Launcher에서 Terminal 클릭하여 머신러닝/딥러닝에 필요한 라이브러리 설치합니다.
 
 <figure><img src="../.gitbook/assets/1.png" alt=""><figcaption></figcaption></figure>
 
-* 터미널 환경에서 conda activate notebook 명령어로 notebook 환경을 활성화하고 notebook 환경에 필요한 라이브러리를 설치한다.
+* 터미널 환경에서 conda activate notebook 명령어로 notebook 환경을 활성화하고 notebook 환경에 필요한 라이브러리를 설치합니다.
 
-※ 반드시 notebook conda 환경에 설치해야 Jupyter 웹 화면에 적용된다.
+※ 반드시 notebook conda 환경에 설치해야 Jupyter 웹 화면에 적용됩니다.
 
 <figure><img src="../.gitbook/assets/2.png" alt=""><figcaption></figcaption></figure>
 
-* notebook 환경에 사용자가 원하는 머신러닝/딥러닝 관련 라이브러리 설치 예시et
+* notebook 환경에 사용자가 원하는 머신러닝/딥러닝 관련 라이브러리 설치 예시
 
 ```shell-session
 772% [a1113a01@gpu06 workspace]$ conda activate notebook
@@ -236,10 +233,10 @@ File -> Hub Control Panel -> Stop My Server
 
 ### **2. 예제 코드 작성 및 실행**
 
-* 사용자 작업 디렉터리에서 예제 파일 iris\_ex.ipynb를 클릭한다.
-* 프로그램 편집/실행 창에서 Shift+Enter로 예제 코드를 실행한다.
+* 사용자 작업 디렉터리에서 예제 파일 iris\_ex.ipynb를 클릭합니다.
+* 프로그램 편집/실행 창에서 Shift+Enter로 예제 코드를 실행합니다.
 
-※ 실행 과정에 나오는 warning 들은 무시 가능하며, 동일 코드 재실행 시 warning 메시지 출력되지 않는다. (warning 내용은 코딩 시 버전에 따른 문법적 제시 안내)
+※ 실행 과정에 나오는 warning 들은 무시 가능하며, 동일 코드 재실행 시 warning 메시지 출력되지 않습니다. (warning 내용은 코딩 시 버전에 따른 문법적 제시 안내)
 
 <figure><img src="../.gitbook/assets/3.png" alt=""><figcaption></figcaption></figure>
 
@@ -251,14 +248,14 @@ File -> Hub Control Panel -> Stop My Server
 
 ### **3. Tensorboard 실행**
 
-* Menu Bar -> Files 에서 tfboard\_ex.ipynb를 클릭한다.
-* Shifter+Enter로 코드 실행한다. (약1분 소요)
+* Menu Bar -> Files 에서 tfboard\_ex.ipynb를 클릭합니다.
+* Shifter+Enter로 코드 실행합니다. (약1분 소요)
 
 <figure><img src="../.gitbook/assets/4.png" alt=""><figcaption></figcaption></figure>
 
-* Tensorboard 실행한다.&#x20;
+* Tensorboard 실행합니다.&#x20;
 
-※ logs 폴더에 로그 데이터가 저장된다.
+※ logs 폴더에 로그 데이터가 저장됩니다.
 
 <figure><img src="../.gitbook/assets/5.png" alt=""><figcaption></figcaption></figure>
 
@@ -280,11 +277,11 @@ File -> Hub Control Panel -> Stop My Server
 
 ### **4. 새로운 Launcher 만들기 및 Python 코드 작성**
 
-* 아래와 같이 New -> Python 3 메뉴를 클릭하여 새로운 Python 코드의 작성이 가능하다.
+* 아래와 같이 New -> Python 3 메뉴를 클릭하여 새로운 Python 코드의 작성이 가능합니다.
 
 <figure><img src="../.gitbook/assets/6.png" alt=""><figcaption></figcaption></figure>
 
-* Python 3 커널을 사용할 수 있는 새로운 Jupyter Notebook Launcher가 실행된다.
+* Python 3 커널을 사용할 수 있는 새로운 Jupyter Notebook Launcher가 실행됩니다.
 
 <figure><img src="../.gitbook/assets/7.png" alt=""><figcaption></figcaption></figure>
 
@@ -294,16 +291,16 @@ File -> Hub Control Panel -> Stop My Server
 
 ### **1. 실행중인 세션 종료**
 
-* 다음과 같이, Left Side Bar에서 Session 탭을 클릭하여 실행중인 Terminal Sessions 이나 Kernel Sessions들을 Shut Down 버튼을 클릭하여 종료한다.
+* 다음과 같이, Left Side Bar에서 Session 탭을 클릭하여 실행중인 Terminal Sessions 이나 Kernel Sessions들을 Shut Down 버튼을 클릭하여 종료합니다.
 
-※ 세션을 종료시키지 않고 JupyterHub 웹페이지를 종료하는 경우, 다음 Jupyter 실행 시에도 그대로 남아있게 된다. (과금은 진행되지 않음)
+※ 세션을 종료시키지 않고 JupyterHub 웹페이지를 종료하는 경우, 다음 Jupyter 실행 시에도 그대로 남아있게 됩니다. (과금은 진행되지 않습니다)
 
 <figure><img src="../.gitbook/assets/8.png" alt=""><figcaption></figcaption></figure>
 
 ### **2. Jupyter 종료**
 
-* (JupyterLab) Jupyter 사용이 끝나면 반드시 Jupyter를 종료시켜 자원을 반납해야 한다.
-* File 메뉴에서 Hub Control Panel 클릭하여 Home 페이지로 와서 Stop My Server 클릭하여 자원을 반납할 수 있다.
+* (JupyterLab) Jupyter 사용이 끝나면 반드시 Jupyter를 종료시켜 자원을 반납해야 합니다.
+* File 메뉴에서 Hub Control Panel 클릭하여 Home 페이지로 와서 Stop My Server 클릭하여 자원을 반납할 수 있습니다.
 
 &#x20;
 

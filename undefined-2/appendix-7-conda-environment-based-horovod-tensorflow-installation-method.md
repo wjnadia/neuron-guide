@@ -1,8 +1,8 @@
 # Conda 기반 Horovod 설치 방법
 
-Horovod는 고성능 분산 컴퓨팅 환경에서 노드간 메시지 전달 및 통신관리를 위해 일반적인 표준 MPI 모델을 사용하며, Horovod의 MPI구현은 표준 Tensorflow 분산 훈련 모델보다 간소화된 프로그래밍 모델을 제공한다. NEURON시스템에서도 콘다 환경을 기반으로 멀티노드를 이용한 훈련 모델을 학습시키고자 한다면 다음과 같은 방법으로 설치 후 실행할 수 있다.
+Horovod는 고성능 분산 컴퓨팅 환경에서 노드간 메시지 전달 및 통신관리를 위해 일반적인 표준 MPI 모델을 사용하며, Horovod의 MPI구현은 표준 Tensorflow 분산 훈련 모델보다 간소화된 프로그래밍 모델을 제공합니다. NEURON시스템에서도 콘다 환경을 기반으로 멀티노드를 이용한 훈련 모델을 학습시키고자 한다면 다음과 같은 방법으로 설치 후 실행할 수 있습니다.
 
-※ Horovod 사용법은 \[별첨8] 참고.
+※ Horovod 사용법은 \[별첨8] 참고 바랍니다.
 
 ## 가. Tensorflow-horovod 설치
 
@@ -15,7 +15,7 @@ $ source activate my_tensorflow
 (my_tensorflow) $
 ```
 
-※ 자세한 콘다 사용방법은 \[별첨 5] 참고
+※ 자세한 콘다 사용방법은 \[별첨 5] 참고 바랍니다.
 
 ### 2. Tensorflow 설치 및 horovod 설치
 
@@ -138,5 +138,5 @@ horovodrun -np 2 python pytorch_ex.py
 ```
 
 {% hint style="info" %}
-2022년 7월 28일에 마지막으로 업데이트되었습니다.
+2022년 7월 28일에 마지막으로 업데이트 되었습니다.
 {% endhint %}

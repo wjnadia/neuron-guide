@@ -16,17 +16,17 @@
 | <p>AArch64 아키텍처 <br><mark style="color:red;">(gh200_1 파티션 전용)</mark></p> |                                                                                                                                                                                                                                                                       <ul><li>ARM_cmake/3.26.2</li><li>ARM_cuda/12.3</li><li>ARM_cudampi/mvapich2-2.3.6</li><li>ARM_cudampi/openmpi-4.1.1 </li><li>ARM_fftw_mpi/3.3.7</li><li>ARM_gcc/11.4.1</li><li>ARM_gromacs/2023.3</li><li>ARM_htop/3.0.5</li><li>ARM_lammps/23Jun2022</li><li>ARM_nvidia_hpc_sdk/24.1</li><li>ARM_nvtop/1.1.0</li><li>ARM_python/3.12.4</li><li>ARM_qe/7.3</li></ul>                                                                                                                                                                                                                                                                       |
 
 * conda/pytorch\_1.11.0, conda/tensorflow\_2.4.1 module은 pytorch/tensorflow 사용을 위한 라이브러리가 설치 되어있는 module로, conda 명령을 사용하려면 python/3.7.1 module 적용 후 conda 명령을 사용해야 합니다.
-* Neuron시스템에서의 인공지능 프레임워크는 anaconda 환경을 사용하는 것을 권장합니다. (라이선스 조건 확인)
+* Neuron시스템에서의 인공지능 프레임워크는 conda 환경을 사용하는 것을 권장합니다. (라이선스 조건 확인, conda-forge 채널활용)
 * 사용자 요구 기반의 Singularity 컨테이너 이미지를 빌드 및 구동하여 사용자 프로그램을 실행할 수 있습니다.&#x20;
-  * \[별첨3] Singularity 컨테이너 사용법’을 참조
-* MATLAB은 **사용자(소속기관)가 라이선스를 보유해야 합니다**. 사용법은 [MATLAB 가이드](https://docs-ksc.gitbook.io/myksc/app/matlab) 참조
+  * \[별첨3] Singularity 컨테이너 사용법’을 참조 바랍니다.
+* MATLAB은 **사용자(소속기관)가 라이선스를 보유해야 합니다**. 사용법은 [MATLAB 가이드](https://docs-ksc.gitbook.io/myksc/app/matlab) 참조 바랍니다.
 
 <mark style="color:red;">**※ GPU가 장착되지 않은 노드를 사용하기 위해서는 None CUDA MPI 라이브러리(예 :  mpi/openmpi-4.1.1) 모듈을 사용해야 합니다.**</mark>
 
 <mark style="color:red;">**※ gh200\_1 파티션은 AArch64 아키텍처로 ARM\_ 접두어가 붙은 전용 module을 활용해야 합니다.**</mark> &#x20;
 
-* <mark style="color:red;">**gh200\_1 계산노드에서는**</mark>**&#x20;**<mark style="color:red;">**x86\_64용 바이너리 실행 시 오류 발생**</mark>
-* <mark style="color:red;">**x86\_64 아키텍처(뉴론 로그인 노드, gh200\_1 파티션을 제외한 모든 계산노드)에서**</mark>**&#x20;**<mark style="color:red;">**AArch64용 바이너리 실행 시 오류 발생**</mark>
+* <mark style="color:red;">**gh200\_1 계산노드에서는**</mark>**&#x20;**<mark style="color:red;">**x86\_64용 바이너리 실행 시 오류 발생합니다.**</mark>
+* <mark style="color:red;">**x86\_64 아키텍처(뉴론 로그인 노드, gh200\_1 파티션을 제외한 모든 계산노드)에서**</mark>**&#x20;**<mark style="color:red;">**AArch64용 바이너리 실행 시 오류 발생합니다.**</mark>
 
 
 
@@ -130,9 +130,11 @@ Intel 컴파일러를 사용하기 위해서 필요한 버전의 Intel 컴파일
 $ module load intel/18.0.2
 ```
 
-※ 프로그래밍 도구 설치 현황 표를 참고하여 사용가능 버전 확인
+※ 프로그래밍 도구 설치 현황 표를 참고하여 사용 가능 버전 확인하시기 바랍니다.
 
 * 컴파일러 종류
+
+
 
 | 컴파일러       | 프로그램    | 소스 확장자                                                 |
 | ---------- | ------- | ------------------------------------------------------ |
@@ -152,7 +154,7 @@ $ ifort -o test.exe test.f90
 $ ./test.exe
 ```
 
-※ /apps/shell/job\_examples 에서 작업제출 test 예제파일을 복사하여 사용 가능
+※ /apps/shell/job\_examples 에서 작업제출 test 예제파일을 복사하여 사용 가능합니다.
 
 #### **2) GNU 컴파일러**
 
@@ -162,9 +164,7 @@ GNU 컴파일러를 사용하기 위해서 필요한 버전의 GNU 컴파일러 
 $ module load gcc/10.2.0
 ```
 
-※ 프로그래밍 도구 설치 현황 표를 참고하여 사용가능 버전 확인
-
-※ 반드시 "gcc/4.8.5" 이상 버전을 사용
+※ 프로그래밍 도구 설치 현황 표를 참고하여 사용가능 버전 확인하시기 바랍니다.
 
 * 컴파일러 종류
 
@@ -187,7 +187,7 @@ $ gfortran -o test.exe test.f90
 $ ./test.exe
 ```
 
-※ /apps/shell/job\_examples 에서 작업제출 test 예제파일을 복사하여 사용 가능
+※ /apps/shell/job\_examples 에서 작업제출 test 예제파일을 복사하여 사용 가능합니다.
 
 #### 3) PGI 컴파일러
 
@@ -197,7 +197,7 @@ PGI 컴파일러를 사용하기 위해서 필요한 버전의 PGI 컴파일러 
 $ module load nvidia_hpc_sdk/22.7
 ```
 
-※ 프로그래밍 도구 설치 현황 표를 참고하여 사용가능 버전 확인
+※ 프로그래밍 도구 설치 현황 표를 참고하여 사용가능 버전 확인하시기 바랍니다.
 
 * **컴파일러 종류**
 
@@ -220,7 +220,7 @@ $ pgfortran -o test.exe test.f90
 $ ./test.exe
 ```
 
-※ /apps/shell/job\_examples 에서 작업제출 test 예제파일을 복사하여 사용 가능
+※ /apps/shell/job\_examples 에서 작업제출 test 예제파일을 복사하여 사용 가능합니다.
 
 ####
 
@@ -336,7 +336,7 @@ $ mpicc mpi-cuda.o -lcudart -L/apps/cuda/11.4/lib64
 $ srun ./a.out
 ```
 
-※ intel 컴파일러 사용 시, gcc/10.2.0 대신 intel/19.1.2 module을 load을 적용\
+※ intel 컴파일러 사용 시, gcc/10.2.0 대신 intel/19.1.2 module을 load을 적용합니다.\
 
 
 {% hint style="info" %}

@@ -1,12 +1,12 @@
 # AI 멀티노드 활용
 
-뉴론 시스템에서 딥러닝 학습에 필요한 계산을 멀티 노드를 이용하여 수십 개의 GPU에 나누어 동시에 처리하고, 고속 네트워크를 통한 결과를 합산하는 분산 학습을 위한 여러 방법을 소개한다.
+뉴론 시스템에서 딥러닝 학습에 필요한 계산을 멀티 노드를 이용하여 수십 개의 GPU에 나누어 동시에 처리하고, 고속 네트워크를 통한 결과를 합산하는 분산 학습을 위한 여러 방법을 소개합니다.
 
 
 
 ## 가. HOROVOD
 
-Horovod는 고성능 분산 컴퓨팅 환경에서 노드간 메시지 전달 및 통신관리를 위해 일반적인 표준 MPI 모델을 사용하며, Horovod의 MPI구현은 표준 Tensorflow 분산 훈련 모델보다 간소화된 프로그래밍 모델을 제공한다.
+Horovod는 고성능 분산 컴퓨팅 환경에서 노드간 메시지 전달 및 통신관리를 위해 일반적인 표준 MPI 모델을 사용하며, Horovod의 MPI구현은 표준 Tensorflow 분산 훈련 모델보다 간소화된 프로그래밍 모델을 제공합니다.
 
 ### **1. HOROVOD (Tensorflow) 설치 및 확인**
 
@@ -179,10 +179,10 @@ $ source activate my_pytorch
 
 ## 나. GLOO
 
-* GLOO는 Facebook 에서 개발한 오픈 소스 집단 커뮤니케이션 라이브러리로, horovod 에 포함되어 있으며 사용자가 MPI 를 설치하지 않고도 horovod 를 이용한 멀티노드 작업 수행을 지원한다.
-* GLOO의 설치는 horovod에 종속성을 가지며, horovod를 설치하는 과정에서 같이 설치된다.
+* GLOO는 Facebook 에서 개발한 오픈 소스 집단 커뮤니케이션 라이브러리로, horovod 에 포함되어 있으며 사용자가 MPI 를 설치하지 않고도 horovod 를 이용한 멀티노드 작업 수행을 지원합니다.
+* GLOO의 설치는 horovod에 종속성을 가지며, horovod를 설치하는 과정에서 같이 설치됩니다.
 
-※ horovod 의 설치방법은 상단의 horovod 설치 및 확인을 참고
+※ horovod 의 설치방법은 상단의 horovod 설치 및 확인을 참고 바랍니다.
 
 ### **1. GLOO 실행 예제**
 
@@ -225,7 +225,7 @@ $ source activate my_tensorflow
 
 ## 다. Ray
 
-Ray는 멀티노드 환경에서 병렬 실행을 위한 python 기반의 워크로드를 제공한다. 다양한 라이브러리를 사용하여 pytorch와 같은 딥러닝 모델에서 사용할 수 있다. 자세한 내용은 다음 홈페이지에서 확인할 수 있다.
+Ray는 멀티노드 환경에서 병렬 실행을 위한 python 기반의 워크로드를 제공합니다. 다양한 라이브러리를 사용하여 pytorch와 같은 딥러닝 모델에서 사용할 수 있습니다. 자세한 내용은 다음 홈페이지에서 확인할 수 있습니다.
 
 <mark style="color:blue;">**https://docs.ray.io/en/latest/cluster/index.html**</mark>
 
@@ -313,11 +313,11 @@ $ source activate my_ray
 
 ### **2. Ray Cluster 설치 및 멀티 노드 실행 예제**
 
-Ray는 멀티노드 실행 시 하나의 head 노드와 다수의 worker 노드로 실행되며, 테스크를 할당된 자원에 효율적으로 스케줄링 해 준다.
+Ray는 멀티노드 실행 시 하나의 head 노드와 다수의 worker 노드로 실행되며, 테스크를 할당된 자원에 효율적으로 스케줄링 해 줍니다.
 
 ![https://docs.ray.io/en/latest/cluster/index.html](../.gitbook/assets/Zc4DVCsuWDTjPfS.png)
 
-NERSC에서 작성한 예제는 GITHUB(https://github.com/NERSC/slurm-ray-cluster.git)를 통해 다운로드 할 수 있고, 다음과 같이 실행할 수 있다.
+NERSC에서 작성한 예제는 GITHUB(https://github.com/NERSC/slurm-ray-cluster.git)를 통해 다운로드 할 수 있고, 다음과 같이 실행할 수 있습니다.
 
 #### 1) 설치 방법
 
@@ -540,7 +540,7 @@ Number of trials: 20/128 (1 PENDING, 8 RUNNING, 11 TERMINATED)
 
 ## 라. Submit it
 
-Submitit은 Slurm 클러스터 내에서 계산을 위해 Python 함수를 제출하기 위한 경량 도구이다. 기본적으로 스케줄러에 제출된 내용을 정리하여 결과, 로그 등에 대한 액세스를 제공한다.
+Submitit은 Slurm 클러스터 내에서 계산을 위해 Python 함수를 제출하기 위한 경량 도구입니다. 기본적으로 스케줄러에 제출된 내용을 정리하여 결과, 로그 등에 대한 액세스를 제공합니다.
 
 ### **1. 예제 (1)**
 
@@ -810,7 +810,7 @@ job = executor.submit(mnist)
 
 ## 마. NCCL
 
-뉴론 시스템에서 NVIDIA GPU에 최적화된 다중 GPU 및 다중 노드 집단 통신 라이브러리인 NCCL의 설치방법 및 예제 실행 방법을 소개한다.
+뉴론 시스템에서 NVIDIA GPU에 최적화된 다중 GPU 및 다중 노드 집단 통신 라이브러리인 NCCL의 설치방법 및 예제 실행 방법을 소개합니다.
 
 ### **1. NCCL설치 및 확인**
 
@@ -1105,7 +1105,7 @@ gpu36 rank:0 gpu3 0 0 0 0 0 0 0 0
 
 ## **바. Tensorflow Distribute**
 
-Tensorflow Distibute는 멀티 GPU 또는 멀티 서버를 활용하여 분산 훈련을 할 수 있는 Tensorflow API 이다(Tensorflow 2.0 사용).
+Tensorflow Distibute는 멀티 GPU 또는 멀티 서버를 활용하여 분산 훈련을 할 수 있는 Tensorflow API 입니다(Tensorflow 2.0 사용).
 
 ### **1. Conda 환경에서 tensorflow 설치 및 확인**
 
@@ -1215,7 +1215,7 @@ python tf_multi_keras.py
 
 ### **3. 멀티 노드, 멀티 GPU 활용(tf.distribute.MultiWorkerMirroedStrategy() 사용)**
 
-멀티 노드에서 활용하기 위해 전략을 수정하고 각 노드에 환경 변수 TF\_CONFIG 설정
+멀티 노드에서 활용하기 위해 전략을 수정하고 각 노드에 환경 변수 TF\_CONFIG 설정합니다.
 
 #### 1) 코드 예제 수정
 
@@ -1298,11 +1298,11 @@ done
 
 ## **사. PytorchDDP**
 
-* [PytorchDDP(DistributedDataParallel)](https://pytorch.org/tutorials/intermediate/ddp_tutorial.html)는 멀티 노드, 멀티GPU환경에서 실행할 수 있는 분산 데이터 병렬처리 기능을 제공한다. PytorchDDP 기능 및 튜토리얼은 아래 웹사이트를 참고 한다.
+* [PytorchDDP(DistributedDataParallel)](https://pytorch.org/tutorials/intermediate/ddp_tutorial.html)는 멀티 노드, 멀티GPU환경에서 실행할 수 있는 분산 데이터 병렬처리 기능을 제공합니다. PytorchDDP 기능 및 튜토리얼은 아래 웹사이트를 참고 바랍니다.
   * [https://pytorch.org/tutorials/intermediate/ddp\_tutorial.html](https://pytorch.org/tutorials/intermediate/ddp_tutorial.html)
   * [https://github.com/pytorch/examples/blob/main/distributed/ddp/README.md](https://github.com/pytorch/examples/blob/main/distributed/ddp/README.md)
 
-아래 예제는 PytorchDDP를 slurm 스케줄러를 통한 실행 방법이다.
+아래 예제는 PytorchDDP를 slurm 스케줄러를 통한 실행 방법입니다.
 
 ### **1. 작업제출 스크립트 예제**
 
@@ -1387,5 +1387,5 @@ done
 ```
 
 {% hint style="info" %}
-2022년 7월 7일에 마지막으로 업데이트되었습니다.
+2022년 7월 7일에 마지막으로 업데이트 되었습니다.
 {% endhint %}

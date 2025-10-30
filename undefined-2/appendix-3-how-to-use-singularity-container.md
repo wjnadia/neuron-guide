@@ -50,7 +50,7 @@ $ singularity [global options...] build [local options...] ＜IMAGE PATH＞ ＜B
 
 [관련 주요 local options]
     --fakeroot : roor 권한 없이 일반사용자가 가짜 root 사용자로 이미지 빌드 
-    --remote : 외부 싱귤레러티 클라우드(Sylabs Cloud)를 통한 원격 빌드(root 권한 필요 없음)
+    --remote : 외부 싱귤레러티 클라우드(Sylabs Cloud)를 통한 원격 빌드(root 권한 필요 없습니다)
     --sandbox : 샌드박스 형태의 쓰기 가능한 이미지 디렉터리 빌드
 
 ＜IMAGE PATH＞
@@ -59,7 +59,7 @@ $ singularity [global options...] build [local options...] ＜IMAGE PATH＞ ＜B
 
 ＜BUILD SPEC＞
 definition file : 컨테이너를 빌드하기 위해 recipe를 정의한  파일(예시 : ubuntu.def)
-local image : 싱귤레러티 이미지 파일 혹은 샌드박스 디렉터리(IMAGE PATH 참조)
+local image : 싱귤레러티 이미지 파일 혹은 샌드박스 디렉터리(IMAGE PATH 참조 바랍니다)
 URI 
 library:// 컨테이너 라이브러리 (default https://cloud.sylabs.io/library) 
 docker:// 도커 레지스트리 (default 도커 허브)
@@ -144,7 +144,6 @@ channels:
   - pytorch
   - nvidia
   - conda-forge
-  - defaults
 dependencies:
   - _libgcc_mutex=0.1=conda_forge
   - _openmp_mutex=4.5=2_kmp_llvm
@@ -398,7 +397,7 @@ Python 3.8.10 (default, Nov 26 2021, 20:14:08)
 Submitted batch job 12345
 ```
 
-※ 자세한 스케줄러(SLURM) 사용 방법은 "뉴론 지침서-스케줄러(SLURM)를 통한 작업실행" 참조
+※ 자세한 스케줄러(SLURM) 사용 방법은 "뉴론 지침서-스케줄러(SLURM)를 통한 작업실행" 참조 바랍니다.
 
 ※ [**\[참조 3\]**](appendix-3-how-to-use-singularity-container.md#h_9146219267821647408138749)를 통해 병렬 학습 실행 예제 프로그램을 따라해 볼 수 있습니다.
 
@@ -406,7 +405,7 @@ Submitted batch job 12345
 
 #### **2) 스케줄러가 할당한 계산 노드에서 인터랙티브 작업 실행**
 
-* 스케줄러를 통해 계산노드를 할당받아 첫번째 계산노드에 쉘 접속 후 인터렉티브 모드로 사용자 프로그램 실행
+* 스케줄러를 통해 계산노드를 할당받아 첫번째 계산노드에 쉘 접속 후 인터렉티브 모드로 사용자 프로그램 실행합니다.
 
 {% code overflow="wrap" %}
 ```

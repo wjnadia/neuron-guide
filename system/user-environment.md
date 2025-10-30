@@ -25,11 +25,11 @@
 * OTP 스마트폰 앱은 안드로이드 앱 스토어(Google Play)나 아이폰 앱 스토어(App Store)에서 “Any OTP”로 검색 후 미래기술(mirae-tech)에서 개발한 앱을 설치하여 사용할 수 있습니다.
 * 슈퍼컴퓨터 로그인 시 “Any OTP” 앱의 OTP 보안숫자를 반드시 입력해야 합니다.
 
-※ 스마트폰을 사용하고 있지 않은 사용자의 경우, 계정담당자(account@ksc.re.kr)에게 문의
+※ 스마트폰을 사용하고 있지 않은 사용자의 경우, 계정담당자(account@ksc.re.kr)에게 문의 부탁드립니다.
 
-※ 자세한 OTP 설치 및 이용방법은 KISTI 홈페이지 > 기술지원 > 지침서에서 “OTP 사용자 매뉴얼” 참조
+※ 자세한 OTP 설치 및 이용방법은 KISTI 홈페이지 > 기술지원 > 지침서에서 “OTP 사용자 매뉴얼” 참조 바랍니다.
 
-※ LG 유플러스의 경우에는 문자가 스팸처리되므로 이메일로 안내
+※ LG 유플러스의 경우에는 문자가 스팸처리되므로 이메일로 안내 드립니다.
 
 
 
@@ -45,13 +45,13 @@
 ### 1. 유닉스 또는 리눅스 환경
 
 ```shell-session
-$ ssh -l <사용자ID> neuron01.ksc.re.kr -p 22
+$ ssh -l <사용자ID> neuron01.ksc.re.kr -P 22
 ```
 
-* \[-p 22]: 포트번호 명시를 위한 것으로 생략 가능
-* X환경 실행을 위해 XQuartx 터미널을 이용
+* \[-P 22]: 포트번호 명시를 위한 것으로 생략 가능
+* X환경 실행을 위해 XQuartx 터미널을 이용합니다.
 
-※ 프로그램은 인터넷을 통해 무료로 다운로드 후 설치
+※ 프로그램은 인터넷을 통해 무료로 다운로드 후 설치하실 수 있습니다.
 
 ![](<../.gitbook/assets/프로그램은 인터넷을 통해 무료로 다운로드 후.png>)
 
@@ -59,14 +59,14 @@ $ ssh -l <사용자ID> neuron01.ksc.re.kr -p 22
 
 * X환경 실행을 위해 Xming 실행
 
-※ 프로그램은 인터넷을 통해 무료로 다운로드 후 설치
+※ 프로그램은 인터넷을 통해 무료로 다운로드 후 설치하실 수 있습니다.
 
 ![](<../.gitbook/assets/프로그램은 인터넷을 통해 무료로 다운로드 후(1).png>)
 
-* putty, Mobaxterm, 또는 SSH Secure Shell Client 등의 ssh 접속 프로그램을 이용
+* putty, Mobaxterm, 또는 SSH Secure Shell Client 등의 ssh 접속 프로그램을 이용합니다.
   * Host Name : neuron.ksc.re.kr, Port : 22, Connection type : SSH
 
-※ 프로그램은 인터넷을 통해 무료로 다운로드 가능
+※ 프로그램은 인터넷을 통해 무료로 다운로드 가능합니다.
 
 ![](<../.gitbook/assets/Host Name neuron.png>)
 
@@ -75,7 +75,7 @@ $ ssh -l <사용자ID> neuron01.ksc.re.kr -p 22
 
 ![](<../.gitbook/assets/x display location 0.0.png>)
 
-※ 만약, DNS 캐싱 문제로 접속이 안 될 경우에는 캐시를 정리 (명령 프롬프트에서 ipconfig /flushdns 명령어 수행)하고 재접속
+※ 만약, DNS 캐싱 문제로 접속이 안 될 경우에는 캐시를 정리 (명령 프롬프트에서 ipconfig /flushdns 명령어 수행)하고 재접속 합니다.
 
 ```shell-session
 C:￦> ipconfig /flushdns
@@ -95,7 +95,7 @@ $ sftp [사용자ID@]neuron-dm.ksc.re.kr [-P 22]
 
 ![](<../.gitbook/assets/윈도우 환경에서는 WinSCP와 같이.png>)
 
-* FTP (File Tranfer Protocal)을 이용하며, OTP를 입력하지 않고 파일 전송 가능
+* FTP (File Tranfer Protocal)을 이용하며, OTP를 입력하지 않고 파일 전송 가능합니다.
 * SFTP(Secure-FTP) 을 이용하며, 파일 전송시 OTP를 입력해야 합니다.(FTP보다 안전한 전송방식)
 
 ### 4. 노드구성
@@ -126,8 +126,8 @@ $ sftp [사용자ID@]neuron-dm.ksc.re.kr [-P 22]
 
 ### <mark style="color:red;">5. 디버깅 노드 제공</mark>
 
-* <mark style="color:red;">디버깅, 컴파일, 수행코드 테스트 등의 목적으로 2개의 GPU 노드 제공(실제 작업 수행은 제한)</mark>
-* <mark style="color:red;">각 노드당 2개의 CPU(Xeon2.9GHz/32Cores)와 2개의 GPU(V100)가 장착되어 있음</mark>
+* <mark style="color:red;">디버깅, 컴파일, 수행코드 테스트 등의 목적으로 2개의 GPU 노드 제공(실제 작업 수행은 제한)합니다.</mark>
+* <mark style="color:red;">각 노드당 2개의 CPU(Xeon2.9GHz/32Cores)와 2개의 GPU(V100)가 장착되어 있습니다.</mark>
 * <mark style="color:red;">로그인 노드(glogin\[01.02])에서 ssh로 직접 접속 가능하며(ssh gdebug01 또는 gdebug02), 스케줄러를 통한 서비스는 더 이상 지원하지 않습니다.</mark>
 
 
@@ -175,9 +175,9 @@ $ passwd
 
 <table><thead><tr><th width="177" align="center">파티션명(CPU종류_GPU종류_GPU개수)</th><th width="170.390625" align="center">노드명</th><th align="center">노드 과금 요율</th></tr></thead><tbody><tr><td align="center"><a data-footnote-ref href="#user-content-fn-1">cas_v100nv_8</a></td><td align="center">gpu[01-02,04-05]</td><td align="center">0.24992</td></tr><tr><td align="center">cas_v100nv_4</td><td align="center">gpu[06-08]</td><td align="center">0.14263</td></tr><tr><td align="center">cas_v100_4</td><td align="center">gpu[10-20]</td><td align="center">0.14263</td></tr><tr><td align="center">cas_v100_2</td><td align="center">gpu[25,26,29]</td><td align="center">0.08312</td></tr><tr><td align="center">amd_a100_4</td><td align="center">gpu[44,45]</td><td align="center">0.19951</td></tr><tr><td align="center">amd_a100nv_8</td><td align="center">gpu[33-35-39-43]</td><td align="center">0.33336</td></tr><tr><td align="center">eme_h200nv_8</td><td align="center">gpu[46-50]</td><td align="center">0.90848</td></tr><tr><td align="center">gh200_1</td><td align="center">gpu[51-52]</td><td align="center">0.11354</td></tr><tr><td align="center">amd_h200nv_8</td><td align="center">gpu[53-56]</td><td align="center">0.90848</td></tr><tr><td align="center">amd_h100_2</td><td align="center">gpu[57-58]</td><td align="center">0.18506</td></tr><tr><td align="center">cpu</td><td align="center">cpu[01-06]</td><td align="center">0.02112</td></tr><tr><td align="center">bigmem</td><td align="center">bigmem01</td><td align="center">0.0432</td></tr><tr><td align="center"></td><td align="center">bigmem02</td><td align="center">0.01624</td></tr><tr><td align="center"></td><td align="center">bigmem03</td><td align="center">0.0324</td></tr><tr><td align="center"></td><td align="center">bigmem04</td><td align="center">0.02832</td></tr></tbody></table>
 
-**※ 공유 노드 정책으로 인하여 작업이 사용한 core, gpu 개수만큼 과금 부과**
+**※ 공유 노드 정책으로 인하여 작업이 사용한 core, gpu 개수만큼 과금 부과됩니다.**
 
-**※ 최신 요금 정보는 요금계산기 (https://www.ksc.re.kr/jwjg/gjbg/yggsg) 참고**
+**※ 최신 요금 정보는 요금계산기 (https://www.ksc.re.kr/jwjg/gjbg/yggsg) 참고 바랍니다.**
 
 
 
@@ -206,7 +206,7 @@ $ quotainfo
 * <mark style="color:red;">삭제 정책 수행 후 대상이 되는 파일은 앞에 접두사(ToBeDelete\_)가 붙게 됩니다.</mark> \ <mark style="color:red;">예) ToBeDelete\_file1.txt, ToBeDelete\_file2.txt</mark>
   * <mark style="color:red;">대상 파일이 필요한 경우 사용자는 직접 접두사가 붙은 파일명을 복구시키고 atime을 업데이트해야 합니다.</mark>
 * <mark style="color:red;">일정기간(20일\~30일) 후 ToBeDelete\_붙은 파일은 일괄 삭제 됩니다. 이후 해당파일은 복구가 불가능합니다.</mark>
-* atime은 stat, ls -lu 명령 등으로 확인할 수 있다.
+* atime은 stat, ls -lu 명령 등으로 확인할 수 있습니다.
 
 ```shell-session
 [login01 ~]# stat file1

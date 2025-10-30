@@ -2,7 +2,7 @@
 
 아나콘다(Anaconda)는 PYTHON 과 R 프로그래밍 언어로 된 과학 컴퓨팅(데이터 과학, 기계 학습 응용 프로그램, 대규모 데이터 처리, 예측 분석 등)분야의 패키지들의 모음을 제공하는 배포판입니다. Anaconda 배포판은 1,200 만 명이 넘는 사용자가 사용하며 Windows, Linux 및 MacOS에 적합한 1400 가지 이상의 인기있는 데이터 과학 패키지를 포함합니다.
 
-Anaconda를 설치하기 위해서는 https://www.anaconda.com 웹사이트에서 자신의 OS에 맞는 배포판을 다운받아 설치 진행하면  됩니다. 단, 설치 전 Anacoda  라이선스 및 사용 조건을 반드시 확인해야 합니다.
+Anaconda를 설치하기 위해서는 https://www.anaconda.com 웹사이트에서 자신의 OS에 맞는 배포판을 다운받아 설치 진행하면  됩니다. <mark style="color:red;">**단, 설치 전 Anacoda  라이선스 및 사용 조건을 반드시 확인해야 합니다**</mark>.
 
 
 
@@ -18,23 +18,7 @@ conda 는 아나콘다에서 패키지 버전 관리를 위해 제공되는 어�
 
 * Miniconda는 https://docs.conda.io/en/latest/miniconda.html 사이트 에서 각 OS 에 맞는 버전을 다운 받을 수 있습니다.
 
-| <p><strong>명령어</strong></p><p><strong>모음</strong></p> | **내용**                                                                                                                                                                     |
-| ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| clean                                                 | Remove unused packages and caches.                                                                                                                                         |
-| config                                                | <p>Modify configuration values in .condarc. This is modeled after the git config command.</p><p>Writes to the user .condarc file (/home01/userID/.condarc) by default.</p> |
-| create                                                | Create a new conda environment from a list of specified packages.                                                                                                          |
-| help                                                  | Displays a list of available conda commands and their help strings.                                                                                                        |
-| info                                                  | Display information about current conda install.                                                                                                                           |
-| init                                                  | Initialize conda for shell interaction. \[Experimental]                                                                                                                    |
-| install                                               | Installs a list of packages into a specified conda environment.                                                                                                            |
-| list                                                  | List linked packages in a conda environment.                                                                                                                               |
-| package                                               | Low-level conda package utility. (EXPERIMENTAL)                                                                                                                            |
-| remove                                                | Remove a list of packages from a specified conda environment.                                                                                                              |
-| uninstall                                             | Alias for conda remove.                                                                                                                                                    |
-| run                                                   | Run an executable in a conda environment. \[Experimental]                                                                                                                  |
-| search                                                | <p>Search for packages and display associated information.<br>The input is a MatchSpec, a query language for conda packages.</p><p>See examples below.</p>                 |
-| update                                                | Updates conda packages to the latest compatible version.                                                                                                                   |
-| upgrade                                               | Alias for conda update                                                                                                                                                     |
+<table><thead><tr><th width="161" align="center">명령어 모음</th><th>내용</th></tr></thead><tbody><tr><td align="center">clean</td><td>Remove unused packages and caches.</td></tr><tr><td align="center">config</td><td><p>Modify configuration values in .condarc. This is modeled after the git config command.</p><p>Writes to the user .condarc file (/home01/userID/.condarc) by default.</p></td></tr><tr><td align="center">create</td><td>Create a new conda environment from a list of specified packages.</td></tr><tr><td align="center">help</td><td>Displays a list of available conda commands and their help strings.</td></tr><tr><td align="center">info</td><td>Display information about current conda install.</td></tr><tr><td align="center">init</td><td>Initialize conda for shell interaction. [Experimental]</td></tr><tr><td align="center">install</td><td>Installs a list of packages into a specified conda environment.</td></tr><tr><td align="center">list</td><td>List linked packages in a conda environment.</td></tr><tr><td align="center">package</td><td>Low-level conda package utility. (EXPERIMENTAL)</td></tr><tr><td align="center">remove</td><td>Remove a list of packages from a specified conda environment.</td></tr><tr><td align="center">uninstall</td><td>Alias for conda remove.</td></tr><tr><td align="center">run</td><td>Run an executable in a conda environment. [Experimental]</td></tr><tr><td align="center">search</td><td><p>Search for packages and display associated information.<br>The input is a MatchSpec, a query language for conda packages.</p><p>See examples below.</p></td></tr><tr><td align="center">update</td><td>Updates conda packages to the latest compatible version.</td></tr><tr><td align="center">upgrade</td><td>Alias for conda update</td></tr></tbody></table>
 
 
 
@@ -63,7 +47,7 @@ $ source ~/.bashrc
 
 * conda 경로 변경 방법
 
-conda 환경, 패키지 경로는 기본적으로 홈 디렉터리로 설정되어 있으나, scratch 와   같은 다른  경로로도 변경할 수 있습니다.
+conda 환경, 패키지 경로는 기본적으로 홈 디렉터리로 설정되어 있으나, scratch 와  같은 다른  경로로도 변경할 수 있습니다.
 
 ```
 $ echo "export CONDA_ENVS_PATH=/scratch/$USER/.conda/envs" >> /home01/$USER/.bashrc
