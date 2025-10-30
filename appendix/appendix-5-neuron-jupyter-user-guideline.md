@@ -4,25 +4,25 @@
 
 ### **1. JupyterHub**
 
-* JupyterHub 란 멀티 사용자 환경에서 주피터 랩/노트북을 사용할 수 있는 오픈소스 소프트웨어를 뜻한다.
-* JupyterHub는 다양한 환경 (JupyterLab, Notebook, RStudio, Nteract 등)을 지원할 뿐만 아니라 인증 서버 (OAuth, LDAP, GitHub 등) 및 배치 스케줄러와도 (PBSPro, Slurm, LSF 등) 유연하게 연동 가능하다.
-* JupyterHub는 컨테이너 관리 플랫폼인 Kubernetes와도 연동이 쉬워 컨테이너 기반의 클라우드 환경에 쉽게 연동 가능하다.
+* JupyterHub 란 멀티 사용자 환경에서 주피터 랩/노트북을 사용할 수 있는 오픈소스 소프트웨어를 뜻합니다.
+* JupyterHub는 다양한 환경 (JupyterLab, Notebook, RStudio, Nteract 등)을 지원할 뿐만 아니라 인증 서버 (OAuth, LDAP, GitHub 등) 및 배치 스케줄러와도 (PBSPro, Slurm, LSF 등) 유연하게 연동 가능합니다.
+* JupyterHub는 컨테이너 관리 플랫폼인 Kubernetes와도 연동이 쉬워 컨테이너 기반의 클라우드 환경에 쉽게 연동 가능합니다.
 
-※ Neuron 기반 JupyterHub는 5호기 Bright LDAP, OTP 인증기능을 추가하였고 Slurm 배치 스케줄러와 연동하여 자원을 할당하여 Jupyter 실행하고 현재 default로 Jupyter Notebook을 제공하고 추가로 JupyterLab 제공한다.
+※ Neuron 기반 JupyterHub는 5호기 Bright LDAP, OTP 인증기능을 추가하였고 Slurm 배치 스케줄러와 연동하여 자원을 할당하여 Jupyter 실행하고 현재 default로 Jupyter Notebook을 제공하고 추가로 JupyterLab 제공합니다.
 
 ### **2. Jupyter Notebook**
 
-* Jupyter Notebook은 웹 기반의 오픈소스 어플리케이션으로 프로그래머들에게 문서 생성, 코드 생성 및 실행, 수학적 라이브러리를 사용한 데이터 시각화, 통계 모델링, 머신러닝/딥러닝 프로그래밍에 사용한다.
-* 40 여개의 프로그래밍 언어 즉 Python, R, Julia, Scala등을 지원한다.
-* 프로그래밍 언어로 작성한 코드는 HTML, 이미지, 동영상 파일, LaTeX 등 다양한 타입으로 변환 가능하다.
-* Apache Spark, Pandas, Scikit-learn, ggplot2, Tensorflow 등 다양한 툴/라이브러리들과 연동 가능하다.
+* Jupyter Notebook은 웹 기반의 오픈소스 어플리케이션으로 프로그래머들에게 문서 생성, 코드 생성 및 실행, 수학적 라이브러리를 사용한 데이터 시각화, 통계 모델링, 머신러닝/딥러닝 프로그래밍에 사용합니다.
+* 40 여개의 프로그래밍 언어 즉 Python, R, Julia, Scala등을 지원합니다.
+* 프로그래밍 언어로 작성한 코드는 HTML, 이미지, 동영상 파일, LaTeX 등 다양한 타입으로 변환 가능합니다.
+* Apache Spark, Pandas, Scikit-learn, ggplot2, Tensorflow 등 다양한 툴/라이브러리들과 연동 가능합니다.
 
 ![](<../.gitbook/assets/Jupyter Notebook.png>)
 
 ### **3. JupyterLab**
 
-* JupyterLab은 Jupyter Notebook 인터페이스에 사용자 편의를 위한 기능들을 추가하여 확장 가능한 모듈로 구성된다.
-* Jupyter Notebook과 달리 하나의 작업 화면에 Tabs 와 Splitters를 사용하여 여러 개의 도큐먼트 또는 다른 기능을 제공한다.
+* JupyterLab은 Jupyter Notebook 인터페이스에 사용자 편의를 위한 기능들을 추가하여 확장 가능한 모듈로 구성됩니다.
+* Jupyter Notebook과 달리 하나의 작업 화면에 Tabs 와 Splitters를 사용하여 여러 개의 도큐먼트 또는 다른 기능을 제공합니다.
 
 ![](../.gitbook/assets/JupyterLab.png)
 
@@ -56,16 +56,16 @@
 
 &#x20;    `(notebook) $ sh  /apps/jupyter/kisti_conda_pytorch.sh`
 
-<mark style="color:red;">**※ 최초 한번만 실행하며 환경설정이 완료되면 즉시 웹 페이지 접속하여 (다. JupyterLab 사용방법) JupyterLab/Notebook을 사용 가능하다.**</mark>
+<mark style="color:red;">**※ 최초 한번만 실행하며 환경설정이 완료되면 즉시 웹 페이지 접속하여 (다. JupyterLab 사용방법) JupyterLab/Notebook을 사용 가능합니다.**</mark>
 
 ### **2. 스크립트 실행**
 
-* 터미널로 로그인 노드 (<mark style="color:red;">**neuron.ksc.re.kr**</mark>) 에 접속하여 다음 스크립트 /apps/jupyter/kisti\_conda\_jupyter.sh 를 실행한다.
-* 스크립트를 실행하면 <mark style="color:red;">**/scratch/\[사용자ID]/.conda/envs**</mark> 디렉터리에 notebook Conda 환경이 만들어지고 jupyterhub, jupyterLab, notebook 패키지들이 자동으로 설치되고 멀티 GPU 환경에 필요한 cudatoolkit=11.6 과 cudnn이 설치된다.&#x20;
+* 터미널로 로그인 노드 (<mark style="color:red;">**neuron.ksc.re.kr**</mark>) 에 접속하여 다음 스크립트 /apps/jupyter/kisti\_conda\_jupyter.sh 를 실행합니다.
+* 스크립트를 실행하면 <mark style="color:red;">**/scratch/\[사용자ID]/.conda/envs**</mark> 디렉터리에 notebook Conda 환경이 만들어지고 jupyterhub, jupyterLab, notebook 패키지들이 자동으로 설치되고 멀티 GPU 환경에 필요한 cudatoolkit=11.6 과 cudnn이 설치됩니다.&#x20;
 
-**※ 이 파일은 한번만 실행하면 되고 그 다음부터는 바로 웹 페이지 접속하여 사용 가능하다.**\
-※ 실행파일은 공유 디렉터리에서 /apps/jupyter/kisti\_conda\_jupyter.sh 로 바로 실행 가능하다.\
-※ 아래 테스트는 사용자ID _<mark style="color:red;">**a1113a01**</mark>_ 로 진행하였다.
+**※ 이 파일은 한번만 실행하면 되고 그 다음부터는 바로 웹 페이지 접속하여 사용 가능합니다.**\
+※ 실행파일은 공유 디렉터리에서 /apps/jupyter/kisti\_conda\_jupyter.sh 로 바로 실행 가능합니다.\
+※ 아래 테스트는 사용자ID _<mark style="color:red;">**a1113a01**</mark>_ 로 진행하였습니다.
 
 ```shell-session
 [a1113a01@glogin02 ~]$ sh /apps/jupyter/kisti_conda_jupyter.sh
@@ -84,7 +84,7 @@ Executing transaction: / WARNING conda.core.prefix_data:_load_single_record(167)
 done
 ```
 
-* shell을 다시 시작하고 base 환경 자동 활성화 기능을 꺼야 한다. (한번만 실행)
+* shell을 다시 시작하고 base 환경 자동 활성화 기능을 꺼야 합니다. (한번만 실행)
 
 ```shell-session
 [a1113a01@glogin01 ~]$ source ~/.bashrc
@@ -92,16 +92,16 @@ done
 (base) [a1113a01@glogin01 ~]$ conda deactivate
 ```
 
-※ base 환경 자동 활성화 기능을 false 로 설정함으로 다음에 base 환경으로 자동 활성화 되는 것을 방지한다. （만약 base 환경으로 활성화 되지 않았으면 source \~/.bashrc 이후 바로 conda activate notebook 명령어를 실행)
+※ base 환경 자동 활성화 기능을 false 로 설정함으로 다음에 base 환경으로 자동 활성화 되는 것을 방지합니다. (만약 base 환경으로 활성화 되지 않았으면 source \~/.bashrc 이후 바로 conda activate notebook 명령어를 실행)
 
-* conda notebook 환경을 다음 명령어로 활성화 한다.
+* conda notebook 환경을 다음 명령어로 활성화 합니다.
 
 ```shell-session
 [a1113a01@glogin01 ~]$ conda activate notebook
 (notebook) [a1113a01@glogin01 ~]$
 ```
 
-* Tensorflow(tensorboard 포함) 혹은 Pytorch 등의 사용을 원하는 사용자는 KISTI에서 제공하는 자동 설치 스크립트를 실행하여 설치할 수 있다.&#x20;
+* Tensorflow(tensorboard 포함) 혹은 Pytorch 등의 사용을 원하는 사용자는 KISTI에서 제공하는 자동 설치 스크립트를 실행하여 설치할 수 있습니다.&#x20;
 
 ※ 주의: 반드시 notebook 사용자 환경에서 실행해야 한다.
 
@@ -113,15 +113,15 @@ done
 (notebook) 757% [a1113a01@glogin01 ~]$ sh /apps/jupyter/kisti_conda_pytorch.sh (약 5분 소요)
 ```
 
-※ 이제부터 사용자는 직접 웹에 접속하여 Jupyter 노트북을 사용할 수 있다. (여기까지 작업들은 한번만 실행하면 됨)
+※ 이제부터 사용자는 직접 웹에 접속하여 Jupyter 노트북을 사용할 수 있습니다. (여기까지 작업들은 한번만 실행하면 됨)
 
 ### **3. JupyterHub 웹 페이지 접속**
 
-* <mark style="color:red;">https://jupyter.ksc.re.kr</mark> 에 접속하여 신청 받은 뉴론 계정, OTP, 비밀번호를 입력한다.
+* <mark style="color:red;">https://jupyter.ksc.re.kr</mark> 에 접속하여 신청 받은 뉴론 계정, OTP, 비밀번호를 입력합니다.
 
 ![](<../.gitbook/assets/JupyterHub 웹 페이지 접속.png>)
 
-* 메인 화면에서 자원 사용현황 확인 및 Refresh 버튼을 클릭하여 자원 사용 현황을 업데이트 할 수 있다.
+* 메인 화면에서 자원 사용현황 확인 및 Refresh 버튼을 클릭하여 자원 사용 현황을 업데이트 할 수 있습니다.
 
 <figure><img src="../.gitbook/assets/jupyter_queue_selection.png" alt=""><figcaption></figcaption></figure>
 
@@ -137,7 +137,7 @@ done
   * jupyter queue (무료): 환경 설치, 전처리, 디버깅 용도&#x20;
   * other queues (유료): 딥러닝/머신러닝 등 모델 실행 및 시각화 용도
 
-※ jupyter queue는 현재 2개 노드로 최대 20개(노드 당 10개) Jupyter Lab/Notebook 실행 가능함 (여러 사용자가 노드의 CPU+GPU\[v100] 공유)&#x20;
+※ jupyter queue는 현재 2개 노드로 최대 20개(노드 당 10개) Jupyter Lab/Notebook 실행 가능합니다. (여러 사용자가 노드의 CPU+GPU\[v100] 공유)&#x20;
 
 ※ jupyter queue의 GPU는 공유자원이기 때문에 할당 정보(Alloc GPUs)는 0으로 표시됩니다.
 
@@ -145,7 +145,7 @@ done
 
 <mark style="color:red;">**※ jupyter 큐 외 기타 큐 선택 시 가급적 \*:gpu=1 을 선택하여 주피터를 실행하시기 바랍니다.**</mark>
 
-※ 유료 과금 정책은 기존 Neuron 시스템 과금 정책을 따르고 정보는 국가슈퍼컴퓨팅 홈페이지 요금안내 페이지 (https://www.ksc.re.kr/jwjg/gjbg/ygan) 에서 확인 가능합니다.
+※ 유료 과금 정책은 기존 Neuron 시스템 과금 정책을 따르고 정보는 국가슈퍼컴퓨팅 홈페이지 요금 안내 페이지 (https://www.ksc.re.kr/jwjg/gjbg/ygan) 에서 확인 가능합니다.
 
 * Job queue 에서 해당 queue를 선택하고 Submit버튼을 클릭하여 Jupyter Notebook 실행 (other queues로도 실행 가능하나, 다만 과금 발생함, 과금 정보는 KSC 홈페이지 Neuron 과금 정보 참고)
 
@@ -315,10 +315,10 @@ File -> Hub Control Panel -> Stop My Server
 
 ## 바. Jupyter 환경 초기화 방법
 
-* conda 가상 환경 notebook 에 pip 으로 설치 할 경우 기존 conda install 로 설치한 패키지들과 버전 충돌이 발생하여 Jupyter 노크북이 실행이 안될 경우 다음과 같은 명령어로 환경 초기화를 해줄 수 있다.
-* 터미널로 로그인 노드에서 /apps/jupyter/reset\_env.sh 를 실행한다.
-* 해당 스크립트를 실행하면 /scratch/\[사용자ID]/.conda/envs 디렉터리에 만들어졌던 notebook 가상환경에 설치되었던 모든 패키지들이 삭제되고 처음 jupyter 실행을 위한 기본 패키지들이 다시 설치 된다.
-* /sratch/\[사용자ID]/workspace/에 데이터는 보존된다.
+* conda 가상 환경 notebook 에 pip 으로 설치 할 경우 기존 conda install 로 설치한 패키지들과 버전 충돌이 발생하여 Jupyter 노크북이 실행이 안될 경우 다음과 같은 명령어로 환경 초기화를 해줄 수 있습니다.
+* 터미널로 로그인 노드에서 /apps/jupyter/reset\_env.sh 를 실행합니다.
+* 해당 스크립트를 실행하면 /scratch/\[사용자ID]/.conda/envs 디렉터리에 만들어졌던 notebook 가상환경에 설치되었던 모든 패키지들이 삭제되고 처음 jupyter 실행을 위한 기본 패키지들이 다시 설치 됩니다.
+* /sratch/\[사용자ID]/workspace/에 데이터는 보존됩니다.
 
 ```shell-session
 [a1113a01@glogin02 ~]$ sh /apps/jupyter/reset_env.sh
@@ -348,5 +348,5 @@ If you need another packages, you can run the installation scripts for some pack
 {% embed url="https://youtu.be/bMvwXXJvwq4" %}
 
 {% hint style="info" %}
-2023년 6월 30일에 마지막으로 업데이트되었습니다.
+2023년 6월 30일에 마지막으로 업데이트 되었습니다.
 {% endhint %}

@@ -105,8 +105,8 @@ g16 test.com
 
 ### 3. GaussView 사용법
 
-* GaussView는  GUI 기반 프로그램이기  때문에,  MyKSC(웹 서비스 포털)의 VNC(원격 데스크톱)에서  실행할 수 있음 ([**MyKSC VNC 사용법 참조**](https://docs-ksc.gitbook.io/myksc/app/vnc)**,** GPU 지원하지 않음)&#x20;
-* MyKSC VNC에서 GaussView는 할당된 계산 자원의 한계로 입력  데이터 생성 및 결과 분석 용도로  사용할 것을 권장하며,  본격적인 계산 작업은 배치 작업 스케줄러를 통해 실행해야 함
+* GaussView는  GUI 기반 프로그램이기  때문에,  MyKSC(웹 서비스 포털)의 VNC(원격 데스크톱)에서  실행할 수 있습니다. ([**MyKSC VNC 사용법 참조**](https://docs-ksc.gitbook.io/myksc/app/vnc)**,** GPU 지원하지 않습니다.)&#x20;
+* MyKSC VNC에서 GaussView는 할당된 계산 자원의 한계로 입력  데이터 생성 및 결과 분석 용도로  사용할 것을 권장하며,  본격적인 계산 작업은 배치 작업 스케줄러를 통해 실행해야 합니다.
 
 <figure><img src="../.gitbook/assets/gassview-1.png" alt=""><figcaption><p>MyKSC VNC에서 GaussView 실행화면</p></figcaption></figure>
 
@@ -117,5 +117,5 @@ g16 test.com
 * 가우시안에 관한 모든 정보는 Gaussian사의 홈페이지(http://gaussian.com)를 통해 얻을 수 있습니다.
 
 {% hint style="info" %}
-2022년 11월 3일에 마지막으로 업데이트되었습니다.
+2022년 11월 3일에 마지막으로 업데이트 되었습니다.
 {% endhint %}

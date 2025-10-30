@@ -1,14 +1,14 @@
 # Singularity 컨테이너
 
-싱귤레러티(Singularity)는 도커(Docker)와 같이 OS 가상화를 구현하기 위한 HPC 환경에 적합한 컨테이너 플랫폼이다. 사용자 작업 환경에 적합한 리눅스 배포판, 컴파일러, 라이브러리, 애플리케이션 등을 포함하는 컨테이너 이미지를 빌드하고 빌드된 컨테이너 이미지를 구동하여 사용자 프로그램을 실행할 수 있다.
+싱귤레러티(Singularity)는 도커(Docker)와 같이 OS 가상화를 구현하기 위한 HPC 환경에 적합한 컨테이너 플랫폼입니다. 사용자 작업 환경에 적합한 리눅스 배포판, 컴파일러, 라이브러리, 애플리케이션 등을 포함하는 컨테이너 이미지를 빌드하고 빌드된 컨테이너 이미지를 구동하여 사용자 프로그램을 실행할 수 있습니다.
 
-Tensorflow, Caffe, Pytorch와 같은 딥러닝 프레임워크와 Quantum Espresso, Lammps, Gromacs, Paraview 등을 지원하는 빌드된 **컨테이너 이미지는** **/apps/applications/singularity\_images/ngc 디렉터리**에서 액세스 할 수 있다.
+Tensorflow, Caffe, Pytorch와 같은 딥러닝 프레임워크와 Quantum Espresso, Lammps, Gromacs, Paraview 등을 지원하는 빌드된 **컨테이너 이미지는** **/apps/applications/singularity\_images/ngc 디렉터리**에서 액세스 할 수 있습니다.
 
 ![](../.gitbook/assets/vm-container_comparison.JPG)       ![](<../.gitbook/assets/image (2).png>)
 
 &#x20; < 가상머신과 컨테이너 아키텍처 비교>                 \<Singularity 컨테이너 아키텍처>
 
-※ 가상머신은 애플리케이션이 하이퍼바이저와 게스트 OS를 거쳐 올라가는 구조이나, 컨테이너는 물리적인 하드웨어에 더 가까우며 별도의 게스트 OS가 아닌 호스트 OS를 공유하기 때문에 오버헤드가 더 작음. 최근 클라우드 서비스에서 컨테이너의 활용이 증가하고 있음
+※ 가상머신은 애플리케이션이 하이퍼바이저와 게스트 OS를 거쳐 올라가는 구조이나, 컨테이너는 물리적인 하드웨어에 더 가까우며 별도의 게스트 OS가 아닌 호스트 OS를 공유하기 때문에 오버헤드가 더 적습니다. 최근 클라우드 서비스에서 컨테이너의 활용이 증가하고 있습니다.
 
 
 
@@ -31,11 +31,11 @@ export PATH=$PATH:/apps/applications/singularity/3.11.0/bin/
 
 ### **2. 로컬 빌드**
 
-* 뉴론 시스템의 로그인 노드에서 컨테이너 이미지를 로컬 빌드하기 위해서는, 먼저 [**KISTI 홈페이지 > 기술지원 > 상담신청**을](https://www.ksc.re.kr/gsjw/gsjw/qna/edit) 통해 아래와 같은 내용으로 fakeroot 사용 신청을 해야함
+* 뉴론 시스템의 로그인 노드에서 컨테이너 이미지를 로컬 빌드하기 위해서는, 먼저 [**KISTI 홈페이지 > 기술지원 > 상담신청**을](https://www.ksc.re.kr/gsjw/gsjw/qna/edit) 통해 아래와 같은 내용으로 fakeroot 사용 신청을 해야합니다.
   * 시스템명 : 뉴론
   * 사용자 ID : a000bcd
   * 요청사항 : 싱귤레러티 fakeroot 사용 설정
-* [**NGC(Nvidia GPU Cloud)에서 배포하는 도커 컨테이너**](https://catalog.ngc.nvidia.com/containers)로 부터 뉴론 시스템의 Nvidia GPU에 최적화된 딥러닝 프레임워크 및 HPC 애플리케이션 관련 싱규레러티 컨테이너 이미지를 빌드할 수 있음
+* [**NGC(Nvidia GPU Cloud)에서 배포하는 도커 컨테이너**](https://catalog.ngc.nvidia.com/containers)로 부터 뉴론 시스템의 Nvidia GPU에 최적화된 딥러닝 프레임워크 및 HPC 애플리케이션 관련 싱규레러티 컨테이너 이미지를 빌드할 수 있습니다.
 
 
 
@@ -46,7 +46,7 @@ $ singularity [global options...] build [local options...] ＜IMAGE PATH＞ ＜B
 [주요 global options]
     -d : 디버깅 정보를 출력함
     -v : 추가 정보를 출력함
-    --version : 싱귤레러티 버전 정보를 출력함
+    --version : 싱귤레러티 버전 정보를 출력
 
 [관련 주요 local options]
     --fakeroot : roor 권한 없이 일반사용자가 가짜 root 사용자로 이미지 빌드 
@@ -96,7 +96,7 @@ oci-archive:// OCI 아카이브 파일
    # singularity 3.11.0 버전 이상에서 지원
    # Definition 파일에서 기존 컨테이너 이미지 기반 패키지 설치에 적합하며,     
      apt-get과 같은 시스템패키지 관리자를 사용하는 경우 일부 패키지(git 등) 설치 과정에서 
-     에러가 발생할 수 있음
+     에러가 발생할 수 있습니다.
  $ singularity build ubuntu4.sif ubuntu.def*
  
 * ) ubuntu.def 예시
@@ -127,10 +127,10 @@ oci-archive:// OCI 아카이브 파일
 
 ### 3.cotainr 사용하여  빌드
 
-cotainr은 사용자가  뉴론  및  자신의 시스템에서 사용중인 conda 패키지를 포함하는 싱귤레러티 컨테이너  이미지를 좀 더 쉽게 빌드할 수 있게 지원하는 도구임&#x20;
+cotainr은 사용자가  뉴론  및  자신의 시스템에서 사용중인 conda 패키지를 포함하는 싱귤레러티 컨테이너  이미지를 좀 더 쉽게 빌드할 수 있게 지원하는 도구입니다.
 
-* 사용자  conda environment를 yml 파일로 export하여 사용자  conda 패키지를 포함하는 뉴론 시스템을 위한 사용자 싱귤레러티 컨테이너 이미지를 빌드할 수 있음
-* 뉴론 및 자신의 시스템에서 기존  conda environment를  yml 파일로 export 하는 방법은 아래와 같음
+* 사용자  conda environment를 yml 파일로 export하여 사용자  conda 패키지를 포함하는 뉴론 시스템을 위한 사용자 싱귤레러티 컨테이너 이미지를 빌드할 수 있습니다.
+* 뉴론 및 자신의 시스템에서 기존  conda environment를  yml 파일로 export 하는 방법은 아래와 같습니다.
 
 ```
 (base) $ conda env export > my_conda_env.yml
@@ -181,7 +181,7 @@ dependencies:
 
 
 
-cotainr을 사용하기 위해서는 module 명령을 사용하여 singularity 및cotainr 모듈을 먼저 로드해야 함
+cotainr을 사용하기 위해서는 module 명령을 사용하여 singularity 및cotainr 모듈을 먼저 로드해야 합니다.
 
 ```
 $ module load  singularity cotainr
@@ -189,7 +189,7 @@ $ module load  singularity cotainr
 
 
 
-cotainr build를 사용하여 컨테이너  이미지를 빌드할 때 컨테이너에 대한 기본 이미지를 직접 지정하거나(-base-image 옵션 사용) --system 옵션을 사용하여 뉴론  시스템에 권장되는 기본 이미지를 사용할 수 있음
+cotainr build를 사용하여 컨테이너  이미지를 빌드할 때 컨테이너에 대한 기본 이미지를 직접 지정하거나(-base-image 옵션 사용) --system 옵션을 사용하여 뉴론  시스템에 권장되는 기본 이미지를 사용할 수 있습니다.
 
 {% code overflow="wrap" fullWidth="false" %}
 ```
@@ -211,7 +211,7 @@ $ cotainr build --system=neuron-cuda --conda-env=my_conda_env.yml --accept-licen
 
 
 
-&#x20;singularity exec 명령어로 빌드한  컨테이너 이미지를 실행하여 아래 예제와 같이  컨테이너에  생성된  conda environment 리스트를 확인할 수 있음
+&#x20;singularity exec 명령어로 빌드한  컨테이너 이미지를 실행하여 아래 예제와 같이  컨테이너에  생성된  conda environment 리스트를 확인할 수 있습니다.
 
 ```
 $ singularity exec --nv my_container.sif conda env list
@@ -231,8 +231,8 @@ base                  *  /opt/conda/envs/conda_container_env
 ```
 {% endcode %}
 
-※ Sylabs Cloud(https://cloud.sylabs.io)에서 제공하는 원격빌드 서비스를 이용하려면 액세스 토큰을 생성하여 뉴론 시스템에 등록해야 함 [**\[참조 1\]**](appendix-3-how-to-use-singularity-container.md#h_7595929387701647407267724)\
-※ 또한, Sylabs Cloud에 웹 브라우저 접속을 통해서 싱귤레러티 컨테이너 이미지의 생성∙관리가 가능함   [**\[참조 2\]**](appendix-3-how-to-use-singularity-container.md#h_6582700487751647407356239)
+※ Sylabs Cloud(https://cloud.sylabs.io)에서 제공하는 원격빌드 서비스를 이용하려면 액세스 토큰을 생성하여 뉴론 시스템에 등록해야 합니다. [**\[참조 1\]**](appendix-3-how-to-use-singularity-container.md#h_7595929387701647407267724)\
+※ 또한, Sylabs Cloud에 웹 브라우저 접속을 통해서 싱귤레러티 컨테이너 이미지의 생성∙관리가 가능합니다.  [**\[참조 2\]**](appendix-3-how-to-use-singularity-container.md#h_6582700487751647407356239)
 
 
 
@@ -251,7 +251,7 @@ $ singularity pull tensorflow.sif library://dxtr/default/hpc-tensorflow:0.1
 ```
 {% endcode %}
 
-※ Sylabs Cloud 라이브러리에 컨테이너 이미지를 내보내기(업로드) 위해서는 먼저 액세스 토큰을 생성하여 뉴론 시스템에 등록해야 함 [**\[참조 1\]**](appendix-3-how-to-use-singularity-container.md#h_7595929387701647407267724)
+※ Sylabs Cloud 라이브러리에 컨테이너 이미지를 내보내기(업로드) 위해서는 먼저 액세스 토큰을 생성하여 뉴론 시스템에 등록해야 합니다. [**\[참조 1\]**](appendix-3-how-to-use-singularity-container.md#h_7595929387701647407267724)
 
 ***
 
@@ -276,9 +276,7 @@ $ singularity pull tensorflow.sif library://dxtr/default/hpc-tensorflow:0.1
 ```
 {% endcode %}
 
-※ 단, 여러 가지 컨테이너 이미지를 사용하는 경우 사용자 프로그램 실행 시 사용자 홈 디렉터리에 추가로 설치한 패키지를 먼저 찾기 때문에 다른 컨테이너 이미지에서 요구하는 패키지와 충돌이 발생하여 정상적으로 동작하지 않을 수 있음
-
-
+※ 단, 여러 가지 컨테이너 이미지를 사용하는 경우 사용자 프로그램 실행 시 사용자 홈 디렉터리에 추가로 설치한 패키지를 먼저 찾기 때문에 다른 컨테이너 이미지에서 요구하는 패키지와 충돌이 발생하여 정상적으로 동작하지 않을 수 있습니다.
 
 
 
@@ -313,7 +311,7 @@ $ singularity exec --nv docker://tensorflow/tensorflow:latest python test.py
 $ singularity exec --nv library://dxtr/default/hpc-tensorflow:0.1 python test.py
 
 ③ Nvidia GPU 장착 계산 노드의 싱귤레러티 컨테이너에서 runscript(이미지 빌드 시 생성)가 존재하면 이 스크립트를 먼저 실행한 후, 
-사용자 명령어(아래 예제에서 python --version)가 존재하면 이어서 실행됨 
+사용자 명령어(아래 예제에서 python --version)가 존재하면 이어서 실행됩니다.
 
 $ singularity run --nv /apps/applications/singularity_images/ngc/tensorflow_22.03-tf1-keras-py3.sif ＼
  python --version 
@@ -344,13 +342,13 @@ Python 3.8.10 (default, Nov 26 2021, 20:14:08)
 ```
 {% endcode %}
 
-※ 싱귤레러티의 명령어\[shell | exec | run | pull ...] 별 도움말을 보려면 “singularity help \[command]”를 실행함
+※ 싱귤레러티의 명령어\[shell | exec | run | pull ...] 별 도움말을 보려면 “singularity help \[command]”를 실행합니다.
 
-※ 계산/로그인 노드에서 Nvidia GPU를 사용하기 위해서는 --nv 옵션을 사용해야 함
+※ 계산/로그인 노드에서 Nvidia GPU를 사용하기 위해서는 --nv 옵션을 사용해야 합니다.
 
 ### **3. NGC 컨테이너 모듈을 사용하여 사용자 프로그램 실행**
 
-모듈 명령어를 사용하여 NGC 싱규레러티 컨테이너 이미지와 관련된 모듈을 로드하면 싱귤레러티 명령어를 입력하지 않아도 자동으로 컨테이너 이미지가 구동되어 좀 더 쉽게 싱귤레러티 컨테이너에서 사용자 프로그램을 실행할 수 있음
+모듈 명령어를 사용하여 NGC 싱규레러티 컨테이너 이미지와 관련된 모듈을 로드하면 싱귤레러티 명령어를 입력하지 않아도 자동으로 컨테이너 이미지가 구동되어 좀 더 쉽게 싱귤레러티 컨테이너에서 사용자 프로그램을 실행할 수 있습니다.
 
 * NGC 컨테이너 모듈을 로드하여 컨테이너에서 사용자 프로그램 실행하기
 
@@ -372,11 +370,11 @@ Python 3.8.10 (default, Nov 26 2021, 20:14:08)
 ```
 {% endcode %}
 
-※ 컨네이너 이미지 모듈 로드 후 실행명령어 입력만으로 “singularity run --nv <컨테이너> \[실행명령어]”가 자동 실행됨
+※ 컨네이너 이미지 모듈 로드 후 실행명령어 입력만으로 “singularity run --nv <컨테이너> \[실행명령어]”가 자동 실행됩니다.
 
 * NGC 컨테이너 모듈 리스트
 
-※ NGC(https://ngc.nvidia.com)에서 Nvidia GPU에 최적화하여 빌드 배포한 도커 컨테이너 이미지를 싱귤레러티로 변환함\
+※ NGC(https://ngc.nvidia.com)에서 Nvidia GPU에 최적화하여 빌드 배포한 도커 컨테이너 이미지를 싱귤레러티로 변환합니다.\
 ※ 컨테이너 이미지 파일 경로 : /apps/applications/singularity\_images/ngc
 
 ```shell-session
@@ -402,7 +400,7 @@ Submitted batch job 12345
 
 ※ 자세한 스케줄러(SLURM) 사용 방법은 "뉴론 지침서-스케줄러(SLURM)를 통한 작업실행" 참조
 
-※ [**\[참조 3\]**](appendix-3-how-to-use-singularity-container.md#h_9146219267821647408138749)를 통해 병렬 학습 실행 예제 프로그램을 따라해 볼 수 있음
+※ [**\[참조 3\]**](appendix-3-how-to-use-singularity-container.md#h_9146219267821647408138749)를 통해 병렬 학습 실행 예제 프로그램을 따라해 볼 수 있습니다.
 
 ***
 
@@ -484,7 +482,7 @@ python pytorch_imagenet_resnet50.py
 
 #### **3) 멀티 노드-2**
 
-* NGC 컨테이너 모듈을 로드하면 사용자 프로그램 실행 시 지정된 싱귤레러티 컨테이너를 자동으로 구동함
+* NGC 컨테이너 모듈을 로드하면 사용자 프로그램 실행 시 지정된 싱귤레러티 컨테이너를 자동으로 구동합니다.
 * 실행 명령어 : mpirun\_wrapper \[사용자 프로그램 실행 명령어]
 
 ```
@@ -535,7 +533,7 @@ mpirun_wrapper python pytorch_imagenet_resnet50.py
 
 ### \[참조3] 병렬 학습 프로그램 실행 예제 <a href="#h_9146219267821647408138749" id="h_9146219267821647408138749"></a>
 
-* 아래 예제는 싱귤레러티 컨테이너에서 pytorch 혹은 keras(tensorflow)로 작성된 resnet50 모델을 사용하여 imagenet 이미지 분류를 위한 병렬 학습 실행을 사용자가 직접 따라해 볼 수 있도록 구성됨
+* 아래 예제는 싱귤레러티 컨테이너에서 pytorch 혹은 keras(tensorflow)로 작성된 resnet50 모델을 사용하여 imagenet 이미지 분류를 위한 병렬 학습 실행을 사용자가 직접 따라해 볼 수 있도록 구성됩니다.
 
 {% code overflow="wrap" %}
 ```
@@ -558,7 +556,7 @@ mpirun_wrapper python pytorch_imagenet_resnet50.py
 
 ***
 
-**1) /apps/applications/singularity\_images/examples 디렉터리에서 아래 작업 스크립트 파일을 사용자 작업 디렉터리로 복사함**
+**1) /apps/applications/singularity\_images/examples 디렉터리에서 아래 작업 스크립트 파일을 사용자 작업 디렉터리로 복사합니다.**
 
 {% code overflow="wrap" %}
 ```shell-session
@@ -568,8 +566,8 @@ mpirun_wrapper python pytorch_imagenet_resnet50.py
 
 ***
 
-**2) STATE가 idle 상태인 계산 노드가 있는 파티션을 확인함**\
-아래 예제에서는 cas\_v100nv\_8, cas\_v100nv\_4, cas\_v100\_4, cas\_v100\_2 등의 파티션에 가용 계산노드가 존재함
+**2) STATE가 idle 상태인 계산 노드가 있는 파티션을 확인합니다.**\
+아래 예제에서는 cas\_v100nv\_8, cas\_v100nv\_4, cas\_v100\_4, cas\_v100\_2 등의 파티션에 가용 계산노드가 존재합니다.
 
 ```shell-session
 [a1234b5@glogin01]$ sinfo
@@ -579,7 +577,7 @@ mpirun_wrapper python pytorch_imagenet_resnet50.py
 
 ***
 
-**3) 작업 스크립트 파일에서 작업명(-J), wall\_time(--time), 작업 큐(-p), Application이름(--comment), 계산노드 자원 요구량(--nodes, --ntasks-per-node, --gres) 등의 스케줄러 옵션과 학습 프로그램의 파라미터를 변경함**
+**3) 작업 스크립트 파일에서 작업명(-J), wall\_time(--time), 작업 큐(-p), Application이름(--comment), 계산노드 자원 요구량(--nodes, --ntasks-per-node, --gres) 등의 스케줄러 옵션과 학습 프로그램의 파라미터를 변경합니다.**
 
 {% code overflow="wrap" %}
 ```bash
@@ -607,7 +605,7 @@ python $Base/examples/pytorch/resnet50v1.5/multiproc.py --nproc_per_node 2 $Base
 
 ***
 
-**4) 스케줄러에 작업을 제출함**
+**4) 스케줄러에 작업을 제출합니다.**
 
 ```shell-session
 [a1234b5@glogin01]$ sbatch 01.pytorch.sh
@@ -616,7 +614,7 @@ Submitted batch job 99982
 
 ***
 
-**5) 스케줄러에 의해 할당된 계산 노드를 확인함**
+**5) 스케줄러에 의해 할당된 계산 노드를 확인합니다.**
 
 ```shell-session
 [a1234b5@glogin01]$ squque –u a1234b5
@@ -626,7 +624,7 @@ Submitted batch job 99982
 
 ***
 
-**6) 스케줄러에 의해 생성되는 로그 파일을 모니터링함**
+**6) 스케줄러에 의해 생성되는 로그 파일을 모니터링 합니다.**
 
 ```shell-session
 [a1234b5@glogin01]$ tail –f pytorch_99982.out
@@ -638,7 +636,7 @@ Submitted batch job 99982
 
 ***
 
-**7) 스케줄러에 의해 할당된 계산 노드에서 학습 프로세스 및 GPU 활용 현황을 모니터링 함**
+**7) 스케줄러에 의해 할당된 계산 노드에서 학습 프로세스 및 GPU 활용 현황을 모니터링 합니다.**
 
 ```shell-session
 [a1234b5@glogin01]$ ssh gpu41
@@ -740,5 +738,5 @@ mpirun_wrapper python $Base/horovod/examples/keras/keras_imagenet_resnet50.py \
 ※ 2노드 점유, 노드 당 2 MPI 타스크, 타스크 당 10 CPUs, 노드 당 2GPU 사용
 
 {% hint style="info" %}
-2023년 3월 2일에 마지막으로 업데이트되었습니다.
+2023년 3월 2일에 마지막으로 업데이트 되었습니다.
 {% endhint %}
