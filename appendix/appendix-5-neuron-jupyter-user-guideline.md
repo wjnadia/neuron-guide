@@ -103,7 +103,7 @@ done
 
 * Tensorflow(tensorboard 포함) 혹은 Pytorch 등의 사용을 원하는 사용자는 KISTI에서 제공하는 자동 설치 스크립트를 실행하여 설치할 수 있습니다.&#x20;
 
-※ 주의: 반드시 notebook 사용자 환경에서 실행해야 한다.
+※ 주의: 반드시 notebook 사용자 환경에서 실행해야 합니다.
 
 ```shell-session
 ## tensorflow-gpu, tensorboard 패키지와 jupyter_notebook 및 jupyter_lab을 위한 tensorboard extenstion 설치

@@ -16,7 +16,7 @@
 ***
 
 * **partition ( -p, --partition )**\
-  작업 수행을 위한 SLURM 파티션을 지정한다. 파티션 명은 sinfo 명령어로 확인이 가능합니다.
+  작업 수행을 위한 SLURM 파티션을 지정합니다. 파티션 명은 sinfo 명령어로 확인이 가능합니다.
 
 ***
 
@@ -64,11 +64,11 @@
 ***
 
 * **dependency ( -d, --dependency )**\
-  작업 의존성을 설정한다. 설정된 작업이 종료된 후에 작업이 시작됩니다.
+  작업 의존성을 설정합니다. 설정된 작업이 종료된 후에 작업이 시작됩니다.
 
 
 
-※ 상세 매뉴얼 : http://slurm.schedmd.com/ 참고 부탁드립니다.
+※ SLURM 상세 매뉴얼 : http://slurm.schedmd.com
 
 {% hint style="info" %}
 2022년 9월 22일에 마지막으로 업데이트 되었습니다.
