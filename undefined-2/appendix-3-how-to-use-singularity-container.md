@@ -23,15 +23,16 @@ Tensorflow, Caffe, Pytorch와 같은 딥러닝 프레임워크와 Quantum Espres
 ### **1. 싱귤레러티 모듈 적재 혹은 경로 설정**
 
 ```
-$ module load singularity/3.11.0
+$ module load singularity/4.1.0
 or
 $ $HOME/.bash_profile
-export PATH=$PATH:/apps/applications/singularity/3.11.0/bin/
+export PATH=$PATH:/apps/applications/singularity/4.1.0/bin/
 ```
 
 ### **2. 로컬 빌드**
 
-* 뉴론 시스템의 로그인 노드에서 컨테이너 이미지를 로컬 빌드하기 위해서는, 먼저 [**KISTI 홈페이지 > 기술지원 > 상담신청**을](https://www.ksc.re.kr/gsjw/gsjw/qna/edit) 통해 아래와 같은 내용으로 fakeroot 사용 신청을 해야합니다.
+* 뉴론 시스템의 로그인 노드에서 컨테이너 이미지를 로컬 빌드하기 위해서는, 먼저 [**KISTI 홈페이지 > 기술지원 > 상담신청**을](https://www.ksc.re.kr/gsjw/gsjw/qna/edit) 통해 아래와 같은 내용으로 fakeroot 사용 신청을 해야합니다. \
+  단, 2026년 1월 8일 이후 신규 사용자는 계정 등록 시 자동 처리 되므로 신청할 필요가 없습니다.
   * 시스템명 : 뉴론
   * 사용자 ID : a000bcd
   * 요청사항 : 싱귤레러티 fakeroot 사용 설정
