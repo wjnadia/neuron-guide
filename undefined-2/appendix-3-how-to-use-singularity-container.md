@@ -20,19 +20,19 @@ Tensorflow, Caffe, Pytorch와 같은 딥러닝 프레임워크와 Quantum Espres
 
 ## 가. 컨테이너 이미지 빌드하기
 
-### **1. 싱귤레러티 모듈 적재 혹은 경로 설정**
+### **1. 싱귤레러티 모듈 적재  및 자동 로드(Default) 설정**
 
 ```
-$ module load singularity/4.1.0
-or
-$ $HOME/.bash_profile
-export PATH=$PATH:/apps/applications/singularity/4.1.0/bin/
+$ module load singularity/4.3.4 (singularity 4.3.4 버전모듈 로드)
+$ module list (현재 로드된 모듈 목록 확인)
+$ module save default (로그인 시 자동 로드(default) 설정)
+$ module savelist (저장된 설정 이름 확인)
 ```
 
 ### **2. 로컬 빌드**
 
 * 뉴론 시스템의 로그인 노드에서 컨테이너 이미지를 로컬 빌드하기 위해서는, 먼저 [**KISTI 홈페이지 > 기술지원 > 상담신청**을](https://www.ksc.re.kr/gsjw/gsjw/qna/edit) 통해 아래와 같은 내용으로 fakeroot 사용 신청을 해야합니다. \
-  단, 2026년 1월 8일 이후 신규 사용자는 계정 등록 시 자동 처리 되므로 신청할 필요가 없습니다.
+  &#xNAN;_**단,****&#x20;**<mark style="color:$success;">**2026년 1월 8일 이후**</mark>**&#x20;****신규 사용자는 계정 등록 시 자동 처리 되므로 신청할 필요가 없습니다.**_
   * 시스템명 : 뉴론
   * 사용자 ID : a000bcd
   * 요청사항 : 싱귤레러티 fakeroot 사용 설정
@@ -45,86 +45,100 @@ export PATH=$PATH:/apps/applications/singularity/4.1.0/bin/
 $ singularity [global options...] build [local options...] ＜IMAGE PATH＞ ＜BUILD SPEC＞
 
 [주요 global options]
-    -d : 디버깅 정보를 출력함
-    -v : 추가 정보를 출력함
+    -d, --debug : 디버깅 정보를 출력함 (문제 발생 시 유용)
+    -v, --verbose : 빌드중 추가 실행 정보를 출력함
+    -q, --quiet: 출력을 최소화하고 에러 메시지만 표시함
     --version : 싱귤레러티 버전 정보를 출력
 
 [관련 주요 local options]
-    --fakeroot : roor 권한 없이 일반사용자가 가짜 root 사용자로 이미지 빌드 
-    --remote : 외부 싱귤레러티 클라우드(Sylabs Cloud)를 통한 원격 빌드(root 권한 필요 없습니다)
-    --sandbox : 샌드박스 형태의 쓰기 가능한 이미지 디렉터리 빌드
+    --fakeroot : roor 권한 없이 일반사용자가 가짜 root 사용자로 이미지 빌드 (대부분의 빌드에 권장)
+    --oci : OCI 규격(Docker 호환) 런타임 사용및 Dockerfile 기반 이미지 빌드 가능
+    --remote : 외부 싱귤레러티 클라우드(Sylabs Cloud)를 통한 원격 빌드(root 권한 필요 없음)
+    --sandbox : 빌드 결과물을 단일 파일(.sif)이 아닌, 수정 가능한 디렉터리 구조로 생성함(root 권한 필요)
+    --update: 기존 샌드박스 이미지에 새로운 내용을 추가하거나 업데이트할 때 사용함
+    --notest: 빌드 후 %test 섹션의 스크립트 실행을 생략함
+  
 
 ＜IMAGE PATH＞
    default : 읽기만 가능한 기본 이미지 파일(예시 : ubuntu1.sif)
-   sandbox : 읽기 및 쓰기 가능한 디렉터리 구조의 컨테이너(예시 : ubuntu4) 
-
+   sandbox* : 읽기 및 쓰기 가능한 디렉터리 구조의 컨테이너(예시 : ubuntu4) 
+    * 개발 단계에서 패키지를 추가 설치하며 테스트할 때 유용
+   
 ＜BUILD SPEC＞
-definition file : 컨테이너를 빌드하기 위해 recipe를 정의한  파일(예시 : ubuntu.def)
+definition file : 컨테이너를 빌드하기 위해 singularity 전용 recipe를 정의한 파일(예시 : ubuntu.def)
+Dockerfile / Containerfile: OCI 표준 빌드 파일 (단, --oci 옵션 권장)
 local image : 싱귤레러티 이미지 파일 혹은 샌드박스 디렉터리(IMAGE PATH 참조 바랍니다)
-URI 
-library:// 컨테이너 라이브러리 (default https://cloud.sylabs.io/library) 
-docker:// 도커 레지스트리 (default 도커 허브)
-docker-archive:// 도커 아카이브 파일
-shub:// 싱규레러티 레지스트리 (default 싱귤레러티 허브)
-oras:// OCI 레지스트리
-oci-archive:// OCI 아카이브 파일
+URI(원격저장소) 
+ · docker:// Docker Hub 등도커 레지스트리에서 가져옴 (default 도커 허브)
+ · docker-archive:// docker save로 생성된 로컬 tar 파일에서 가져옴
+ · library:// Syslabs 컨테이너 라이브러리에서 가져옴 (default https://cloud.sylabs.io/library) 
+ · oras:// OCI 아카이브를 지원하는 일반 레지스트리에서 가져
+ · oci-archive:// 로컬 OCI 표준 아카이브 파일에서 가져옴
 ```
 {% endcode %}
 
 ***
 
-{% code title="[예시]" overflow="wrap" fullWidth="false" %}
-```shell-session
-① Definition 파일로부터 ubuntu1.sif 이미지 빌드하기
+<pre class="language-shell-session" data-title="[예시]" data-overflow="wrap" data-full-width="false"><code class="lang-shell-session">① Definition 파일로부터 ubuntu1.sif 이미지 빌드하기
  $ singularity build --fakeroot ubuntu1.sif ubuntu.def* 
 
 ② 싱규레러티 라이브러리로부터 ubuntu2.sif 이미지 빌드하기
- $ singularity build --fakeroot ubuntu2.sif library://ubuntu:18.04 
+ $ singularity build --fakeroot ubuntu2.sif library://ubuntu:22.04 
 
 ③ 도커 허브로부터 ubuntu3.sif 이미지 빌드하기
- $ singularity build --fakeroot ubuntu3.sif docker://ubuntu:18.04 
+ $ singularity build --fakeroot ubuntu<a data-footnote-ref href="#user-content-fn-1">3.sif docker://ubuntu:22.04 </a>
  
 ④ 도커 tar 파일로부터 pytorch.sif 이미지 빌드하기
  $ singularity build --fakeroot pytorch.sif docker-archive://pytorch.tar
  
-⑤ NGC(Nvidia GPU Cloud) 도커 레지스트리로부터 '22년 03월 배포 pytorch 이미지 빌드하기
- $ singularity build --fakeroot pytorch1.sif docker://nvcr.io/nvidia/pytorch:22.03-py3
+⑤ NGC(Nvidia GPU Cloud) 도커 레지스트리로부터 '25년 12월 배포 pytorch 이미지 빌드하기
+ $ singularity build --fakeroot pytorch1.sif docker://nvcr.io/nvidia/pytorch:25.12-py3
 
 ⑥ Definition 파일로부터 pytorch.sif 이미지 빌드하기
  $ singularity build --fakeroot pytorch2.sif pytorch.def**
 
-⑦ fakeroot 사용하지 않고 Definition 파일로부터  ubuntu4.sif 이미지 빌드하기
-   # singularity 3.11.0 버전 이상에서 지원
-   # Definition 파일에서 기존 컨테이너 이미지 기반 패키지 설치에 적합하며,     
-     apt-get과 같은 시스템패키지 관리자를 사용하는 경우 일부 패키지(git 등) 설치 과정에서 
-     에러가 발생할 수 있습니다.
- $ singularity build ubuntu4.sif ubuntu.def*
- 
+⑦ Dockerfile을 사용하여 이미지 빌드하기 
+   # OCI 규격(Docker 호환) 런타임 사용및 Dockerfile 기반 이미지 빌드 가능 
+   # 빌드된이미지를 실행할 때도 --oci 옵션을 사용해야 함
+   # singularity 4.3.4 버전 이상에서 지원
+  $ singularity build --fakeroot --oci mpi.sif Dockerfile***
+     
 * ) ubuntu.def 예시
  bootstrap: docker
- from: ubuntu:18.04
+ from: ubuntu:22.04
  %post
- apt-get update
- apt-get install -y wget bash gcc gfortran g++ make file
+<strong> apt-get update
+</strong> apt-get install -y wget bash gcc gfortran g++ make file
+ apt-get clean
  %runscript
  echo "hello world from ubuntu container!"
 
 ** ) pytorch.def 예시
  # 로컬 이미지 파일로부터 콘다를 사용하여 새로운 패키지 설치를 포함한 이미지 빌드
  bootstrap: localimage
- from: /apps/applications/singularity_images/ngc/pytorch:22.03-py3.sif
+ from: /apps/applications/singularity_images/ngc/pytorch:25.12-py3.sif
  %post
  pip install jupyter
  
  # 외부 NGC 도커 이미지로부터 콘다를 사용하여 새로운 패키지 설치를 포함한 이미지 빌드
  bootstrap: docker
- from: nvcr.io/nvidia/pytorch:22.03-py3
+ from: nvcr.io/nvidia/pytorch:25.12-py3
  %post
  pip install jupyter
-```
-{% endcode %}
+ 
+*** ) Dockerfile 예시 
+FROM rockylinux:9
+RUN dnf -y install openmpi openmpi-devel gcc make which &#x26;&#x26; dnf clean all
+ENV PATH=/usr/lib64/openmpi/bin:$PATH
+WORKDIR /app
+COPY ring.c /app/ring.c
+RUN mpicc ring.c -O2 -o ring
+CMD ["mpirun","--allow-run-as-root","-np","4","/app/ring"]
+</code></pre>
 
-
+{% hint style="warning" %}
+### **\[유의 사항]** <mark style="color:blue;">gpu\[51-52] 계산 노드(GH200, ARM  CPU 아키텍처)</mark>에서 singularity 컨테이너를 사용하여 프로그램을 실행하기 위해서는 먼저  [인터랙티브 작업 제출](https://docs-ksc.gitbook.io/neuron-user-guide/undefined/running-jobs-through-scheduler-slurm#id-3)을 통해 gpu\[51-52] 노드 중 하나에 접속하여 <mark style="color:blue;">이 아키텍처와 호환이 되는 컨테이너 이미지를 빌드</mark>해야 합니다.&#x20;
+{% endhint %}
 
 ### 3.cotainr 사용하여  빌드
 
@@ -282,13 +296,13 @@ $ singularity pull tensorflow.sif library://dxtr/default/hpc-tensorflow:0.1
 
 ## 나. 싱귤레러티 컨테이너에서 사용자 프로그램 실행
 
-### **1. 싱귤레러티 모듈 적재 혹은 경로 설정**
+### **1. 싱귤레러티 모듈 적재  및 자동 로드(Default) 설정**
 
 ```
-$ module load singularity/3.11.0
-or
-$ $HOME/.bash_profile
-export PATH=$PATH:/apps/applications/singularity/3.11.0/bin/
+$ module load singularity/4.3.4 (singularity 4.3.4 버전 모듈 로드)
+$ module list (현재 로드된 모듈 목록 확인)
+$ module save default (로그인 시 자동 로드(default) 설정)
+$ module savelist (저장된 설정 이름 확인)
 ```
 
 ### **2. 싱귤레러티 컨테이너에서 프로그램 실행 명령어**
@@ -302,43 +316,52 @@ $ singularity [global options...] run [run options...] ＜container＞
 {% code title="[예제]" overflow="wrap" fullWidth="false" %}
 ```
 ① Nvidia GPU 장착 계산 노드의 싱귤레러티 컨테이너에서 쉘 실행 후 사용자 프로그램 실행 
-$ singularity shell --nv＊ tensorflow_22.03-tf1-keras-py3.sif
+$ singularity shell --nv＊ pytorch:25.12-py3.sif.sif
 Singularity> python test.py
 
 ② Nvidia GPU 장착 계산 노드의 싱귤레러티 컨테이너에서 사용자 프로그램 실행
-$ singularity exec --nv tensorflow_22.03-tf1-keras-py3.sif python test.py 
-$ singularity exec --nv docker://tensorflow/tensorflow:latest python test.py
-$ singularity exec --nv library://dxtr/default/hpc-tensorflow:0.1 python test.py
+$ singularity exec --nv pytorch:25.12-py3.sif python test.py 
+$ singularity exec --nv docker://python:latest python test.py
+$ singularity exec --nv library://dxtr/default/hpc-pytorch python test.py
 
 ③ Nvidia GPU 장착 계산 노드의 싱귤레러티 컨테이너에서 runscript(이미지 빌드 시 생성)가 존재하면 이 스크립트를 먼저 실행한 후, 
 사용자 명령어(아래 예제에서 python --version)가 존재하면 이어서 실행됩니다.
 
-$ singularity run --nv /apps/applications/singularity_images/ngc/tensorflow_22.03-tf1-keras-py3.sif ＼
+$ singularity run --nv /apps/applications/singularity_images/ngc/pytorch:25.12-py3.sif ＼
  python --version 
-================
-== TensorFlow ==
-================
+=============
+== PyTorch ==
+=============
 
-NVIDIA Release 22.03-tf1 (build 33659237)
-TensorFlow Version 1.15.5
+NVIDIA Release 25.12 (build 245654590)
+PyTorch Version 2.10.0a0+b4e4ee8
+Container image Copyright (c) 2025, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+Copyright (c) 2014-2024 Facebook Inc.
+Copyright (c) 2011-2014 Idiap Research Institute (Ronan Collobert)
+Copyright (c) 2012-2014 Deepmind Technologies    (Koray Kavukcuoglu)
+Copyright (c) 2011-2012 NEC Laboratories America (Koray Kavukcuoglu)
+Copyright (c) 2011-2013 NYU                      (Clement Farabet)
+Copyright (c) 2006-2010 NEC Laboratories America (Ronan Collobert, Leon Bottou, Iain Melvin, Jason Weston)
+Copyright (c) 2006      Idiap Research Institute (Samy Bengio)
+Copyright (c) 2001-2004 Idiap Research Institute (Ronan Collobert, Samy Bengio, Johnny Mariethoz)
+Copyright (c) 2015      Google Inc.
+Copyright (c) 2015      Yangqing Jia
+Copyright (c) 2013-2016 The Caffe contributors
+All rights reserved.
 
-Container image Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
-Copyright 2017-2022 The TensorFlow Authors. All rights reserved.
+Various files include modifications (c) NVIDIA CORPORATION & AFFILIATES.  All rights reserved.
 
-Various files include modifications (c) NVIDIA CORPORATION & AFFILIATES. All rights reserved.
-
-This container image and its contents are governed by the NVIDIA Deep Learning Container License.
-By pulling and using the container, you accept the terms and conditions of this license:
-https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+GOVERNING TERMS: The software and materials are governed by the NVIDIA Software License Agreement
+(found at https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-software-license-agreement/)
+and the Product-Specific Terms for NVIDIA AI Products
+(found at https://www.nvidia.com/en-us/agreements/enterprise-software/product-specific-terms-for-ai-products/).
 
 NOTE: CUDA Forward Compatibility mode ENABLED.
- Using CUDA 11.6 driver version 510.47.03 with kernel driver version 460.32.03.
- See https://docs.nvidia.com/deploy/cuda-compatibility/ for details.
+  Using CUDA 13.1 driver version 590.44.01 with kernel driver version 580.105.08.
+  See https://docs.nvidia.com/deploy/cuda-compatibility/ for details.
 
-NOTE: Mellanox network driver detected, but NVIDIA peer memory driver not
- detected. Multi-node communication performance may be reduced.
+Python 3.12.3
 
-Python 3.8.10 (default, Nov 26 2021, 20:14:08)
 ```
 {% endcode %}
 
@@ -355,16 +378,16 @@ Python 3.8.10 (default, Nov 26 2021, 20:14:08)
 {% code overflow="wrap" %}
 ```shell-session
 ① tensorflow 1.15.5 지원 싱규레러티 컨테이너 이미지(tensorflow_22.03-tf1-keras-py3.sif)를 자동으로 구동하여 사용자 프로그램 실행
- $ module load singularity/3.9.7 ngc/tensorflow:22.03-tf1-py3 
+ $ module load singularity/4.3.4 ngc/tensorflow:22.03-tf1-py3 
  $ mpirun -H gpu39:2,gpu44:2 –n 4 python keras_imagenet_resnet50.py
 
 ② lammps 지원 싱규레러티 컨테이너 이미지(lammps:15Jun2020-x86_64.sif)를 자동으로 구동하여 lammps 실행
- $ module load singularity/3.6.4 ngc/lammps:15Jun2020 
+ $ module load singularity/4.3.4 ngc/lammps:15Jun2020 
  $ mpirun –H gpu39:2,gpu44:2 -n 4 lmp -in in.lj.txt -var x 8 -var y 8 -var z 8 -k on g 2 \
  -sf kk -pk kokkos cuda/aware on neigh full comm device binsize 2.8
 
 ③ gromacs 지원 싱규레러티 컨테이너 이미지(gromacs:2020.2-x86_64.sif)를 자동으로 구동하여 gromacs 실행
- $ module load singularity/3.6.4 ngc/gromacs:2020.2 
+ $ module load singularity/4.3.4 ngc/gromacs:2020.2 
  $ gmx mdrun -ntmpi 2 -nb gpu -ntomp 1 -pin on -v -noconfout –nsteps 5000 \
  –s topol.tpr singularity shell --nv＊ tensorflow:20.09-tf1-py3.sif 
 ```
@@ -412,8 +435,8 @@ Submitted batch job 12345
 ```
 [id@glogin01]$ srun --partition=cas_v100_4 --nodes=1 --ntasks-per-node=2 --cpus-per-task=10 --gres=gpu:2 --comment=pytorch --pty bash 
 [id@gpu10]$ 
-[id@gpu10]$ module load singularity/3.11.0 
-[id@gpu10]$ singularity run --nv /apps/applications/singularity_images/ngc/pytorch_22.03-hd-py3.sif python test.py
+[id@gpu10]$ module load singularity/4.3.4 
+[id@gpu10]$ singularity run --nv /apps/applications/singularity_images/ngc/pytorch:25.12-py3.sif python test.py
 ```
 {% endcode %}
 
@@ -441,9 +464,9 @@ Submitted batch job 12345
 #SBATCH -e %x_%j.err
 #SBATCH —gres=gpu:2 # number of GPUs per node
 
-module load singularity/3.11.0 
+module load singularity/4.3.4 
 
-singularity run --nv /apps/applications/singularity_images/ngc/pytorch_22.03-hd-py3.sif python test.py
+singularity run --nv /apps/applications/singularity_images/ngc/pytorch:25.12-py3.sif python test.py
 ```
 {% endcode %}
 
@@ -469,7 +492,7 @@ singularity run --nv /apps/applications/singularity_images/ngc/pytorch_22.03-hd-
 #SBATCH -e %x_%j.err
 #SBATCH --gres=gpu:2 # number of GPUs per node
 
-module load singularity/3.11.0 gcc/4.8.5 mpi/openmpi-3.1.5
+module load singularity/4.3.4 gcc/4.8.5 mpi/openmpi-3.1.5
 
 srun singularity run --nv /apps/applications/singularity_images/ngc/pytorch_22.03-hd-py3.sif \
 python pytorch_imagenet_resnet50.py 
@@ -498,7 +521,7 @@ python pytorch_imagenet_resnet50.py
 #SBATCH -e %x_%j.err
 #SBATCH --gres=gpu:2 # number of GPUs per node
 
-module load singularity/3.11.0  ngc/pytorch:22.03-py3
+module load singularity/4.3.4  ngc/pytorch:22.03-py3
 
 mpirun_wrapper python pytorch_imagenet_resnet50.py 
 ```
@@ -740,3 +763,5 @@ mpirun_wrapper python $Base/horovod/examples/keras/keras_imagenet_resnet50.py \
 {% hint style="info" %}
 2023년 3월 2일에 마지막으로 업데이트 되었습니다.
 {% endhint %}
+
+[^1]: 
