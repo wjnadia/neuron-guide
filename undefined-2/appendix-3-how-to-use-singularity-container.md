@@ -30,7 +30,7 @@ $ module savelist (저장된 설정 이름 확인)
 ```
 
 {% hint style="info" %}
-<mark style="color:$info;">**새로운 기능 사용 및 보안 강화를 위해**</mark>**&#x20;**<mark style="color:$danger;">**4.3.4 버전**</mark><mark style="color:$info;">**만 제공됩니다. (**</mark><mark style="color:blue;">**하위 버전에서 빌드된 이미지 호환됨**</mark><mark style="color:$info;">**)**</mark>&#x20;
+<mark style="color:$info;">**새로운 기능 사용 및 보안 강화를 위해 최신**</mark>**&#x20;**<mark style="color:$danger;">**4.3.4 버전**</mark><mark style="color:$info;">**만 제공됩니다. (**</mark><mark style="color:blue;">**하위 버전에서 빌드된 이미지 호환됨**</mark><mark style="color:$info;">**)**</mark>&#x20;
 {% endhint %}
 
 ### **2. 로컬 빌드**
