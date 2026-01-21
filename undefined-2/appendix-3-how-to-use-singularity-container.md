@@ -23,7 +23,7 @@ Tensorflow, Caffe, Pytorch와 같은 딥러닝 프레임워크와 Quantum Espres
 ### **1. 싱귤레러티 모듈 적재  및 자동 로드(Default) 설정**
 
 ```
-$ module load singularity/4.3.4 (singularity 4.3.4 버전모듈 로드)
+$ module load singularity/4.3.4 (singularity 4.3.4 버전 모듈 로드)
 $ module list (현재 로드된 모듈 목록 확인)
 $ module save default (로그인 시 자동 로드(default) 설정)
 $ module savelist (저장된 설정 이름 확인)
