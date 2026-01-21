@@ -31,11 +31,19 @@ $ module savelist (저장된 설정 이름 확인)
 
 ### **2. 로컬 빌드**
 
-* 뉴론 시스템의 로그인 노드에서 컨테이너 이미지를 로컬 빌드하기 위해서는, 먼저 [**KISTI 홈페이지 > 기술지원 > 상담신청**을](https://www.ksc.re.kr/gsjw/gsjw/qna/edit) 통해 아래와 같은 내용으로 fakeroot 사용 신청을 해야합니다. \
-  &#xNAN;_**단,&#x20;**<mark style="color:$danger;">**2026년 1월 8일 이후**</mark>_ _**신규 사용자는 계정 등록 시 자동 처리 되므로 신청할 필요가 없습니다.**_
+
+
+* 뉴론 시스템의 로그인 노드에서 컨테이너 이미지를 로컬 빌드하기 위해서는, 먼저 [**KISTI 홈페이지 > 기술지원 > 상담신청**을](https://www.ksc.re.kr/gsjw/gsjw/qna/edit) 통해 아래와 같은 내용으로 fakeroot 사용 신청을 해야합니다.&#x20;
   * 시스템명 : 뉴론
   * 사용자 ID : a000bcd
   * 요청사항 : 싱귤레러티 fakeroot 사용 설정
+
+{% hint style="warning" %}
+<mark style="color:$danger;">**2026년 1월 8일**</mark><mark style="color:$danger;">**&#x20;**</mark>_<mark style="color:$danger;">**이후**</mark>_ _신규 사용자는 계정 등록 시 자동 처리 되므로 신청할 필요가 없습니다._
+{% endhint %}
+
+
+
 * [**NGC(Nvidia GPU Cloud)에서 배포하는 도커 컨테이너**](https://catalog.ngc.nvidia.com/containers)로 부터 뉴론 시스템의 Nvidia GPU에 최적화된 딥러닝 프레임워크 및 HPC 애플리케이션 관련 싱규레러티 컨테이너 이미지를 빌드할 수 있습니다.
 
 
@@ -137,7 +145,7 @@ CMD ["mpirun","--allow-run-as-root","-np","4","/app/ring"]
 </code></pre>
 
 {% hint style="warning" %}
-<mark style="color:$danger;">**\[유의 사항]**</mark> <mark style="color:blue;">gpu\[51-52] 계산 노드(GH200, ARM  CPU 아키텍처)</mark>에서 singularity 컨테이너를 사용하고자 할 경우,   먼저 [인터랙티브 작업 제출](https://docs-ksc.gitbook.io/neuron-user-guide/undefined/running-jobs-through-scheduler-slurm#id-3)을 통해 gpu\[51-52] 노드 중 하나에 접속하여 <mark style="color:blue;">이 아키텍처와 호환이 되는 컨테이너 이미지를   빌드</mark> 해야 합니다.&#x20;
+<mark style="color:$danger;">**\[유의 사항]**</mark> <mark style="color:blue;">gpu\[51-52] 계산 노드(GH200, ARM  CPU 아키텍처)</mark>에서 singularity 컨테이너를 사용하고자 할 경우,    먼저 [인터랙티브 작업 제출](https://docs-ksc.gitbook.io/neuron-user-guide/undefined/running-jobs-through-scheduler-slurm#id-3)을 통해 gpu\[51-52] 노드 중 하나에 접속하여 <mark style="color:blue;">이 아키텍처와 호환이 되는 컨테이너 이미지를   빌드</mark> 해야 합니다.&#x20;
 {% endhint %}
 
 ### 3.cotainr 사용하여  빌드
@@ -211,7 +219,7 @@ $ cotainr info
 .....
 System info
 Available system configurations: 
-- neuron-cuda     <- Ubuntu 20.04, CUDA 11.6.1, IB 사용자라이브러리 등이 설치된 컨테이너 이미지
+- neuron-cuda     <- Ubuntu 22.04, CUDA 13.1, IB 사용자라이브러리 등이 설치된 컨테이너 이미지
 ```
 {% endcode %}
 
@@ -268,7 +276,7 @@ $ singularity pull tensorflow.sif library://dxtr/default/hpc-tensorflow:0.1
 {% endcode %}
 
 {% hint style="info" %}
-※ Sylabs Cloud 라이브러리에 컨테이너 이미지를 내보내기(업로드) 위해서는 먼저 액세스 토큰을 생성하여 뉴론 시스템에 등록해야 합니다. [**\[참조 1\]**](appendix-3-how-to-use-singularity-container.md#h_7595929387701647407267724)
+Sylabs Cloud 라이브러리에 컨테이너 이미지를 내보내기(업로드) 위해서는 먼저 액세스 토큰을 생성하여 뉴론 시스템에 등록해야 합니다. [**\[참조 1\]**](appendix-3-how-to-use-singularity-container.md#h_7595929387701647407267724)
 {% endhint %}
 
 ***
