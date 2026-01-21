@@ -29,6 +29,10 @@ $ module save default (로그인 시 자동 로드(default) 설정)
 $ module savelist (저장된 설정 이름 확인)
 ```
 
+{% hint style="info" %}
+<mark style="color:$info;">**새로운 기능 사용 및 보안 강화를 위해**</mark>**&#x20;**<mark style="color:$danger;">**4.3.4 버전**</mark><mark style="color:$info;">**만 제공됩니다. (**</mark><mark style="color:blue;">**하위 버전에서 빌드된 이미지 호환됨**</mark><mark style="color:$info;">**)**</mark>&#x20;
+{% endhint %}
+
 ### **2. 로컬 빌드**
 
 
@@ -152,7 +156,7 @@ CMD ["mpirun","--allow-run-as-root","-np","4","/app/ring"]
 
 cotainr은 사용자가  뉴론  및  자신의 시스템에서 사용중인 conda 패키지를 포함하는 싱귤레러티 컨테이너  이미지를 좀 더 쉽게 빌드할 수 있게 지원하는 도구입니다.
 
-* 사용자  conda environment를 yml 파일로 export하여 사용자  conda 패키지를 포함하는 뉴론 시스템을 위한 사용자 싱귤레러티 컨테이너 이미지를 빌드할 수 있습니다.
+* 사용자  conda environment를 yml 파일로 export하여 사용자  conda 패키지를 포함하는 뉴론 시스템을    위한 사용자 싱귤레러티 컨테이너 이미지를 빌드할 수 있습니다.
 * 뉴론 및 자신의 시스템에서 기존  conda environment를  yml 파일로 export 하는 방법은 아래와 같습니다.
 
 ```
