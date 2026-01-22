@@ -280,33 +280,6 @@ Sylabs Cloud 라이브러리에 컨테이너 이미지를 내보내기(업로드
 
 ***
 
-### **6. 컨테이너 이미지에서 제공되지 않는 파이썬 패키지 등을 사용자 홈 디렉터리에 설치하는 방법**
-
-{% code overflow="wrap" fullWidth="false" %}
-```shell-session
-① pip install --user [파이썬 패키지 이름/버전], 사용자의 /home01/ID/.local 디렉터리에 설치됨 
- $ module load ngc/tensorflow:20.09-tf1-py3 (텐서플로우 컨테이너 모듈 로드)
- $ pip install --user keras==2.1.2 
- $ pip list --user
- Package Version
- ----------- -------
- Keras 2.1.2
-
-② conda install —use-local [콘다 패키지 이름/버전], 사용자의 /home01/ID/.conda/pkgs 디렉터리에 설치됨
- $ module load ngc/pytorch:20.09-py3 (파이토치 컨테이너 모듈 로드)
- $ conda install --use-local matplotlib -y 
- $ conda list matplotlib
- # Name Version Build Channel
- matplotlib 3.3.3 pypi_0 pypi
-```
-{% endcode %}
-
-{% hint style="info" %}
-여러 가지 컨테이너 이미지를 사용하는 경우 사용자 프로그램 실행 시 사용자 홈 디렉터리에 추가로 설치한 패키지를 먼저  찾기 때문에 다른 컨테이너 이미지에서 요구하는 패키지와 충돌이 발생하여 정상적으로 동작하지 않을 수 있습니다.
-{% endhint %}
-
-
-
 ## 나. 싱귤레러티 컨테이너에서 사용자 프로그램 실행
 
 ### **1. 싱귤레러티 모듈 적재  및 자동 로드(Default) 설정**
