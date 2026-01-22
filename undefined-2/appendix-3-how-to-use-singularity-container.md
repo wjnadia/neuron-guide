@@ -149,7 +149,7 @@ CMD ["mpirun","--allow-run-as-root","-np","4","/app/ring"]
 </code></pre>
 
 {% hint style="warning" %}
-<mark style="color:$danger;">**\[유의 사항]**</mark> <mark style="color:blue;">gpu\[51-52] 계산 노드(GH200, ARM  CPU 아키텍처)</mark>에서 singularity 컨테이너를 사용하고자 할 경우,    먼저 [인터랙티브 작업 제출](https://docs-ksc.gitbook.io/neuron-user-guide/undefined/running-jobs-through-scheduler-slurm#id-3)을 통해 gpu\[51-52] 노드 중 하나에 접속하여 <mark style="color:blue;">이 아키텍처와 호환이 되는 컨테이너 이미지를   빌드</mark> 해야 합니다.&#x20;
+<mark style="color:$danger;">**\[유의 사항]**</mark> <mark style="color:$warning;">**gpu\[51-52] 계산 노드(GH200, ARM  CPU 아키텍처)**</mark>에서 singularity 컨테이너를 사용하고자 할 경우, 먼저 [<mark style="color:blue;">**인터랙티브 작업 제출**</mark>](https://docs-ksc.gitbook.io/neuron-user-guide/undefined/running-jobs-through-scheduler-slurm#id-3)을 통해 gpu\[51-52] 노드 중 하나에 접속하여 <mark style="color:$warning;">**이 아키텍처와 호환이 되는 컨테이너 이미지를 빌드**</mark> 해야 합니다.&#x20;
 {% endhint %}
 
 ### 3.cotainr 사용하여  빌드
@@ -170,52 +170,43 @@ name: base
 channels:
   - pytorch
   - nvidia
-  - conda-forge
+  - defaults
 dependencies:
-  - _libgcc_mutex=0.1=conda_forge
-  - _openmp_mutex=4.5=2_kmp_llvm
-  - archspec=0.2.3=pyhd8ed1ab_0
-  - boltons=23.1.1=pyhd8ed1ab_0
-  - brotli-python=1.1.0=py39h3d6467e_1
-  - bzip2=1.0.8=hd590300_5
-  - c-ares=1.27.0=hd590300_0
-  - ca-certificates=2024.2.2=hbcca054_0
-  - certifi=2024.2.2=pyhd8ed1ab_0
-  - cffi=1.16.0=py39h7a31438_0
-  - charset-normalizer=3.3.2=pyhd8ed1ab_0
-  - cloudpickle=3.0.0=pyhd8ed1ab_0
-  - colorama=0.4.6=pyhd8ed1ab_0
-  - conda=24.1.2=py39hf3d152e_0
-  - conda-libmamba-solver=24.1.0=pyhd8ed1ab_0
-  - conda-package-handling=2.2.0=pyh38be061_0
-  - conda-package-streaming=0.9.0=pyhd8ed1ab_0
+  - _libgcc_mutex=0.1=main
+  - _openmp_mutex=5.1=1_gnu
+  - blas=1.0=mkl
+  - brotli-python=1.0.9=py312h6a678d5_8
+  - bzip2=1.0.8=h5eee18b_6
+  - ca-certificates=2024.3.11=h06a4308_0
+  - certifi=2024.2.2=py312h06a4308_0
+  - charset-normalizer=2.0.4=pyhd3eb1b0_0
   - cuda-cudart=12.1.105=0
+  - cuda-cupti=12.1.105=0
+  - cuda-libraries=12.1.0=0
+  - cuda-nvrtc=12.1.105=0
+  - cuda-nvtx=12.1.105=0
+  - cuda-opencl=12.4.127=0
+  - cuda-runtime=12.1.0=0
+  - expat=2.6.2=h6a678d5_0
+  - ffmpeg=4.3=hf484d3e_0
+  - filelock=3.13.1=py312h06a4308_0
   
   ......
   
-  - pip:
-      - annotated-types==0.6.0
-      - deepspeed==0.14.0
-      - hjson==3.1.0
-      - ninja==1.11.1.1
-      - py-cpuinfo==9.0.0
-      - pydantic==2.6.3
-      - pydantic-core==2.16.3
-      - pynvml==11.5.0
 ```
 {% endcode %}
 
 
 
-cotainr을 사용하기 위해서는 module 명령을 사용하여 singularity 및cotainr 모듈을 먼저 로드해야 합니다.
+cotainr을 사용하기 위해서는 module 명령을 사용하여 cotainr 모듈을 먼저 로드해야 합니다.
 
 ```
-$ module load  singularity cotainr
+$ module load cotainr
 ```
 
 
 
-cotainr build를 사용하여 컨테이너  이미지를 빌드할 때 컨테이너에 대한 기본 이미지를 직접 지정하거나(-base-image 옵션 사용) --system 옵션을 사용하여 뉴론  시스템에 권장되는 기본 이미지를 사용할 수 있습니다.
+cotainr build를 사용하여 컨테이너  이미지를 빌드할 때 컨테이너에 대한 --base-image 옵션을 사용하여 이미지를 직접 지정하거나, --system 옵션을 사용하여 뉴론  시스템에  권장되는 기본 이미지를 사용할 수 있습니다.
 
 {% code overflow="wrap" fullWidth="false" %}
 ```
@@ -223,13 +214,17 @@ $ cotainr info
 .....
 System info
 Available system configurations: 
-- neuron-cuda     <- Ubuntu 22.04, CUDA 13.1, IB 사용자라이브러리 등이 설치된 컨테이너 이미지
+- neuron-cuda <- Ubuntu 22.04, CUDA 13.1, IB 사용자 라이브러리 등이 설치된 컨테이너 이미지
 ```
 {% endcode %}
 
 {% code overflow="wrap" fullWidth="false" %}
 ```
 
+# 사용자 이미지 직접 지정
+$ cotainr build --base-image=docker://nvcr.io/nvidia/cuda:13.1.0-devel-ubuntu22.04 --conda-env=my_conda_env.yml --accept-licenses my_container.sif
+
+# 뉴론 시스템 기본 이미지 (Ubuntu 22.04, CUDA 13.1, IB 사용자 라이브러리 등포함)
 $ cotainr build --system=neuron-cuda --conda-env=my_conda_env.yml --accept-licenses my_container.sif
   
 ```
