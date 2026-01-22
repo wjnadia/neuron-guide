@@ -264,13 +264,13 @@ Sylabs Cloud에 웹 브라우저 접속을 통해서 싱귤레러티 컨테이�
 {% code fullWidth="false" %}
 ```
 ① Sylabs cloud 라이브러리에서 컨테이너 이미지 가져오기  
-$ singularity pull tensorflow.sif library://dxtr/default/hpc-tensorflow:0.1 
+$ singularity pull pytorch.sif singularity pull library://library://dxtr/default/hpc-pytorch:0.1
 
 ② 도커 허브에서 이미지를 가져와서 싱귤레러티 이미지로 변환
- $ singularity pull tensorflow.sif docker://tensorflow/tensorflow:latest
+ $ singularity pull pytorch.sif docker://pytorch/pytorch:2.10.0-cuda13.0-cudnn9-devel
 
 ③ Sylabs Cloud 라이브러리에 싱귤레러티 이미지 내보내기(업로드)
- $ singularity push -U tensorflow.sif library://ID/default/tensorflow.sif 
+ $ singularity push -U pytorch.sif library://ID/default/pytorch.sif 
 ```
 {% endcode %}
 
