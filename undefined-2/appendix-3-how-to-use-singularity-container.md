@@ -314,14 +314,14 @@ $ singularity exec --nv library://dxtr/default/hpc-pytorch python test.py
 사용자 명령어(아래 예제에서 python --version)가 존재하면 이어서 실행됩니다.
 
 $ singularity run --nv /apps/applications/singularity_images/ngc/pytorch:25.12-py3.sif ＼
- python --version 
+ nvidia-smi 
 =============
 == PyTorch ==
 =============
 
-NVIDIA Release 25.12 (build 245654590)
-PyTorch Version 2.10.0a0+b4e4ee8
-Container image Copyright (c) 2025, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+NVIDIA Release 24.12 (build 126674149)
+PyTorch Version 2.6.0a0+df5bbc0
+Container image Copyright (c) 2024, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 Copyright (c) 2014-2024 Facebook Inc.
 Copyright (c) 2011-2014 Idiap Research Institute (Ronan Collobert)
 Copyright (c) 2012-2014 Deepmind Technologies    (Koray Kavukcuoglu)
@@ -337,17 +337,14 @@ All rights reserved.
 
 Various files include modifications (c) NVIDIA CORPORATION & AFFILIATES.  All rights reserved.
 
-GOVERNING TERMS: The software and materials are governed by the NVIDIA Software License Agreement
-(found at https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-software-license-agreement/)
-and the Product-Specific Terms for NVIDIA AI Products
-(found at https://www.nvidia.com/en-us/agreements/enterprise-software/product-specific-terms-for-ai-products/).
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
 
-NOTE: CUDA Forward Compatibility mode ENABLED.
-  Using CUDA 13.1 driver version 590.44.01 with kernel driver version 580.105.08.
-  See https://docs.nvidia.com/deploy/cuda-compatibility/ for details.
+NOTE: Mellanox network driver detected, but NVIDIA peer memory driver not
+      detected.  Multi-node communication performance may be reduced.
 
 Python 3.12.3
-
 ```
 {% endcode %}
 
@@ -370,16 +367,16 @@ Python 3.12.3
 {% code overflow="wrap" %}
 ```shell-session
 ① tensorflow 1.15.5 지원 싱규레러티 컨테이너 이미지(tensorflow_22.03-tf1-keras-py3.sif)를 자동으로 구동하여 사용자 프로그램 실행
- $ module load singularity/4.3.4 ngc/tensorflow:22.03-tf1-py3 
+ $ module load ngc/tensorflow:22.03-tf1-py3 
  $ mpirun -H gpu39:2,gpu44:2 –n 4 python keras_imagenet_resnet50.py
 
-② lammps 지원 싱규레러티 컨테이너 이미지(lammps:15Jun2020-x86_64.sif)를 자동으로 구동하여 lammps 실행
- $ module load singularity/4.3.4 ngc/lammps:15Jun2020 
+② lammps 지원 싱규레러티 컨테이너 이미지(lammps:patch_15Jun2023.sif)를 자동으로 구동하여 lammps 실행
+ $ module load ngc/lammps:patch_15Jun2023 gcc/15.2.0 mpi/openmpi-4.1.8
  $ mpirun –H gpu39:2,gpu44:2 -n 4 lmp -in in.lj.txt -var x 8 -var y 8 -var z 8 -k on g 2 \
  -sf kk -pk kokkos cuda/aware on neigh full comm device binsize 2.8
 
 ③ gromacs 지원 싱규레러티 컨테이너 이미지(gromacs:2020.2-x86_64.sif)를 자동으로 구동하여 gromacs 실행
- $ module load singularity/4.3.4 ngc/gromacs:2020.2 
+ $ module ngc/gromacs:2020.2 
  $ gmx mdrun -ntmpi 2 -nb gpu -ntomp 1 -pin on -v -noconfout –nsteps 5000 \
  –s topol.tpr singularity shell --nv＊ tensorflow:20.09-tf1-py3.sif 
 ```
@@ -436,7 +433,7 @@ Submitted batch job 12345
 [id@glogin01]$ srun --partition=cas_v100_4 --nodes=1 --ntasks-per-node=2 --cpus-per-task=10 --gres=gpu:2 --comment=pytorch --pty bash 
 [id@gpu10]$ 
 [id@gpu10]$ module load singularity/4.3.4 
-[id@gpu10]$ singularity run --nv /apps/applications/singularity_images/ngc/pytorch:25.12-py3.sif python test.py
+[id@gpu10]$ singularity run --nv /apps/applications/singularity_images/ngc/pytorch:23.12-py3.sif python test.py
 ```
 {% endcode %}
 
@@ -468,7 +465,7 @@ Submitted batch job 12345
 
 module load singularity/4.3.4 
 
-singularity run --nv /apps/applications/singularity_images/ngc/pytorch:25.12-py3.sif python test.py
+singularity run --nv /apps/applications/singularity_images/ngc/pytorch:23.12-py3.sif python test.py
 ```
 {% endcode %}
 
