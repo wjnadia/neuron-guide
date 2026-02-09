@@ -26,10 +26,6 @@ Singularity 컨테이너에 대한 자세한 사용법은 [https://docs-ksc.gitb
 
 로그인 노드 또는 계산 노드에서 Podman을 사용하여 컨테이너 이미지를 준비합니다.
 
-ㅇ
-
-ㅇ
-
 #### 가. 외부 이미지 가져오기 (Pull)
 
 NGC(NVIDIA GPU Cloud) 등에서 이미지를 가져옵니다.
@@ -46,7 +42,12 @@ nvcr.io/nvidia/pytorch  25.12-py3   dd94fce2f83a  7 weeks ago  20.6 GB
 
 사용자 소스 코드나 특정 라이브러리를 포함한 커스텀 이미지를 생성합니다.
 
+이미지 빌드에 많은 시간이 소요되고 부하가 많이 걸리는 경우, 스케줄러(SLURM)를 통해 인터랙티브 모드로 할당된  계산  노드에 접속하여 빌드하는 것을 권장합니다. &#x20;
+
 ```
+## 스케줄러를 통해 인터랙티브 모드로 할당된 계산노드에 접속
+$  srun --partition=cas_v100_4 --nodes=1 --ntasks-per-node=2 --cpus-per-task=10 --comment=pytorch --pty bash
+
 # 현재 디렉터리(.)의 Dockerfile로 'my_pytorch:v1' 이미지 빌드
 $ ls Dockerfile
 Dockerfile
