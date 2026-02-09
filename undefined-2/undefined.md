@@ -4,7 +4,7 @@ hidden: true
 
 # 컨테이너 활용 가이드(작성 중 초안)
 
-뉴론 시스템은 HPC 및  AI 관련 복잡한 소프트웨어 의존성을 해결하고 다양한 시스템에서 일관된 작업 환경을  유지할 수 있도록 최적화된 컨테이너 활용 환경을 제공합니다. 사용자는 자신의 작업 단계(빌드, 실행)에 맞춰 적절한 도구를 선택하여 활용할 수 있습니다.
+뉴론 시스템은 HPC 응용 및 AI 학습/추론 등에서 복잡한 소프트웨어 의존성을 해결하고 다양한 시스템에서 일관된 작업 환경을  유지할 수 있도록 최적화된 컨테이너 활용 환경을 제공합니다. 사용자는 자신의 작업 단계(빌드, 실행)에 맞춰 적절한 도구를 선택하여 사용할 수 있습니다.
 
 {% hint style="info" %}
 * **Podman**: 일반 사용자 권한 기반의 이미지 빌드 및 관리 도구입니다. Docker를 대체하여 이미지를 생성하거나 외부 레지스트리(NGC 등)에서 수급할 때 사용합니다.
@@ -19,7 +19,7 @@ hidden: true
 <table data-header-hidden><thead><tr><th width="104.800048828125" align="center"></th><th align="center"></th><th align="center"></th><th align="center"></th></tr></thead><tbody><tr><td align="center"><strong>구분</strong></td><td align="center"><strong>Podman</strong><br><strong>(빌드/관리)</strong></td><td align="center"><strong>Enroot</strong><br><strong>(고성능 실행)</strong></td><td align="center"><strong>Singularity</strong><br><strong>(범용 실행)</strong></td></tr><tr><td align="center">주요 역할</td><td align="center"><p>이미지 생성 </p><p>및 커스터마이징</p></td><td align="center"><p>GPU 연산 가속 </p><p>(권장)</p></td><td align="center">시스템 간<br>호환성 유지</td></tr><tr><td align="center">저장 형식</td><td align="center"><p>OCI 레이어 </p><p>(디렉터리)</p></td><td align="center"><p><code>.sqsh</code> </p><p>(단일 압축 파일)</p></td><td align="center"><p><code>.sif</code> </p><p>(단일 이미지 파일)</p></td></tr><tr><td align="center">특징</td><td align="center">Docker 명령어 호환</td><td align="center">빠른 로딩, <br>Nvidia GPU 최적화</td><td align="center">기존 뉴론 컨테이너환경 유지</td></tr></tbody></table>
 
 {% hint style="info" %}
-Singularity 컨테이너에 대한 자세한 사용법은 [https://docs-ksc.gitbook.io/neuron-user-guide/undefined-2/appendix-3-how-to-use-singularity-container](https://docs-ksc.gitbook.io/neuron-user-guide/undefined-2/appendix-3-how-to-use-singularity-container) 를 참조하세요.
+Singularity 에 대한 자세한 사용법은 [**Singularity 컨테이너**](https://docs-ksc.gitbook.io/neuron-user-guide/undefined-2/appendix-3-how-to-use-singularity-container) 를 참조하세요.
 {% endhint %}
 
 ### 2. 이미지 빌드 및 관리 (Podman)
@@ -30,13 +30,12 @@ Singularity 컨테이너에 대한 자세한 사용법은 [https://docs-ksc.gitb
 
 NGC(NVIDIA GPU Cloud) 등에서 이미지를 가져옵니다.
 
-```
-# NGC에서 PyTorch 25.12 버전 가져오기
+<pre><code># NGC에서 PyTorch 25.12 버전 가져오기
 $ podman pull nvcr.io/nvidia/pytorch:25.12-py3
 $ podman images
 REPOSITORY              TAG         IMAGE ID      CREATED      SIZE
-nvcr.io/nvidia/pytorch  25.12-py3   dd94fce2f83a  7 weeks ago  20.6 GB
-```
+<strong>nvcr.io/nvidia/pytorch  25.12-py3   dd94fce2f83a  7 weeks ago  20.6 GB
+</strong></code></pre>
 
 #### 나. Dockerfile을 이용한 로컬 빌드
 
@@ -44,8 +43,7 @@ nvcr.io/nvidia/pytorch  25.12-py3   dd94fce2f83a  7 weeks ago  20.6 GB
 
 이미지 빌드에 많은 시간이 소요되고 부하가 많이 걸리는 경우, 스케줄러(SLURM)를 통해 인터랙티브 모드로 할당된  계산  노드에 접속하여 빌드하는 것을 권장합니다. &#x20;
 
-```
-## 스케줄러를 통해 인터랙티브 모드로 할당된 계산노드에 접속
+<pre><code>## 스케줄러(SLURM)를 통해 인터랙티브 모드로 할당된 계산노드에 접속
 $  srun --partition=cas_v100_4 --nodes=1 --ntasks-per-node=2 --cpus-per-task=10 --comment=pytorch --pty bash
 
 # 현재 디렉터리(.)의 Dockerfile로 'my_pytorch:v1' 이미지 빌드
@@ -54,9 +52,9 @@ Dockerfile
 $ podman build -t my_pytorch:v1 . 
 $ podman images
 REPOSITORY              TAG         IMAGE ID      CREATED        SIZE
-localhost/my_pytorch    v1          d9c8064f0996  6 seconds ago  20.6 GB
-nvcr.io/nvidia/pytorch  25.12-py3   dd94fce2f83a  7 weeks ago    20.6 GB
-```
+<strong>localhost/my_pytorch    v1          d9c8064f0996  6 seconds ago  20.6 GB
+</strong>nvcr.io/nvidia/pytorch  25.12-py3   dd94fce2f83a  7 weeks ago    20.6 GB
+</code></pre>
 
 ```
 [Dockerfile 예시]
@@ -101,11 +99,11 @@ $ podman build -f Dockerfile.gpu -t my_pytorch:gpu_ver .
 **이미지 관리 명령어 요약**
 {% endhint %}
 
-<table data-header-hidden><thead><tr><th width="91.4000244140625" align="center"></th><th width="284.1334228515625"></th><th></th></tr></thead><tbody><tr><td align="center"><sub><strong>기능</strong></sub></td><td><sub><strong>명령어</strong></sub></td><td><sub><strong>설명</strong></sub></td></tr><tr><td align="center"><sub>목록 확인</sub></td><td><code>$ podman images</code></td><td><sub>로컬에 저장된 이미지 리스트 출력</sub></td></tr><tr><td align="center"><sub>이미지 삭제</sub></td><td><code>$ podman rmi [이미지ID]</code></td><td><sub>불필요한 이미지 제거</sub></td></tr><tr><td align="center"><sub>상세 정보</sub></td><td><code>$ podman inspect [이미지ID]</code></td><td><sub>이미지 레이어, 환경변수 등 상세 정보 확인</sub></td></tr><tr><td align="center"><sub>태그 변경</sub></td><td><code>$ podman tag [기존이름] [새이름]</code></td><td><sub>이미지에 새로운 이름/태그 부여</sub></td></tr></tbody></table>
+<table data-header-hidden><thead><tr><th width="91.4000244140625" align="center"></th><th width="284.1334228515625"></th><th></th></tr></thead><tbody><tr><td align="center"><sub><strong>기능</strong></sub></td><td><sub><strong>명령어</strong></sub></td><td><sub><strong>설명</strong></sub></td></tr><tr><td align="center"><sub>목록 확인</sub></td><td><sub><code>$ podman images</code></sub></td><td><sub>로컬에 저장된 이미지 리스트 출력</sub></td></tr><tr><td align="center"><sub>이미지 삭제</sub></td><td><sub><code>$ podman rmi [이미지ID]</code></sub></td><td><sub>불필요한 이미지 제거</sub></td></tr><tr><td align="center"><sub>상세 정보</sub></td><td><sub><code>$ podman inspect [이미지ID]</code></sub></td><td><sub>이미지 레이어, 환경변수 등 상세 정보 확인</sub></td></tr><tr><td align="center"><sub>태그 변경</sub></td><td><sub><code>$ podman tag [기존이름] [새이름]</code></sub></td><td><sub>이미지에 새로운 이름/태그 부여</sub></td></tr></tbody></table>
 
 ### 2. 이미지 업로드
 
-Podman으로 빌드한 이미지를 외부 저장소인 Docker Hub 또는 사용자 레지스트리에 업로드하여 관리할수 있습니다. <br>
+Podman으로 빌드한 이미지를 외부 저장소인 Docker Hub 또는 사용자 레지스트리에 업로드하여 관리 및 공유 할 수 있습니다. 특히, 로그인  또는 계산 노드의 로컬 파일시스템에 저장된 이미지는 영구 보관되지  않기  때문에,  외부 저장소에 이미지를 업로드하는 것을 권장합니다.  &#x20;
 
 #### 가. Docker Hub 로그인
 
@@ -152,7 +150,7 @@ $ enroot import -o my_pytorch.sqsh podman://my_pytorch:v1ㄸ
 **Enroot 이미지 관련 명령어**&#x20;
 {% endhint %}
 
-<table data-header-hidden><thead><tr><th width="74.86663818359375" align="center"></th><th width="149.5999755859375" align="center"></th><th></th></tr></thead><tbody><tr><td align="center"><sub><strong>단계</strong></sub></td><td align="center"><sub><strong>작업 내용</strong></sub></td><td><sub><strong>명령어 / 설정 예시</strong></sub></td></tr><tr><td align="center"><sub>이미지 가져오기</sub></td><td align="center"><sub>Docker Hub 등      외부 레지스트리에서 직접 가져오기</sub></td><td><p></p><p><sub><code>$ enroot import docker://ubuntu:latest//image:tag</code></sub></p></td></tr><tr><td align="center"><sub>이미지 리스트</sub></td><td align="center"><sub>이미지 목록 확인</sub></td><td><code>$ enroot list</code></td></tr><tr><td align="center"><sub>이미지 삭제</sub></td><td align="center"><sub>더 이상 사용하지 않는 이미지 제거</sub></td><td><code>$ enroot remove [image_name]</code></td></tr></tbody></table>
+<table data-header-hidden><thead><tr><th width="74.86663818359375" align="center"></th><th width="149.5999755859375" align="center"></th><th></th></tr></thead><tbody><tr><td align="center"><sub><strong>단계</strong></sub></td><td align="center"><sub><strong>작업 내용</strong></sub></td><td><sub><strong>명령어 / 설정 예시</strong></sub></td></tr><tr><td align="center"><sub>이미지 가져오기</sub></td><td align="center"><sub>Docker Hub 등      외부 레지스트리에서 직접 가져오기</sub></td><td><p></p><p><sub><code>$ enroot import docker://ubuntu:latest//image:tag</code></sub></p></td></tr><tr><td align="center"><sub>이미지 리스트</sub></td><td align="center"><sub>이미지 목록 확인</sub></td><td><sub><code>$ enroot list</code></sub></td></tr><tr><td align="center"><sub>이미지 삭제</sub></td><td align="center"><sub>더 이상 사용하지 않는 이미지 제거</sub></td><td><sub><code>$ enroot remove [image_name]</code></sub></td></tr></tbody></table>
 
 #### 나. Singularity
 
@@ -173,7 +171,9 @@ $ singularity build --fakeroot my_pytorch.sif docker-archive://my_pytorch.tar
 #### 가.Enroot&#x20;
 
 ```bash
-# GPU 계산 노드에서quashFS 이미지를 로드하고 실행
+# GPU 계산 노드에서 squashFS 이미지를 로드하고 실행
+# GPU 가속 연동 옵션 필요 없음(자동 연동됨)
+$ enroot start my_pytorch.sqsh nvidia-smi
 $ enroot start my_pytorch.sqsh python train.py
 ```
 
@@ -181,12 +181,14 @@ $ enroot start my_pytorch.sqsh python train.py
 
 ```bash
 # GPU 계산노드에서 Singularity 이미지를 로드하여 실행
+# --nv: GPU 가속 연동 옵션 필수
+$ singularity exec --nv my_pytorch.sif nvidia-smi
 $ singularity exec --nv my_pytorch.sif python train.py
 ```
 
-### 5. 스케줄러(SLURM)을 통한 작업 실행
+### 5. 스케줄러(SLURM)를 통한 작업 실행
 
-뉴론 시스템 스케줄러(Slurm)를 통해 컨테이너 작업을 제출하는 방법입니다. 사용 도구(Enroot(Pyxis) 또는 Singularity)에 따라 스크립트를 작성하십시오.
+스케줄러(Slurm)를 통해 컨테이너 작업을 제출하는 방법입니다. 사용 도구(Enroot(Pyxis) 또는 Singularity)에 따라 스크립트를 작성합니다.
 
 #### 가. Enroot(Pyxis) 활용 예시
 
