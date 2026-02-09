@@ -352,6 +352,8 @@ Python 3.12.3
 싱귤레러티의 명령어\[shell | exec | run | pull ...] 별 도움말을 보려면 “singularity help \[command]”를 실행합니다.
 
 계산/로그인 노드에서 Nvidia GPU를 사용하기 위해서는 --nv 옵션을 사용해야 합니다.
+
+Dockerfile을  사용(싱귤레러티 --oci 빌드옵션 적용)하여 빌드된 이미지를 실행하기 위해서는 --oci 옵션을 사용해야 합니다.
 {% endhint %}
 
 
