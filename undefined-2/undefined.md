@@ -2,12 +2,214 @@
 hidden: true
 ---
 
-# 컨테이너 사용법(작성 중 초안)
+# 컨테이너 활용 가이드(작성 중 초안)
 
-뉴론 시스템은 사용자의 연구 환경을 완벽하게 재현하기 위해 세 가지 컨테이너 솔루션을 제공합니다.
+뉴론 시스템은 연구 환경의 일관된 재현과 복잡한 소프트웨어 의존성 해결을 위해 최적화된컨테이너 솔루션을 제공합니다. 사용자는 자신의 작업 단계(빌드, 최적화, 실행)에 맞춰 적절한 도구를 선택하여 활용할 수 있습니다.
 
-\{% hint style="info" %\}
+{% hint style="info" %}
+* **Podman**: 일반 사용자 권한 기반의 이미지 빌드 및 관리 도구입니다. Docker를 대체하여 이미지를 생성하거나 외부 레지스트리(NGC 등)에서 수급할 때 사용합니다.
+* **Enroot**: NVIDIA에서 개발한 HPC 전용 런타임입니다. 컨테이너 이미지를 SquashFS(`.sqsh`)로 변환하여 GPU 연산 성능을 극대화하며, Pyxis 플러그인을 통해 Slurm 스케줄러와 유기적으로 연동됩니다.
+* **Singularity**: HPC 환경의 표준 컨테이너 도구로, 높은 범용성과 기존 구축된 `.sif` 이미지와의 호환성을 제공합니다
+{% endhint %}
 
-* Podman: 일반 사용자 권한 기반의 이미지 빌드 및 외부 이미지(NGC 등) 관리 도구
-* Enroot: 6호기(GH200) 및 GPU 연산 노드에 최적화된 고성능 실행 도구
-* Singularity: 뉴론 시스템의 범용 표준 컨테이너 도구 \{% endhint %\}
+### 1.  컨테이너 도구 선택 가이드
+
+사용자의 목적 및 실행 노드 특성에 따라 최적의 도구를 선택할 수 있습니다.
+
+<table data-header-hidden><thead><tr><th width="104.800048828125" align="center"></th><th align="center"></th><th align="center"></th><th align="center"></th></tr></thead><tbody><tr><td align="center"><strong>구분</strong></td><td align="center"><strong>Podman</strong><br><strong>(빌드/관리)</strong></td><td align="center"><strong>Enroot</strong><br><strong>(고성능 실행)</strong></td><td align="center"><strong>Singularity</strong><br><strong>(범용 실행)</strong></td></tr><tr><td align="center">주요 역</td><td align="center"><p>이미지 생성 </p><p>및 커스터마이징</p></td><td align="center"><p>GPU 연산 가속 </p><p>(권장)</p></td><td align="center">시스템 간<br>호환성 유지</td></tr><tr><td align="center">저장 형식</td><td align="center"><p>OCI 레이어 </p><p>(디렉터리)</p></td><td align="center"><p><code>.sqsh</code> </p><p>(단일 압축 파일)</p></td><td align="center"><p><code>.sif</code> </p><p>(단일 이미지 파일)</p></td></tr><tr><td align="center">특징</td><td align="center">Docker 명령어 호환</td><td align="center">빠른 로딩, <br>GH200 최적화</td><td align="center">기존 뉴론 환경 유지</td></tr></tbody></table>
+
+{% hint style="info" %}
+Singularity 컨테이너에 대한 자세한 사용법은 [https://docs-ksc.gitbook.io/neuron-user-guide/undefined-2/appendix-3-how-to-use-singularity-container](https://docs-ksc.gitbook.io/neuron-user-guide/undefined-2/appendix-3-how-to-use-singularity-container) 를참조하세요.
+{% endhint %}
+
+### 2. 이미지 빌드 및 관리 (Podman)
+
+로그인 노드 또는 계산 노드에서 Podman을 사용하여 컨테이너이미지를 준비합니다.
+
+#### 가. 외부 이미지 가져오기 (Pull)
+
+NGC(NVIDIA GPU Cloud) 등에서 이미지를 가져옵니다.
+
+```
+# NGC에서 PyTorch 25.12 버전 가져오기
+$ podman pull nvcr.io/nvidia/pytorch:25.12-py3
+$ podman images
+```
+
+#### 나. Dockerfile을 이용한 로컬 빌드
+
+사용자 소스 코드나 특정 라이브러리를 포함한 커스텀 이미지를 생성합니다.
+
+```
+# 작성한 Dockerfile을 바탕으로 'my_pytorch:v1' 이미지 빌드
+$ cat Dockerfile
+$ podman build -t my_pytorch:v1 . 
+```
+
+```
+[Dockerfile 예시]
+# 1. 베이스 이미지 지정 (NVIDIA GPU Cloud 제공 이미지)
+FROM nvcr.io/nvidia/pytorch:25.12-py3
+
+# 2. 메타데이터 설정
+LABEL maintainer="user_id@ksc.re.kr"
+
+# 3. 추가 시스템 패키지 설치 (필요시)
+RUN apt-get update && apt-get install -y \
+    wget \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# 4. Python 라이브러리 추가 설치 (pip 활용)
+RUN pip install --no-cache-dir \
+    pandas \
+    scikit-learn \
+    matplotlib
+
+# 5. 작업 디렉토리 설정
+WORKDIR /workspace
+```
+
+### 2. 이미지 업로드
+
+Podman으로 빌드하거나 커스터마이징한 이미지를 외부 저장소인 Docker Hub 또는 사용자 레지스리에 업로드하여 관리할 수 있습니다.<br>
+
+#### 가. Docker Hub 로그인
+
+먼저 Podman을 통해 Docker Hub 등의 계정에 인증합니다.
+
+```
+$ podman login docker.io
+# Username과 Password(또는 Access Token)를 입력합니다.
+```
+
+#### 나. 이미지 태그(Tag) 설정
+
+업로드를 위해서는 이미지 이름을 `계정명/이미지명:태그` 형식으로 지정해야 합니다.
+
+```
+# 로컬 이미지(my_pytorch:v1)를 Docker Hub 형식으로 태그
+$ podman tag localhost/my_pytorch:v1 docker.io/내계정ID/my_pytorch:v1
+```
+
+#### 다. 이미지 업로드(Push)
+
+태그가 완료된 이미지를 Docker Hub 레지스트리로 전송합니다.
+
+```
+$ podman push docker.io/내계정ID/my_pytorch:v1
+```
+
+### 3. 이미지 변환 및 최적화
+
+Podman으로 준비한 이미지는 컨테이너 실행 도구에 맞는 변환 과정을 거칩니다.
+
+#### 가. Enroot&#x20;
+
+이미지를 SquashFS 포맷으로 변환하여 로딩 속도를 높이고 GPU 연산 효율을 최적화 합니다.
+
+```
+# .sqsh 이미지 생성
+$ enroot import -o my_pytorch.sqsh podman://my_pytorch:v1
+```
+
+#### 나. Singularity
+
+기존 작업 방식 유지 또는 타 시스템과의 이미지 공유가 필요한 경우 활용합니다.
+
+```
+# Podman 이미지를 tar로 내보낸 후 .sif 파일로 빌드
+$ podman save my_pytorch:v1 -o my_pytorch.tar
+$ singularity build --fakeroot my_pytorch.sif docker-archive://my_pytorch.tar
+```
+
+### 4. 이미지 배포 및 실행
+
+생성된 이미지는  Enroot 또는 Singularity 환경에 배포하여 실행할 수 있습니다.
+
+#### 가.Enroot&#x20;
+
+```bash
+# GPU 계산 노드에서quashFS 이미지를 로드하고 실행
+$ enroot start my_pytorch.sqsh python train.py
+```
+
+#### 나. Singularity
+
+```bash
+# GPU 계산노드에서 Singularity 이미지를 로드하여 실행
+$ singularity exec --nv my_pytorch.sif python train.py
+```
+
+### 5. 스케줄러(SLURM)을 통한 작업 실행
+
+뉴론 시스템 스케줄러(Slurm)를 통해 컨테이너 작업을 제출하는 방법입니다. 사용 도구(Enroot(Pyxis) 또는 Singularity)에 따라 스크립트를 작성하십시오.
+
+#### 가. Enroot(Pyxis) 활용 예시
+
+Pyxis는 Slurm의 `srun` 옵션을 확장하여, 사용자가 복잡한 Enroot 명령어를 직접 입력하지 않아도 컨테이너 환경을 자동으로 구성해 줍니다.
+
+```
+#!/bin/bash
+#SBATCH –J pytorch # job name
+#SBATCH --time=1:00:00 # wall_time
+#SBATCH -p cas_v100_4
+#SBATCH --comment pytorch # application name
+#SBATCH --nodes=1 
+#SBATCH --ntasks-per-node=2 
+#SBATCH --cpus-per-task=10 
+#SBATCH –o %x_%j.out
+#SBATCH -e %x_%j.err
+#SBATCH —gres=gpu:2 # number of GPUs per node
+
+# Pyxis 플러그인을 이용한 컨테이너 실행
+# --container-image: 사용할 .sqsh 이미지 경로
+# --container-workdir: 컨테이너 내 작업 디렉토리 설정
+srun --container-image=./my_env.sqsh \
+     --container-workdir=/scratch/[ID] \
+     python train.py
+```
+
+```
+#!/bin/bash
+#SBATCH –J pytorch # job name
+#SBATCH --time=1:00:00 # wall_time
+#SBATCH -p cas_v100_4
+#SBATCH --comment pytorch # application name
+#SBATCH --nodes=1 
+#SBATCH --ntasks-per-node=2 
+#SBATCH --cpus-per-task=10 
+#SBATCH –o %x_%j.out
+#SBATCH -e %x_%j.err
+#SBATCH —gres=gpu:2 # number of GPUs per node
+# Pyxis 전용 #SBATCH 파라미터 설정
+#SBATCH --container-image=./my_pytorch.sqsh    # 사용할 Enroot 이미지 경로
+#SBATCH --container-workdir=/scratch/[ID]      # 컨테이너 내 작업 디렉토리 설정
+
+srun python train.py
+```
+
+{% hint style="info" %}
+**Pyxis 주요 #SBATCH 파라미터 설명**
+{% endhint %}
+
+<table data-header-hidden><thead><tr><th width="202.1334228515625"></th><th></th></tr></thead><tbody><tr><td><strong>파라미터</strong></td><td><strong>설명</strong></td></tr><tr><td><code>--container-image</code></td><td>사용할 컨테이너 이미지 경로 (<code>.sqsh</code> 파일 또는 <code>docker://</code> 주소)</td></tr><tr><td><code>--container-mounts</code></td><td>마운트할 경로 설정 (형식: <code>호스트경로:컨테이너경로</code>)    * /home01, /scratch, /apps는 지정하지 않아도 자동 마운트 됨</td></tr><tr><td><code>--container-workdir</code></td><td>컨테이너 실행 시 시작 위치(Working Directory) 지정</td></tr><tr><td><code>--container-name</code></td><td>실행 중인 컨테이너에 부여할 이름 (디버깅 용도)</td></tr><tr><td><code>--container-save</code></td><td>작업 종료 후 변경된 컨테이너 상태를 <code>.sqsh</code>로 저장 (필요 시)</td></tr></tbody></table>
+
+#### 나. Singularity 활용 예시
+
+```
+#!/bin/bash
+#SBATCH –J pytorch # job name
+#SBATCH --time=1:00:00 # wall_time
+#SBATCH -p cas_v100_4
+#SBATCH --comment pytorch # application name
+#SBATCH --nodes=1 
+#SBATCH --ntasks-per-node=2 
+#SBATCH --cpus-per-task=10 
+#SBATCH –o %x_%j.out
+#SBATCH -e %x_%j.err
+#SBATCH —gres=gpu:2 # number of GPUs per node
+
+# --nv: GPU 가속 연동 옵션 필수
+singularity exec --nv my_pytorch.sif python train.py
+```
