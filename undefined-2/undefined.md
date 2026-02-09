@@ -26,6 +26,10 @@ Singularity 컨테이너에 대한 자세한 사용법은 [https://docs-ksc.gitb
 
 로그인 노드 또는 계산 노드에서 Podman을 사용하여 컨테이너 이미지를 준비합니다.
 
+ㅇ
+
+ㅇ
+
 #### 가. 외부 이미지 가져오기 (Pull)
 
 NGC(NVIDIA GPU Cloud) 등에서 이미지를 가져옵니다.
