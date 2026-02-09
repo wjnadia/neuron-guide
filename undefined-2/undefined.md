@@ -47,6 +47,10 @@ nvcr.io/nvidia/pytorch  25.12-py3   dd94fce2f83a  7 weeks ago  20.6 GB
 $ ls Dockerfile
 Dockerfile
 $ podman build -t my_pytorch:v1 . 
+$ podman images
+REPOSITORY              TAG         IMAGE ID      CREATED        SIZE
+localhost/my_pytorch    v1          d9c8064f0996  6 seconds ago  20.6 GB
+nvcr.io/nvidia/pytorch  25.12-py3   dd94fce2f83a  7 weeks ago    20.6 GB
 ```
 
 ```
