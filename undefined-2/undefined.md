@@ -34,6 +34,8 @@ NGC(NVIDIA GPU Cloud) 등에서 이미지를 가져옵니다.
 # NGC에서 PyTorch 25.12 버전 가져오기
 $ podman pull nvcr.io/nvidia/pytorch:25.12-py3
 $ podman images
+REPOSITORY              TAG         IMAGE ID      CREATED      SIZE
+nvcr.io/nvidia/pytorch  25.12-py3   dd94fce2f83a  7 weeks ago  20.6 GB
 ```
 
 #### 나. Dockerfile을 이용한 로컬 빌드
@@ -41,8 +43,9 @@ $ podman images
 사용자 소스 코드나 특정 라이브러리를 포함한 커스텀 이미지를 생성합니다.
 
 ```
-# 작성한 Dockerfile을 바탕으로 'my_pytorch:v1' 이미지 빌드
-$ cat Dockerfile
+# 현재 디렉터리(.)의 Dockerfile로 'my_pytorch:v1' 이미지 빌드
+$ ls Dockerfile
+Dockerfile
 $ podman build -t my_pytorch:v1 . 
 ```
 
@@ -70,9 +73,30 @@ RUN pip install --no-cache-dir \
 WORKDIR /workspace
 ```
 
+{% hint style="info" %}
+**이미지 빌드 명령어**
+{% endhint %}
+
+```
+$ podman build [옵션] -t [이미지명]:[태그] [Dockerfile경로]
+-t, --tag: 이미지 이름과 버전(태그) 지정(예: my_env:v1.0)
+-f, --file: 기본 파일명(Dockerfile)이 아닌 다른 이름의 파일을 사용할 때 지정
+--no-cache: 캐시를 사용하지 않고 모든 단계를 새로 빌드(라이브러리 업데이트 시 유용)
+-v, --volume: 빌드 과정 중 호스트 디렉토리를 마운트해야 할 때 사용
+
+# 특정 파일을 지정하여 빌드
+$ podman build -f Dockerfile.gpu -t my_pytorch:gpu_ver .
+```
+
+{% hint style="info" %}
+**이미지 관리 명령어 요약**
+{% endhint %}
+
+<table data-header-hidden><thead><tr><th width="91.4000244140625" align="center"></th><th width="284.1334228515625"></th><th></th></tr></thead><tbody><tr><td align="center"><sub><strong>기능</strong></sub></td><td><sub><strong>명령어</strong></sub></td><td><sub><strong>설명</strong></sub></td></tr><tr><td align="center"><sub>목록 확인</sub></td><td><code>$ podman images</code></td><td><sub>로컬에 저장된 이미지 리스트 출력</sub></td></tr><tr><td align="center"><sub>이미지 삭제</sub></td><td><code>$ podman rmi [이미지ID]</code></td><td><sub>불필요한 이미지 제거</sub></td></tr><tr><td align="center"><sub>상세 정보</sub></td><td><code>$ podman inspect [이미지ID]</code></td><td><sub>이미지 레이어, 환경변수 등 상세 정보 확인</sub></td></tr><tr><td align="center"><sub>태그 변경</sub></td><td><code>$ podman tag [기존이름] [새이름]</code></td><td><sub>이미지에 새로운 이름/태그 부여</sub></td></tr></tbody></table>
+
 ### 2. 이미지 업로드
 
-Podman으로 빌드하거나 커스터마이징한 이미지를 외부 저장소인 Docker Hub 또는 사용자 레지스리에 업로드하여 관리할 수 있습니다.<br>
+Podman으로 빌드한 이미지를 외부 저장소인 Docker Hub 또는 사용자 레지스트리에 업로드하여 관리할수 있습니다. <br>
 
 #### 가. Docker Hub 로그인
 
@@ -100,9 +124,11 @@ $ podman tag localhost/my_pytorch:v1 docker.io/내계정ID/my_pytorch:v1
 $ podman push docker.io/내계정ID/my_pytorch:v1
 ```
 
-### 3. 이미지 변환 및 최적화
 
-Podman으로 준비한 이미지는 컨테이너 실행 도구에 맞는 변환 과정을 거칩니다.
+
+### 3. 이미지 변환&#x20;
+
+Podman으로 준비한 이미지는 컨테이너 실행 도구에 맞는 변환 과정을 거쳐야  합니다.
 
 #### 가. Enroot&#x20;
 
@@ -110,8 +136,14 @@ Podman으로 준비한 이미지는 컨테이너 실행 도구에 맞는 변환 
 
 ```
 # .sqsh 이미지 생성
-$ enroot import -o my_pytorch.sqsh podman://my_pytorch:v1
+$ enroot import -o my_pytorch.sqsh podman://my_pytorch:v1ㄸ
 ```
+
+{% hint style="info" %}
+**Enroot 이미지 관련 명령어**&#x20;
+{% endhint %}
+
+<table data-header-hidden><thead><tr><th width="74.86663818359375" align="center"></th><th width="149.5999755859375" align="center"></th><th></th></tr></thead><tbody><tr><td align="center"><sub><strong>단계</strong></sub></td><td align="center"><sub><strong>작업 내용</strong></sub></td><td><sub><strong>명령어 / 설정 예시</strong></sub></td></tr><tr><td align="center"><sub>이미지 가져오기</sub></td><td align="center"><sub>Docker Hub 등      외부 레지스트리에서 직접 가져오기</sub></td><td><p></p><p><sub><code>$ enroot import docker://ubuntu:latest//image:tag</code></sub></p></td></tr><tr><td align="center"><sub>이미지 리스트</sub></td><td align="center"><sub>이미지 목록 확인</sub></td><td><code>$ enroot list</code></td></tr><tr><td align="center"><sub>이미지 삭제</sub></td><td align="center"><sub>더 이상 사용하지 않는 이미지 제거</sub></td><td><code>$ enroot remove [image_name]</code></td></tr></tbody></table>
 
 #### 나. Singularity
 
@@ -123,7 +155,9 @@ $ podman save my_pytorch:v1 -o my_pytorch.tar
 $ singularity build --fakeroot my_pytorch.sif docker-archive://my_pytorch.tar
 ```
 
-### 4. 이미지 배포 및 실행
+
+
+### 4. 이미지 실행
 
 생성된 이미지는  Enroot 또는 Singularity 환경에 배포하여 실행할 수 있습니다.
 
@@ -150,6 +184,7 @@ $ singularity exec --nv my_pytorch.sif python train.py
 Pyxis는 Slurm의 `srun` 옵션을 확장하여, 사용자가 복잡한 Enroot 명령어를 직접 입력하지 않아도 컨테이너 환경을 자동으로 구성해 줍니다.
 
 ```
+[예시 1]
 #!/bin/bash
 #SBATCH –J pytorch # job name
 #SBATCH --time=1:00:00 # wall_time
@@ -171,6 +206,7 @@ srun --container-image=./my_env.sqsh \
 ```
 
 ```
+[예시 2]
 #!/bin/bash
 #SBATCH –J pytorch # job name
 #SBATCH --time=1:00:00 # wall_time
@@ -193,7 +229,7 @@ srun python train.py
 **Pyxis 주요 #SBATCH 파라미터 설명**
 {% endhint %}
 
-<table data-header-hidden><thead><tr><th width="202.1334228515625"></th><th></th></tr></thead><tbody><tr><td><strong>파라미터</strong></td><td><strong>설명</strong></td></tr><tr><td><code>--container-image</code></td><td>사용할 컨테이너 이미지 경로 (<code>.sqsh</code> 파일 또는 <code>docker://</code> 주소)</td></tr><tr><td><code>--container-mounts</code></td><td>마운트할 경로 설정 (형식: <code>호스트경로:컨테이너경로</code>)    * /home01, /scratch, /apps는 지정하지 않아도 자동 마운트 됨</td></tr><tr><td><code>--container-workdir</code></td><td>컨테이너 실행 시 시작 위치(Working Directory) 지정</td></tr><tr><td><code>--container-name</code></td><td>실행 중인 컨테이너에 부여할 이름 (디버깅 용도)</td></tr><tr><td><code>--container-save</code></td><td>작업 종료 후 변경된 컨테이너 상태를 <code>.sqsh</code>로 저장 (필요 시)</td></tr></tbody></table>
+<table data-header-hidden><thead><tr><th width="202.1334228515625"></th><th></th></tr></thead><tbody><tr><td><strong>파라미터</strong></td><td><strong>설명</strong></td></tr><tr><td><code>--container-image</code></td><td>사용할 컨테이너 이미지 경로 (<code>.sqsh</code> 파일 또는 <code>docker://</code> 주소)</td></tr><tr><td><code>--container-mounts</code></td><td>마운트할 경로 설정 (형식: <code>호스트경로:컨테이너경로</code>)    <sub>* /home01, /scratch, /apps는 지정하지 않아도 자동 마운트 됨</sub></td></tr><tr><td><code>--container-workdir</code></td><td>컨테이너 실행 시 시작 위치(Working Directory) 지정</td></tr><tr><td><code>--container-name</code></td><td>실행 중인 컨테이너에 부여할 이름 (디버깅 용도)</td></tr><tr><td><code>--container-save</code></td><td>작업 종료 후 변경된 컨테이너 상태를 <code>.sqsh</code>로 저장 (필요 시)</td></tr></tbody></table>
 
 #### 나. Singularity 활용 예시
 
