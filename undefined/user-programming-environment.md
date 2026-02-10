@@ -336,8 +336,7 @@ $ mpicc mpi-cuda.o -lcudart -L/apps/cuda/11.4/lib64
 $ srun ./a.out
 ```
 
-※ intel 컴파일러 사용 시, gcc/10.2.0 대신 intel/19.1.2 module을 load을 적용합니다.\
-
+※ intel 컴파일러 사용 시, gcc/10.2.0 대신 intel/19.1.2 module을 load을 적용합니다.<br>
 
 {% hint style="info" %}
 2024년 11월 22일에 마지막으로 업데이트 되었습니다.

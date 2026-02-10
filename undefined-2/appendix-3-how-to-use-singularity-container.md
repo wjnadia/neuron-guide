@@ -4,7 +4,7 @@
 
 Tensorflow, Pytorch와 같은 딥러닝 프레임워크와 Quantum Espresso, Lammps, Gromacs 등을 지원하는 빌드된 **컨테이너 이미지는** **/apps/applications/singularity\_images/ngc 디렉터리**에서 액세스 할 수 있습니다.
 
-<div align="center"><figure><img src="../.gitbook/assets/vm-container_comparison.JPG" alt="" width="471"><figcaption><p>&#x3C;가상머신과 컨테이너 아키텍처 비교></p></figcaption></figure> <figure><img src="../.gitbook/assets/singularity_architecture.JPG" alt="" width="375"><figcaption><p align="center">&#x3C;Singularity 컨테이너 아키텍처></p></figcaption></figure></div>
+<figure><img src="../.gitbook/assets/싱귤레러티 아키텍처.png" alt=""><figcaption></figcaption></figure>
 
 ※ 가상머신은 애플리케이션이 하이퍼바이저와 게스트 OS를 거쳐 올라가는 구조이나, 컨테이너는 물리적인 하드웨어에 더 가까우며 별도의 게스트 OS가 아닌 호스트 OS를 공유하기 때문에 오버헤드가 더 적습니다. 최근 클라우드 서비스에서 컨테이너의 활용이 증가하고 있습니다.
 
@@ -16,7 +16,7 @@ Tensorflow, Pytorch와 같은 딥러닝 프레임워크와 Quantum Espresso, Lam
 
 ## 가. 컨테이너 이미지 빌드하기
 
-### **1. 싱귤레러티 모듈 적재  및 자동 로드(Default) 설정**
+### **1. 모듈 적재  및 자동 로드(Default) 설정**
 
 ```
 $ module load singularity/4.3.4 (singularity 4.3.4 버전 모듈 로드)
@@ -284,6 +284,8 @@ Sylabs Cloud 라이브러리에 컨테이너 이미지를 내보내기(업로드
 
 ```
 $ module load singularity/4.3.4 (singularity 4.3.4 버전 모듈 로드)
+
+##(필요시) Singularity를 포함한 자주 사용하는 모듈들이 자동 로드 되도록 설정
 $ module list (현재 로드된 모듈 목록 확인)
 $ module save default (로그인 시 자동 로드(default) 설정)
 $ module savelist (저장된 설정 이름 확인)
@@ -311,15 +313,14 @@ $ singularity exec --nv library://dxtr/default/hpc-pytorch python test.py
 ③ Nvidia GPU 장착 계산 노드의 싱귤레러티 컨테이너에서 runscript(이미지 빌드 시 생성)가 존재하면 이 스크립트를 먼저 실행한 후, 
 사용자 명령어(아래 예제에서 python --version)가 존재하면 이어서 실행됩니다.
 
-$ singularity run --nv /apps/applications/singularity_images/ngc/pytorch:25.12-py3.sif ＼
- nvidia-smi 
+$ singularity run --nv  /apps/applications/singularity_images/ngc/pytorch:25.12-py3.sif python --version 
 =============
 == PyTorch ==
 =============
 
-NVIDIA Release 24.12 (build 126674149)
-PyTorch Version 2.6.0a0+df5bbc0
-Container image Copyright (c) 2024, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+NVIDIA Release 25.12 (build 245654590)
+PyTorch Version 2.10.0a0+b4e4ee8
+Container image Copyright (c) 2025, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 Copyright (c) 2014-2024 Facebook Inc.
 Copyright (c) 2011-2014 Idiap Research Institute (Ronan Collobert)
 Copyright (c) 2012-2014 Deepmind Technologies    (Koray Kavukcuoglu)
@@ -335,9 +336,14 @@ All rights reserved.
 
 Various files include modifications (c) NVIDIA CORPORATION & AFFILIATES.  All rights reserved.
 
-This container image and its contents are governed by the NVIDIA Deep Learning Container License.
-By pulling and using the container, you accept the terms and conditions of this license:
-https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+GOVERNING TERMS: The software and materials are governed by the NVIDIA Software License Agreement
+(found at https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-software-license-agreement/)
+and the Product-Specific Terms for NVIDIA AI Products
+(found at https://www.nvidia.com/en-us/agreements/enterprise-software/product-specific-terms-for-ai-products/).
+
+NOTE: CUDA Forward Compatibility mode ENABLED.
+  Using CUDA 13.1 driver version 590.44.01 with kernel driver version 580.105.08.
+  See https://docs.nvidia.com/deploy/cuda-compatibility/ for details.
 
 NOTE: Mellanox network driver detected, but NVIDIA peer memory driver not
       detected.  Multi-node communication performance may be reduced.
@@ -351,7 +357,7 @@ Python 3.12.3
 
 계산/로그인 노드에서 Nvidia GPU를 사용하기 위해서는 --nv 옵션을 사용해야 합니다.
 
-Dockerfile을  사용(싱귤레러티 --oci 빌드옵션 적용)하여 빌드된 이미지를 실행하기 위해서는 --oci 옵션을 사용해야 합니다.
+<mark style="color:$danger;">**싱귤레러티 --oci 빌드 옵션을 사용하여 빌드된 이미지를 실행하기 위해서는 반드시 --oci 옵션을 사용해야 합니다.**</mark>
 {% endhint %}
 
 
