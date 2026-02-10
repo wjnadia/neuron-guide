@@ -1,16 +1,12 @@
 # Singularity 컨테이너
 
-싱귤레러티(Singularity)는 도커(Docker)와 같이 OS 가상화를 구현하기 위한 HPC 환경에 적합한 컨테이너 플랫폼입니다. 사용자 작업 환경에 적합한 리눅스 배포판, 컴파일러, 라이브러리, 애플리케이션 등을 포함하는 컨테이너 이미지를 빌드하고 빌드된 컨테이너 이미지를 구동하여 사용자 프로그램을 실행할 수 있습니다.
+싱귤레러티(Singularity)는 도커(Docker)와 같이 OS 가상화를 구현하기 위한 HPC 환경에 적합한 컨테이너 플랫폼입니다. 사용자 작업 환경에 적합한 리눅스 배포판, 컴파일러, 라이브러리, 애플리케이션 등을 포함하는 컨테이너 이미지를 빌드 및 동하여 사용자 프로그램을 실행할 수 있습니다.
 
-Tensorflow, Caffe, Pytorch와 같은 딥러닝 프레임워크와 Quantum Espresso, Lammps, Gromacs, Paraview 등을 지원하는 빌드된 **컨테이너 이미지는** **/apps/applications/singularity\_images/ngc 디렉터리**에서 액세스 할 수 있습니다.
+Tensorflow, Pytorch와 같은 딥러닝 프레임워크와 Quantum Espresso, Lammps, Gromacs 등을 지원하는 빌드된 **컨테이너 이미지는** **/apps/applications/singularity\_images/ngc 디렉터리**에서 액세스 할 수 있습니다.
 
-![](../.gitbook/assets/vm-container_comparison.JPG)       ![](<../.gitbook/assets/image (2).png>)
-
-&#x20; < 가상머신과 컨테이너 아키텍처 비교>                 \<Singularity 컨테이너 아키텍처>
+<div align="center"><figure><img src="../.gitbook/assets/vm-container_comparison.JPG" alt="" width="471"><figcaption><p>&#x3C;가상머신과 컨테이너 아키텍처 비교></p></figcaption></figure> <figure><img src="../.gitbook/assets/singularity_architecture.JPG" alt="" width="375"><figcaption><p align="center">&#x3C;Singularity 컨테이너 아키텍처></p></figcaption></figure></div>
 
 ※ 가상머신은 애플리케이션이 하이퍼바이저와 게스트 OS를 거쳐 올라가는 구조이나, 컨테이너는 물리적인 하드웨어에 더 가까우며 별도의 게스트 OS가 아닌 호스트 OS를 공유하기 때문에 오버헤드가 더 적습니다. 최근 클라우드 서비스에서 컨테이너의 활용이 증가하고 있습니다.
-
-
 
 ### (동영상가이드)  싱귤레러티 컨테이너 이미지 빌드 및 실행 방법&#x20;
 
