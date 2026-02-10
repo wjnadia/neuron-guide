@@ -152,11 +152,9 @@ CMD ["mpirun","--allow-run-as-root","-np","4","/app/ring"]
 <mark style="color:$danger;">**\[유의 사항]**</mark> <mark style="color:$warning;">**gpu\[51-52] 계산 노드(GH200, ARM  CPU 아키텍처)**</mark>에서 singularity 컨테이너를 사용하고자 할 경우, 먼저 [<mark style="color:blue;">**인터랙티브 작업 제출**</mark>](https://docs-ksc.gitbook.io/neuron-user-guide/undefined/running-jobs-through-scheduler-slurm#id-3)을 통해 gpu\[51-52] 노드 중 하나에 접속하여 <mark style="color:$warning;">**이 아키텍처와 호환이 되는 컨테이너 이미지를 빌드**</mark> 해야 합니다.&#x20;
 {% endhint %}
 
-### 3. Podman  사용하여 빌드
 
 
-
-### 4.cotainr 사용하여  빌드
+### 3.cotainr 사용하여  빌드
 
 cotainr은 사용자가  뉴론  및  자신의 시스템에서 사용중인 conda 패키지를 포함하는 싱귤레러티 컨테이너  이미지를 좀 더 쉽게 빌드할 수 있게 지원하는 도구입니다.
 
@@ -228,7 +226,7 @@ Available system configurations:
 # 사용자 이미지 직접 지정
 $ cotainr build --base-image=docker://nvcr.io/nvidia/cuda:13.1.0-devel-ubuntu22.04 --conda-env=my_conda_env.yml --accept-licenses my_container.sif
 
-# 뉴론 시스템 기본 이미지 (Ubuntu 22.04, CUDA 13.1, IB 사용자 라이브러리 등포함)
+# 뉴론 시스템 기본 이미지 (Ubuntu 22.04, CUDA 13.1, IB 사용자 라이브러리 등 포함)
 $ cotainr build --system=neuron-cuda --conda-env=my_conda_env.yml --accept-licenses my_container.sif
   
 ```
@@ -247,7 +245,7 @@ base                  *  /opt/conda/envs/conda_container_env
 
 ###
 
-### **5. 원격빌드**
+### **4. 원격빌드**
 
 {% code overflow="wrap" fullWidth="false" %}
 ```shell-session
@@ -263,7 +261,7 @@ Sylabs Cloud에 웹 브라우저 접속을 통해서 싱귤레러티 컨테이�
 
 
 
-### **6. 컨테이너 이미지 가져오기/내보내기**
+### **5. 컨테이너 이미지 가져오기/내보내기**
 
 {% code fullWidth="false" %}
 ```
