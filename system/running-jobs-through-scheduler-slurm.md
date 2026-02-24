@@ -106,7 +106,7 @@ $ nvidia-smi -l 2
 
 ※ ‘\[별첨1] 작업스크립트 파일 주요 키워드’를 참조바랍니다.
 
-※ 기계학습 프레임워크 Conda 활용은  부록 [appendix-2-how-to-use-conda.md](../undefined-2/appendix-2-how-to-use-conda.md "mention") 가이드를 참조바랍니다.
+※ 기계학습 프레임워크 Conda 활용은  부록 [appendix-2-how-to-use-conda.md](../appendix/appendix-2-how-to-use-conda.md "mention") 가이드를 참조바랍니다.
 
 * SLURM 키워드
 
@@ -163,7 +163,7 @@ cpus-per-gpu = node의 총 core 수 / node의 총 GPU 수 * 요청 GPU 수(--gre
 export OMP_NUM_THREADS=1
 
 module purge
-module load intel/19.1.2
+module load intel/25.3.0
 
 srun ./test.exe
 
@@ -189,7 +189,7 @@ exit 0
 export OMP_NUM_THREADS=10
 
 module purge
-module load intel/19.1.2
+module load intel/25.3.0
 
 mpirun ./test_omp.exe
 
@@ -212,7 +212,7 @@ exit 0
 #SBATCH --comment xxx #Application별 SBATCH 옵션 이름표 참고
 
 module purge
-module load intel/19.1.2 mpi/impi-19.1.2
+module load intel/25.3.0 mpi/impi-21.17
 
 mpirun ./test_mpi.exe
 ```
@@ -234,7 +234,7 @@ mpirun ./test_mpi.exe
 #SBATCH --comment xxx #Application별 SBATCH 옵션 이름표 참고
 
 module purge
-module load intel/19.1.2 mpi/impi-19.1.2
+module load intel/25.3.0 mpi/impi-21.17
 
 export OMP_NUM_THREADS=10
 
@@ -260,7 +260,7 @@ mpirun ./test_mpi.exe
 export OMP_NUM_THREADS=1
 
 module purge
-module load intel/19.1.2 cuda/11.4
+module load intel/25.3.0 cuda/12.4.1
 
 srun ./test.exe
 
@@ -287,7 +287,7 @@ exit 0
 export OMP_NUM_THREADS=10
 
 module purge
-module load intel/19.1.2 cuda/11.4
+module load intel/25.3.0 cuda/12.4.1
 
 srun ./test_omp.exe
 
@@ -311,7 +311,7 @@ exit 0
 #SBATCH --comment xxx #Application별 SBATCH 옵션 이름표 참고
 
 module purge
-module load intel/19.1.2 cuda/11.4 cudampi/mvapich2-2.3.6
+module load intel/25.3.0 cuda/12.4.1 cudampi/openmpi-4.1.8
 
 srun ./test_mpi.exe
 ```
@@ -333,7 +333,7 @@ srun ./test_mpi.exe
 #SBATCH --comment xxx 
 
 module purge
-module load intel/19.1.2 cuda/11.4 cudampi/mvapich2-2.3.6
+module load intel/25.3.0 cuda/12.4.1 cudampi/openmpi-4.1.8
 
 srun ./test_mpi.exe
 ```
@@ -355,7 +355,7 @@ srun ./test_mpi.exe
 #SBATCH --comment xxx 
 
 module purge
-module load intel/19.1.2 cuda/11.4 cudampi/mvapich2-2.3.6
+module load intel/25.3.0 cuda/12.4.1 cudampi/openmpi-4.1.8
 
 srun ./test_mpi.exe
 ```
@@ -378,7 +378,7 @@ srun ./test_mpi.exe
 #SBATCH --comment xxx #Application별 SBATCH 옵션 이름표 참고
 
 module purge
-module load intel/19.1.2 mpi/impi-19.1.2
+module load intel/25.3.0 mpi/impi-21.17
 
 mpirun -n 2 ./test.exe
 
@@ -527,5 +527,5 @@ $ scancel 761
 * 필요시 모든 파티션에서 SLURM Interactive Job 기능을 이용해 컴파일, 디버깅이 가능합니다.
 
 {% hint style="info" %}
-2025년 1월 02일에 마지막으로 업데이트 되었습니다.
+2026년 2월 23일에 마지막으로 업데이트 되었습니다.
 {% endhint %}
