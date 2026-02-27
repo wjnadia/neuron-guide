@@ -302,7 +302,7 @@ $ singularity [global options...] run [run options...] ＜container＞
 {% code title="[예제]" overflow="wrap" fullWidth="false" %}
 ```
 ① Nvidia GPU 장착 계산 노드의 싱귤레러티 컨테이너에서 쉘 실행 후 사용자 프로그램 실행 
-$ singularity shell --nv＊ pytorch:25.12-py3.sif.sif
+$ singularity shell --nv＊ pytorch:25.12-py3.sif
 Singularity> python test.py
 
 ② Nvidia GPU 장착 계산 노드의 싱귤레러티 컨테이너에서 사용자 프로그램 실행
@@ -357,7 +357,7 @@ Python 3.12.3
 
 계산/로그인 노드에서 Nvidia GPU를 사용하기 위해서는 --nv 옵션을 사용해야 합니다.
 
-<mark style="color:$danger;">**싱귤레러티 --oci 빌드 옵션을 사용하여 빌드된 이미지를 실행하기 위해서는 반드시 --oci 옵션을 사용해야 합니다.**</mark>
+<mark style="color:$danger;">**싱귤레러티 --oci 옵션을 사용하여 빌드된 이미지를 실행하기 위해서는 반드시 --oci 옵션을 사용해야 합니다.**</mark>
 {% endhint %}
 
 
@@ -373,7 +373,7 @@ Python 3.12.3
 {% code overflow="wrap" %}
 ```shell-session
 ① tensorflow 1.15.5 지원 싱규레러티 컨테이너 이미지(tensorflow_22.03-tf1-keras-py3.sif)를 자동으로 구동하여 사용자 프로그램 실행
- $ module load ngc/tensorflow:22.03-tf1-py3 
+ $ module load ngc/tensorflow:25.02-tf2-py3 
  $ mpirun -H gpu39:2,gpu44:2 –n 4 python keras_imagenet_resnet50.py
 
 ② lammps 지원 싱규레러티 컨테이너 이미지(lammps:patch_15Jun2023.sif)를 자동으로 구동하여 lammps 실행
@@ -403,11 +403,15 @@ NGC(https://ngc.nvidia.com)에서 Nvidia GPU에 최적화하여 빌드 배포한
 
 ```shell-session
 1009% [a123a01@glogin01 ngc]$ module av
+
+-- [중략] --
+
+----------------------------------------------------------------------------------------- /apps/Modules/modulefiles/ngc -----------
+   ngc/gromacs:2020.2    ngc/lammps:patch_15Jun2023    ngc/pytorch:24.12-py3    ngc/qe:6.7    ngc/tensorflow:25.02-tf2-py3 (D)
+
+-- [중략] --
+
 ```
-
-\-- \[중략] --
-
-<figure><img src="../.gitbook/assets/singularity-neuron-ngc-module.png" alt=""><figcaption></figcaption></figure>
 
 ###
 
@@ -439,7 +443,7 @@ Submitted batch job 12345
 [id@glogin01]$ srun --partition=cas_v100_4 --nodes=1 --ntasks-per-node=2 --cpus-per-task=10 --gres=gpu:2 --comment=pytorch --pty bash 
 [id@gpu10]$ 
 [id@gpu10]$ module load singularity/4.3.4 
-[id@gpu10]$ singularity run --nv /apps/applications/singularity_images/ngc/pytorch:23.12-py3.sif python test.py
+[id@gpu10]$ singularity run --nv /apps/applications/singularity_images/ngc/pytorch:25.12-py3.sif python test.py
 ```
 {% endcode %}
 
