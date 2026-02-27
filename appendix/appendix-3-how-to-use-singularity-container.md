@@ -475,7 +475,7 @@ Submitted batch job 12345
 
 module load singularity/4.3.4 
 
-singularity run --nv /apps/applications/singularity_images/ngc/pytorch:23.12-py3.sif python test.py
+singularity run --nv /apps/applications/singularity_images/ngc/pytorch:25.12-py3.sif python test.py
 ```
 {% endcode %}
 
@@ -505,7 +505,7 @@ singularity run --nv /apps/applications/singularity_images/ngc/pytorch:23.12-py3
 
 module load singularity/4.3.4 gcc/4.8.5 mpi/openmpi-3.1.5
 
-srun singularity run --nv /apps/applications/singularity_images/ngc/pytorch_22.03-hd-py3.sif \
+srun singularity run --nv /apps/applications/singularity_images/ngc/pytorch:24.12-py3-hvd.sif \
 python pytorch_imagenet_resnet50.py 
 ```
 {% endcode %}
@@ -534,7 +534,7 @@ python pytorch_imagenet_resnet50.py
 #SBATCH -e %x_%j.err
 #SBATCH --gres=gpu:2 # number of GPUs per node
 
-module load singularity/4.3.4  ngc/pytorch:22.03-py3
+module load singularity/4.3.4  ngc/pytorch:24.12-py3
 
 mpirun_wrapper python pytorch_imagenet_resnet50.py 
 ```
@@ -634,7 +634,7 @@ mpirun_wrapper python pytorch_imagenet_resnet50.py
 
 ## Training Resnet-50(Pytorch) for image classification on single node & multi GPUs
 Base=/apps/applications/singularity_images
-module load ngc/pytorch:22.03-py3
+module load ngc/pytorch:24.12-py3
 
 python $Base/examples/pytorch/resnet50v1.5/multiproc.py --nproc_per_node 2 $Base/examples/pytorch/resnet50v1.5/main.py $Base/imagenet \
 --data-backend dali-gpu --raport-file report.json -j2 --arch resnet50 -c fanin --label-smoothing 0.1 -b 128 --epochs 50
@@ -706,7 +706,7 @@ Submitted batch job 99982
 
 ## Training Resnet-50(Pytorch) for image classification on single node & multi GPUs
 Base=/apps/applications/singularity_images
-module load ngc/pytorch:22.03-py3
+module load ngc/pytorch:24.12-py3
 
 python $Base/examples/pytorch/resnet50v1.5/multiproc.py --nproc_per_node 2 $Base/examples/pytorch/resnet50v1.5/main.py $Base/imagenet \
 --data-backend dali-gpu --raport-file report.json -j2 --arch resnet50 -c fanin --label-smoothing 0.1 -b 128 --epochs 50
@@ -738,7 +738,7 @@ python $Base/examples/pytorch/resnet50v1.5/multiproc.py --nproc_per_node 2 $Base
 
 ## Training Resnet-50(Pytorch horovod) for image classification on multi nodes & multi GPUs
 Base=/apps/applications/singularity_images
-module load ngc/pytorch:22.03-py3
+module load ngc/pytorch:24.12-py3
 
 mpirun_wrapper \
 python $Base/examples/horovod/examples/pytorch/pytorch_imagenet_resnet50.py \
@@ -770,7 +770,7 @@ python $Base/examples/horovod/examples/pytorch/pytorch_imagenet_resnet50.py \
 
 ## Training Resnet-50(Keras horovod) for image classification on multi nodes & multi GPUS
 Base=/apps/applications/singularity_images/examples
-module load ngc/tensorflow:22.03-tf1-py3
+module load ngc/tensorflow:25.02-tf2-py3
 
 mpirun_wrapper python $Base/horovod/examples/keras/keras_imagenet_resnet50.py \
 --batch-size=128 --epochs=50
