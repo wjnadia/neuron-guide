@@ -8,7 +8,7 @@ hidden: true
 
 {% hint style="info" %}
 * **Podman**: 일반 사용자 권한 기반의 이미지 빌드 및 관리 도구입니다. Docker를 대체하여 이미지를 생성할 때 사용합니다.
-* **Enroot**: NVIDIA에서 개발한 HPC 전용 런타임입니다. 컨테이너 이미지를 SquashFS(`.sqsh`)로 변환하여 GPU 연산 성능을 극대화하며, Pyxis 플러그인을 통해 Slurm 스케줄러와 유기적으로 연동됩니다.
+* **Enroot**: NVIDIA에서 개발한 HPC 전용 런타임입니다. 컨테이너 이미지를 SquashFS(`.sqsh`)로 변환하여 Nvidia GPU에 최적화 되어 있으며, Pyxis 플러그인을 통해 Slurm 스케줄러와 유기적으로 연동됩니다.
 * **Singularity**: HPC 환경의 표준 컨테이너 도구로, 높은 범용성과 기존 구축된 `.sif` 이미지와의 호환성을 제공합니다
 {% endhint %}
 
@@ -28,7 +28,7 @@ Singularity 에 대한 자세한 사용법은 [**Singularity 컨테이너**](htt
 
 #### 가. Podman 사용 설정
 
-Podman 사용 환경 설정을 위해서는 먼저 사용자 홈디렉터리에 .usepodman 이라는 파일을 생성해야 합니다. 한 번만 생성하면 되고 로그아웃 후 다시 로그인하면 바로 적용 됩니다.
+Podman 사용 환경 설정을 위해서는 먼저 사용자 홈 디렉터리에 **.usepodman** 이라는 파일을 생성해야 합니다. 한 번만 생성하면 되고 로그아웃 후 다시 로그인하면 바로 적용 됩니다.
 
 ```
 $ cd ~                # 사용자홈 디렉터리(/home01/[ID])로 이동             
@@ -113,35 +113,65 @@ $ podman build -f Dockerfile.gpu -t my_pytorch:gpu_ver .
 
 ### 2. 이미지 업로드
 
-Podman으로 빌드한 이미지를 외부 저장소인 Docker Hub 또는 사용자 레지스트리에 업로드하여 관리 및 공유 할 수 있습니다. 특히, 로그인  또는 계산 노드의 로컬 파일시스템에 저장된 이미지는 영구 보관되지  않기  때문에,  외부 저장소에 이미지를 업로드하는 것을 권장합니다.  &#x20;
+Podman으로 빌드한 이미지를 **외부 저장소인 Docker Hub** 또는 **KISTI 내부 저장소인 myhub**에 업로드하여 관리 및 공유 할 수 있습니다. 특히, 로그인  또는 계산 노드의 로컬 파일시스템에 저장된 이미지는 영구 보관되지  않기  때문에,  외부 또는 내부 저장소에 이미지를 업로드하는 것을 권장합니다.  &#x20;
 
-#### 가. Docker Hub 로그인
+#### 가. Docker Hub 또는 myhub 로그인
 
-먼저 Podman을 통해 Docker Hub 등의 계정에 인증합니다.
+먼저 Podman을 통해 Docker Hub 또는 myhub 계정으로 인증합니다.
+
+**1) Docker Hub**
 
 ```
 $ podman login docker.io
 # Username과 Password(또는 Access Token)를 입력합니다.
 ```
 
+**2) myhub**
+
+```
+$ podman login myhub.ksc.re.kr
+# Username(슈퍼컴퓨터 계정 ID)와 Access Token을 입력합니다.
+```
+
+{% hint style="info" %}
+myhub 를 사용하기 위해서는 먼저  웹  브라우저에서 [**https://my.hub.ksc.re.k**](https://my.hub.ksc.re.k/)**r**에 슈퍼컴퓨터 계정으로 로그인하여 **사용자 프로젝트**를 생성하고 **Access Token**을  가져와야  합니다.&#x20;
+
+<i class="fa-linktree">:linktree:</i> 자세한 사용 방법은 [**myhub 사용법**](undefined.md#myhub)을 참조하시기 바랍니다.&#x20;
+{% endhint %}
+
 #### 나. 이미지 태그(Tag) 설정
 
-업로드를 위해서는 이미지 이름을 `계정명/이미지명:태그` 형식으로 지정해야 합니다.
+업로드를 위해서는 이미지 이름을 **\[레지스트리주소]/\[Username 또는 프로젝트명]/\[이미지명]:\[버전태그]** 형식으로 지정해야 합니다.
+
+**1) Docker Hub**
 
 ```
 # 로컬 이미지(my_pytorch:v1)를 Docker Hub 형식으로 태그
-$ podman tag localhost/my_pytorch:v1 docker.io/내계정ID/my_pytorch:v1
+$ podman tag localhost/my_pytorch:v1 docker.io/[Username]/my_pytorch:v1
+```
+
+**2) myhub**
+
+```
+# 로컬 이미지(my_pytorch:v1)를 myhub 형식으로 태그
+$ podman tag localhost/my_pytorch:v1 myhub.ksc.re.kr/[프로젝트명]/my_pytorch:v1
 ```
 
 #### 다. 이미지 업로드(Push)
 
-태그가 완료된 이미지를 Docker Hub 레지스트리로 전송합니다.
+태그가 완료된 이미지를 Docker Hub 또는 myhub로 전송합니다.
+
+**1) Docker Hub**
 
 ```
-$ podman push docker.io/내계정ID/my_pytorch:v1
+$ podman push docker.io/[Username]/my_pytorch:v1
 ```
 
+**2) myhub**
 
+```
+$ podman push myhub.ksc.re.kr/[프로젝트명]/my_pytorch:v1
+```
 
 ### 3. 이미지 변환&#x20;
 
@@ -153,14 +183,14 @@ Podman으로 준비한 이미지는 컨테이너 실행 도구에 맞는 변환 
 
 ```
 # .sqsh 이미지 생성
-$ enroot import -o my_pytorch.sqsh podman://my_pytorch:v1ㄸ
+$ enroot import -o my_pytorch.sqsh podman://my_pytorch:v1
 ```
 
 {% hint style="info" %}
 **Enroot 이미지 관련 명령어**&#x20;
 {% endhint %}
 
-<table data-header-hidden><thead><tr><th width="74.86663818359375" align="center"></th><th width="149.5999755859375" align="center"></th><th></th></tr></thead><tbody><tr><td align="center"><sub><strong>단계</strong></sub></td><td align="center"><sub><strong>작업 내용</strong></sub></td><td><sub><strong>명령어 / 설정 예시</strong></sub></td></tr><tr><td align="center"><sub>이미지 가져오기</sub></td><td align="center"><sub>Docker Hub 등      외부 레지스트리에서 직접 가져오기</sub></td><td><p></p><p><sub><code>$ enroot import docker://ubuntu:latest//image:tag</code></sub></p></td></tr><tr><td align="center"><sub>이미지 리스트</sub></td><td align="center"><sub>이미지 목록 확인</sub></td><td><sub><code>$ enroot list</code></sub></td></tr><tr><td align="center"><sub>이미지 삭제</sub></td><td align="center"><sub>더 이상 사용하지 않는 이미지 제거</sub></td><td><sub><code>$ enroot remove [image_name]</code></sub></td></tr></tbody></table>
+<table data-header-hidden><thead><tr><th width="74.86663818359375" align="center"></th><th width="149.5999755859375" align="center"></th><th></th></tr></thead><tbody><tr><td align="center"><sub><strong>단계</strong></sub></td><td align="center"><sub><strong>작업 내용</strong></sub></td><td><sub><strong>명령어 / 설정 예시</strong></sub></td></tr><tr><td align="center"><sub>이미지 가져오기</sub></td><td align="center"><sub>Docker Hub 및 myhub 등  외부 레지스트리에서 직접 가져오기</sub></td><td><p></p><p><sub><code>$ enroot import docker://[Username]/my_pytorch:v1</code></sub><br><sub><code>$ enroot import docker://myhub.ksc.re.kr/[프로젝트명]/ubuntu:latest</code></sub></p></td></tr><tr><td align="center"><sub>이미지 리스트</sub></td><td align="center"><sub>이미지 목록 확인</sub></td><td><sub><code>$ enroot list</code></sub></td></tr><tr><td align="center"><sub>이미지 삭제</sub></td><td align="center"><sub>더 이상 사용하지 않는 이미지 제거</sub></td><td><sub><code>$ enroot remove [image_name]</code></sub></td></tr></tbody></table>
 
 #### 나. Singularity
 
@@ -270,3 +300,16 @@ srun python train.py
 # --nv: GPU 가속 연동 옵션 필수
 singularity exec --nv my_pytorch.sif python train.py
 ```
+
+
+
+### 6. 기타 참고 사항
+
+#### 가. myhub 사용법
+
+1\) myhub 사용자 페이지 접속
+
+&#x20;
+
+2\) myhub
+
