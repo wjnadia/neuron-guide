@@ -130,11 +130,11 @@ $ podman login docker.io
 
 ```
 $ podman login myhub.ksc.re.kr
-# Username(슈퍼컴퓨터 계정 ID)와 Access Token을 입력합니다.
+# Username(슈퍼컴퓨터 계정 ID)와 Password(CLI secert)을 입력합니다.
 ```
 
 {% hint style="info" %}
-myhub 를 사용하기 위해서는 먼저  웹  브라우저에서 [**https://my.hub.ksc.re.k**](https://my.hub.ksc.re.k/)**r**에 슈퍼컴퓨터 계정으로 로그인하여 **사용자 프로젝트**를 생성하고 **Access Token**을  가져와야  합니다.&#x20;
+myhub 를 사용하기 위해서는 먼저  웹  브라우저에서 [**https://my.hub.ksc.re.k**](https://my.hub.ksc.re.k/)**r**에 슈퍼컴퓨터 계정으로 로그인하여 **사용자 프로젝트**를 생성하고  CLI secret을  복사해 와야 합니다.&#x20;
 
 <i class="fa-linktree">:linktree:</i> 자세한 사용 방법은 [**myhub 사용법**](undefined.md#myhub)을 참조하시기 바랍니다.&#x20;
 {% endhint %}
@@ -307,9 +307,53 @@ singularity exec --nv my_pytorch.sif python train.py
 
 #### 가. myhub 사용법
 
-1\) myhub 사용자 페이지 접속
+myhub는 KISTI가 자체 구축한 컨테이너 이미지 레지스트리입니다. 슈퍼컴퓨터 계정을 가진 사용자는 웹 브라우저를 통해 로그인 및 프로젝트 생성,  Access Token 가져오기를  통해 슈퍼컴퓨터 컨테이너 환경에서 빠르게이미지를 업로드 및 다운로드 할 수 있습니다.&#x20;
 
-&#x20;
+**1) myhub 접속**
 
-2\) myhub
+웹 브라우저를 사용하여 myhub에 접속하여  슈퍼컴퓨터 계정을 사용하여 로그인(ID/패스워드/OTP) 합니다.    &#x20;
 
+{% embed url="https://myhub.ksc.re.kr" %}
+
+<figure><img src="../.gitbook/assets/image.png" alt=""><figcaption><p>myhub 로그인 화면</p></figcaption></figure>
+
+
+
+**2) 사용자 프로젝트 생성**
+
+프로젝트 생성 버튼을 눌러서 사용자가 원하는 프로젝트 이름을 지정하고 필요에  따라 공개(Public) 여부를 설정합니다.  private으로 설정하면 컨테이너에서 이미지 업로드 및 다운로드 시 사용자 인증 절차가 필요합니다.&#x20;
+
+<figure><img src="../.gitbook/assets/image (4).png" alt=""><figcaption><p>프로젝트 리스트</p></figcaption></figure>
+
+<figure><img src="../.gitbook/assets/image (5).png" alt=""><figcaption><p>프로젝트 생성</p></figcaption></figure>
+
+
+
+사용자가 생성한 프로젝트에서 Members에 로그인 시 사용한 ID(Name)가 Project Admin 으로 추가되었는 지 확인하고 없다면 추가합니다.&#x20;
+
+<figure><img src="../.gitbook/assets/image (6).png" alt=""><figcaption><p>프로젝트 멤버 설정</p></figcaption></figure>
+
+
+
+**3) Access Token 확인**
+
+프로젝트가 private으로 지정된 경우, 프로젝트에  컨테이너  이미지를  업로드  및 다운로드하기 위해서는  Podman의 경우 Username 및 Password를 입력하여 인증 정보를 등록해 주어야 합니다. User Profile에서 Username과 Password를 확인할 수 있으며,  Username은  동일하며CLI secret이 Password에  해당합니다. &#x20;
+
+<figure><img src="../.gitbook/assets/image (10).png" alt=""><figcaption><p>User Profile</p></figcaption></figure>
+
+podman의 경우 터미널 화면에서 아래와 같이 myhub에 대한 로그인 인증 정보를 등록할 수 있습니다. &#x20;
+
+```
+#> podman login myhub.ksc.re.kr
+Username: wjnadia
+Password:
+Login Succeeded!
+```
+
+
+
+**4) 프로젝트 할당량 및 사용량 확인**&#x20;
+
+프로젝트 선택하면 오른쪽 상단에서 프로젝트 별 이미지저장 공간의 할당량 및 사용량을 확인할 수 있으며, 할당량을 초과하여 이미지를 저장할 수 없습니다.&#x20;
+
+<figure><img src="../.gitbook/assets/image (11).png" alt=""><figcaption></figcaption></figure>

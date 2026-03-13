@@ -60,7 +60,7 @@ echo "end of the job"
 
 <mark style="color:red;">※ --gres, --cpus-per-task로 GPU, CPU 개수 설정 가능합니다.</mark>
 
-<mark style="color:red;">※ conda 가상환경 notebook에 jupyter notebook, jupyterlab 등 설치되어 있어야 합니다.</mark> \ <mark style="color:red;">(기존 뉴론 Jupyter 사용자는 별도로 설치할 필요가 없습니다.</mark>  [appendix-5-neuron-jupyter-user-guideline.md](../appendix/appendix-5-neuron-jupyter-user-guideline.md "mention")<mark style="color:red;">)</mark>
+<mark style="color:red;">※ conda 가상환경 notebook에 jupyter notebook, jupyterlab 등 설치되어 있어야 합니다.</mark> \ <mark style="color:red;">(기존 뉴론 Jupyter 사용자는 별도로 설치할 필요가 없습니다.</mark>  [appendix-5-neuron-jupyter-user-guideline.md](appendix-5-neuron-jupyter-user-guideline.md "mention")<mark style="color:red;">)</mark>
 
 ### 2. 작업 스크립트 제출 <a href="#submit" id="submit"></a>
 
@@ -88,7 +88,7 @@ ssh -L localhost:8888:gpu30:22782 $USER@neuron.ksc.re.kr
 
 ### 1. Windows OS일 경우 명령 프롬프트 예시 <a href="#windows" id="windows"></a>
 
-<figure><img src="../.gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (3) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### 2. Mac OS일 경우 터미널 예시 <a href="#mac" id="mac"></a>
 
@@ -108,6 +108,6 @@ Password(OTP):
 
 <mark style="color:red;">※ 비밀번호가 아닌 아이디입니다. (예: x0010a01)</mark>
 
-<figure><img src="../.gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 <mark style="color:red;">※ 해당 작업은 인터렉티브 작업으로 실행이 되기 때문에 사용이 완료되면</mark> \ <mark style="color:red;">scancel \[job\_id] 명령으로 작업을 삭제하시기 바랍니다. (MAX WALLTIME 은 24시간)</mark>
