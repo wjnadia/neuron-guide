@@ -279,7 +279,7 @@ srun python train.py
 ```
 [예시 3 : Pytorch Horovod Resnet-50 모델 기반 학습 예시]
 #!/bin/sh
-#SBATCH -J pytorch_horovod # job name
+#SBATCH -J pytorch_horovod_enroot # job name
 #SBATCH --time=24:00:00 # walltime
 #SBATCH --comment=pytorch # application name
 #SBATCH -p cas_v100nv_8 # partition name 
@@ -309,7 +309,7 @@ python $Base/examples/horovod/examples/pytorch/pytorch_imagenet_resnet50.py \
 
 ```
 #!/bin/bash
-#SBATCH –J pytorch_horovod # job name
+#SBATCH –J pytorch_horovod_sing # job name
 #SBATCH --time=24:00:00 # wall_time
 #SBATCH -p cas_v100nv_8
 #SBATCH --comment pytorch # application name
