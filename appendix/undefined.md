@@ -289,13 +289,11 @@ srun python train.py
 #SBATCH -o %x_%j.out
 #SBATCH -e %x_%j.err
 #SBATCH --gres=gpu:1 # number of GPUs per node
-#SBATCH --container-image=    # 사용할 Enroot 이미지 경로
-#SBATCH --container-workdir=$PWD      # 컨테이너 내 작업 디렉토리 설정
 
 ## Training Resnet-50(Pytorch horovod) for image classification on multi nodes & multi GPUs
 Base=/apps/applications/singularity_images
 
-srun --container-image=$Base/ngc/pytorch24.12-py3-x86_64.sqsh  python $Base/examples/horovod/examples/pytorch/pytorch_imagenet_resnet50.py \
+srun --container-image=$Base/ngc/pytorch24.12-py3-x86_64.sqsh --container-workdir=$PWD python $Base/examples/horovod/examples/pytorch/pytorch_imagenet_resnet50.py \
 --batch-size=128 --epochs=50
 
 ```
