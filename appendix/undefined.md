@@ -316,9 +316,9 @@ python $Base/examples/horovod/examples/pytorch/pytorch_imagenet_resnet50.py \
 #SBATCH --nodes=2 
 #SBATCH --ntasks-per-node=1 
 #SBATCH --cpus-per-task=4 
-#SBATCH –o %x_%j.out
+#SBATCH -o %x_%j.out
 #SBATCH -e %x_%j.err
-#SBATCH —gres=gpu:1 # number of GPUs per node
+#SBATCH --gres=gpu:1 # number of GPUs per node
 
 ## Training Resnet-50(Pytorch horovod) for image classification on multi nodes & multi GPUs
 Base=/apps/applications/singularity_images
