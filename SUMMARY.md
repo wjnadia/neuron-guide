@@ -27,7 +27,7 @@
 * [AI 멀티노드 활용](appendix/ai.md)
 * [SSH Port Forwarding 을 통한 Jupyter 작업 실행](appendix/ssh-port-forwarding-jupyter.md)
 * [NVIDIA GPU Profiling](appendix/nvidia-gpu-profiling.md)
-* [컨테이너 활용 가이드(작성 중 초안)](appendix/undefined.md)
+* [컨테이너 활용 가이드(작성 중)](appendix/undefined.md)
 
 ## External Link
 
