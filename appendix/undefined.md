@@ -2,7 +2,7 @@
 hidden: true
 ---
 
-# 컨테이너 활용 가이드(작성 중 초안)
+# 컨테이너 활용 가이드(초안)
 
 뉴론 시스템은 HPC 응용 및 AI 학습/추론 등에서 복잡한 소프트웨어 의존성을 해결하고 다양한 시스템에서 일관된 작업 환경을  유지할 수 있도록 최적화된 컨테이너 활용 환경을 제공합니다. 사용자는 자신의 작업 단계(빌드, 실행)에 맞춰 적절한 도구를 선택하여 사용할 수 있습니다.
 
@@ -293,7 +293,8 @@ srun python train.py
 ## Training Resnet-50(Pytorch horovod) for image classification on multi nodes & multi GPUs
 Base=/apps/applications/singularity_images
 
-srun --container-image=$Base/ngc/pytorch24.12-py3-x86_64.sqsh --container-workdir=$PWD python $Base/examples/horovod/examples/pytorch/pytorch_imagenet_resnet50.py \
+srun --container-image=$Base/ngc/pytorch24.12-py3-x86_64.sqsh --container-workdir=$PWD \
+python $Base/examples/horovod/examples/pytorch/pytorch_imagenet_resnet50.py \
 --batch-size=128 --epochs=50
 
 ```
@@ -308,19 +309,24 @@ srun --container-image=$Base/ngc/pytorch24.12-py3-x86_64.sqsh --container-workdi
 
 ```
 #!/bin/bash
-#SBATCH –J pytorch # job name
-#SBATCH --time=1:00:00 # wall_time
-#SBATCH -p cas_v100_4
+#SBATCH –J pytorch_horovod # job name
+#SBATCH --time=24:00:00 # wall_time
+#SBATCH -p cas_v100nv_8
 #SBATCH --comment pytorch # application name
-#SBATCH --nodes=1 
-#SBATCH --ntasks-per-node=2 
-#SBATCH --cpus-per-task=10 
+#SBATCH --nodes=2 
+#SBATCH --ntasks-per-node=1 
+#SBATCH --cpus-per-task=4 
 #SBATCH –o %x_%j.out
 #SBATCH -e %x_%j.err
-#SBATCH —gres=gpu:2 # number of GPUs per node
+#SBATCH —gres=gpu:1 # number of GPUs per node
 
-# --nv: GPU 가속 연동 옵션 필수
-singularity exec --nv my_pytorch.sif python train.py
+## Training Resnet-50(Pytorch horovod) for image classification on multi nodes & multi GPUs
+Base=/apps/applications/singularity_images
+module load ngc/pytorch:24.12-py3
+
+mpirun_wrapper \
+python $Base/examples/horovod/examples/pytorch/pytorch_imagenet_resnet50.py \
+--batch-size=128 --epochs=50
 ```
 
 
