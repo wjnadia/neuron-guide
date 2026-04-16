@@ -111,7 +111,7 @@ $ podman build -f Dockerfile.gpu -t my_pytorch:gpu_ver .
 
 <table data-header-hidden><thead><tr><th width="91.4000244140625" align="center"></th><th width="284.1334228515625"></th><th></th></tr></thead><tbody><tr><td align="center"><sub><strong>기능</strong></sub></td><td><sub><strong>명령어</strong></sub></td><td><sub><strong>설명</strong></sub></td></tr><tr><td align="center"><sub>목록 확인</sub></td><td><sub><code>$ podman images</code></sub></td><td><sub>로컬에 저장된 이미지 리스트 출력</sub></td></tr><tr><td align="center"><sub>이미지 삭제</sub></td><td><sub><code>$ podman rmi [이미지ID]</code></sub></td><td><sub>불필요한 이미지 제거</sub></td></tr><tr><td align="center"><sub>상세 정보</sub></td><td><sub><code>$ podman inspect [이미지ID]</code></sub></td><td><sub>이미지 레이어, 환경변수 등 상세 정보 확인</sub></td></tr><tr><td align="center"><sub>태그 변경</sub></td><td><sub><code>$ podman tag [기존이름] [새이름]</code></sub></td><td><sub>이미지에 새로운 이름/태그 부여</sub></td></tr></tbody></table>
 
-### 2. 이미지 업로드
+### 3. 이미지 업로드
 
 Podman으로 빌드한 이미지를 **외부 저장소인 Docker Hub** 또는 **KISTI 내부 저장소인 myhub**에 업로드하여 관리 및 공유 할 수 있습니다. 특히, 로그인  또는 계산 노드의 로컬 파일시스템에 저장된 이미지는 영구 보관되지  않기  때문에,  외부 또는 내부 저장소에 이미지를 업로드하는 것을 권장합니다.  &#x20;
 
@@ -173,7 +173,7 @@ $ podman push docker.io/[Username]/my_pytorch:v1
 $ podman push myhub.ksc.re.kr/[프로젝트명]/my_pytorch:v1
 ```
 
-### 3. 이미지 변환&#x20;
+### 4. 이미지 변환&#x20;
 
 Podman으로 준비한 이미지는 컨테이너 실행 도구에 맞는 변환 과정을 거쳐야  합니다.
 
@@ -204,7 +204,7 @@ $ singularity build --fakeroot my_pytorch.sif docker-archive://my_pytorch.tar
 
 
 
-### 4. 이미지 실행
+### 5. 이미지 실행
 
 생성된 이미지는  Enroot 또는 Singularity 환경에 배포하여 실행할 수 있습니다.
 
@@ -226,7 +226,23 @@ $ singularity exec --nv my_pytorch.sif nvidia-smi
 $ singularity exec --nv my_pytorch.sif python train.py
 ```
 
-### 5. 스케줄러(SLURM)를 통한 작업 실행
+{% hint style="info" %}
+#### [Podman에서 ](#user-content-fn-1)[^1]이미지  실행 방법
+
+```shellscript
+# 모든 GPU 사용
+$ podman run --rm --device nvidia.com/gpu=all \
+    nvcr.io/nvidia/cuda:12.0.1-base-ubuntu22.04 nvidia-smi
+
+# 여러 장치 중 특정 GPU(예: 0번)만 사용
+$ podman run --rm --device nvidia.com/gpu=0 \
+    nvcr.io/nvidia/cuda:12.0.1-base-ubuntu22.04 nvidia-smi
+```
+{% endhint %}
+
+
+
+### 6. 스케줄러(SLURM)를 통한 작업 실행
 
 스케줄러(Slurm)를 통해 컨테이너 작업을 제출하는 방법입니다. 사용 도구(Enroot(Pyxis) 또는 Singularity)에 따라 스크립트를 작성합니다.
 
@@ -331,7 +347,7 @@ python $Base/examples/horovod/examples/pytorch/pytorch_imagenet_resnet50.py \
 
 
 
-### 6. 기타 참고 사항
+### 7. 기타 참고 사항
 
 #### 가. myhub 사용법
 
@@ -403,3 +419,5 @@ INFO:    Token stored in /tmp/singularity_wjnadia/config/docker-config.json#> mk
 프로젝트 선택하면 오른쪽 상단에서 프로젝트 별 이미지 저장 공간의 할당량 및 사용량을 확인할 수 있으며, 할당량을 초과하여 이미지를 저장할 수 없습니다.&#x20;
 
 <figure><img src="../.gitbook/assets/image (11).png" alt=""><figcaption></figcaption></figure>
+
+[^1]: 
