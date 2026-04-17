@@ -322,9 +322,9 @@ python $Base/examples/horovod/examples/pytorch/pytorch_imagenet_resnet50.py \
 
 ```
 
-```
-#!/bin/sh
-#SBATCH -J gemma-nim # job name
+<pre><code>[예시 4 : Gemma 4 31B 모델 추론 예시]
+<strong>#!/bin/sh
+</strong>#SBATCH -J gemma-nim # job name
 #SBATCH --time=24:00:00 # walltime
 #SBATCH --comment=etc # application name
 #SBATCH -p amd_a100nv_8 # partition name (queue or class)
@@ -349,7 +349,7 @@ export NIM_GPU_MEMORY_UTILIZATION=0.9
 ## Executing NIM server
 Base=/apps/applications/singularity_images
 
-srun --container-image=$Base/gemma-4-31b-it-1.7.0-x86_64.sqsh \
+srun --container-image=$Base/ngc/gemma-4-31b-it-1.7.0-x86_64.sqsh \
      --container-writable \
      --container-mounts=$Base/examples/nim_cache:/opt/nim/.cache \
      --container-env=NGC_API_KEY,NIM_TENSOR_PARALLEL_SIZE,NIM_OFFLINE_MODE,NIM_MAX_MODEL_LEN,NIM_GPU_MEMORY_UTILIZATION \
@@ -357,7 +357,7 @@ srun --container-image=$Base/gemma-4-31b-it-1.7.0-x86_64.sqsh \
      --container-workdir=$PWD \
      /opt/nim/start_server.sh
 
-```
+</code></pre>
 
 {% hint style="info" %}
 **Pyxis 주요 #SBATCH 파라미터 설명**
