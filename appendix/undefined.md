@@ -322,7 +322,7 @@ python $Base/examples/horovod/examples/pytorch/pytorch_imagenet_resnet50.py \
 
 ```
 
-<pre><code>[예시 4 : Gemma 4 31B 모델 추론 예시]
+<pre><code>[예시 4 : Gemma 4 31B 모델 기반추론 예시]
 <strong>#!/bin/sh
 </strong>#SBATCH -J gemma-nim # job name
 #SBATCH --time=24:00:00 # walltime
