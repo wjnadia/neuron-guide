@@ -293,7 +293,7 @@ srun python train.py
 ```
 
 ```
-[예시 3 : Pytorch Horovod Resnet-50 모델 기반 학습 예시]
+[예시 3 : Resnet-50 모델 기반 분산 학습 예시]
 #!/bin/sh
 #SBATCH -J pytorch_horovod_enroot # job name
 #SBATCH --time=24:00:00 # walltime
@@ -306,10 +306,17 @@ srun python train.py
 #SBATCH -e %x_%j.err
 #SBATCH --gres=gpu:1 # number of GPUs per node
 
-## Training Resnet-50(Pytorch horovod) for image classification on multi nodes & multi GPUs
+## Distributed Training: ResNet-50 (PyTorch with Horovod) 
+## Targeting multi-node & multi-GPU environments using Enroot containers
 Base=/apps/applications/singularity_images
 
+## Case 1) Execution using a local Enroot image file (.sqsh)
 srun --container-image=$Base/ngc/pytorch24.12-py3-x86_64.sqsh --container-workdir=$PWD \
+python $Base/examples/horovod/examples/pytorch/pytorch_imagenet_resnet50.py \
+--batch-size=128 --epochs=50
+
+## Case 2) Execution using a container image from the myhub registry
+# srun --container-image=myhub.ksc.re.kr/wjnadia/pytorch:24.12-py3-x86_64 --container-workdir=$PWD \
 python $Base/examples/horovod/examples/pytorch/pytorch_imagenet_resnet50.py \
 --batch-size=128 --epochs=50
 
