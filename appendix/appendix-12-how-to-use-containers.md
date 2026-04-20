@@ -1,12 +1,16 @@
 # 컨테이너 활용 가이드
 
-뉴론 시스템은 HPC 응용 및 AI 학습/추론 등에서 복잡한 소프트웨어 의존성을 해결하고 다양한 시스템에서 일관된 작업 환경을  유지할 수 있도록 최적화된 컨테이너 활용 환경을 제공합니다. 사용자는 자신의 작업 단계(빌드, 실행)에 맞춰 적절한 도구를 선택하여 사용할 수 있습니다.
+뉴론 시스템은 HPC 응용 및 AI 학습/추론 등에서 복잡한 소프트웨어 의존성을 해결하고     다양한 시스템에서 일관된 작업 환경을  유지할 수 있도록 최적화된 컨테이너 활용 환경을   제공합니다.        &#x20;
+
+사용자는 자신의 작업 단계(빌드, 실행)에 맞춰 적절한 도구를 선택하여 사용할 수 있습니다.
 
 {% hint style="info" %}
 * **Podman**: 일반 사용자 권한 기반의 이미지 빌드 및 관리 도구입니다. Docker를 대체하여 이미지를 생성할 때 사용합니다.
 * **Enroot**: NVIDIA에서 개발한 HPC 전용 런타임입니다. 컨테이너 이미지를 SquashFS(`.sqsh`)로 변환하여 Nvidia GPU에 최적화 되어 있으며, Pyxis 플러그인을 통해 Slurm 스케줄러와 유기적으로 연동됩니다.
 * **Singularity**: HPC 환경의 표준 컨테이너 도구로, 높은 범용성과 기존 구축된 `.sif` 이미지와의 호환성을 제공합니다
 {% endhint %}
+
+
 
 ### 1.  컨테이너 도구 선택 가이드
 
@@ -17,6 +21,8 @@
 {% hint style="info" %}
 Singularity 에 대한 자세한 사용법은 [**Singularity 컨테이너**](https://docs-ksc.gitbook.io/neuron-user-guide/undefined-2/appendix-3-how-to-use-singularity-container) 를 참조하세요.
 {% endhint %}
+
+
 
 ### 2. 이미지 빌드 및 관리 (Podman)
 
@@ -86,6 +92,8 @@ RUN pip install --no-cache-dir \
 WORKDIR /workspace
 ```
 
+
+
 {% hint style="info" %}
 **이미지 빌드 명령어**
 {% endhint %}
@@ -100,6 +108,8 @@ $ podman build [옵션] -t [이미지명]:[태그] [Dockerfile경로]
 # 특정 파일을 지정하여 빌드
 $ podman build -f Dockerfile.gpu -t my_pytorch:gpu_ver .
 ```
+
+
 
 {% hint style="info" %}
 **이미지 관리 명령어 요약**
@@ -124,16 +134,20 @@ $ podman login docker.io
 
 **2) myhub**
 
+{% code expandable="true" %}
 ```
 $ podman login myhub.ksc.re.kr
 # Username(슈퍼컴퓨터 계정 ID)와 Password(CLI secert)을 입력합니다.
 ```
+{% endcode %}
 
 {% hint style="info" %}
 myhub 를 사용하기 위해서는 먼저  웹  브라우저에서 [**https://my.hub.ksc.re.k**](https://my.hub.ksc.re.k/)**r**에 슈퍼컴퓨터 계정으로 로그인하여 **사용자 프로젝트**를 생성하고  CLI secret을  복사해 와야 합니다.&#x20;
 
 <i class="fa-linktree">:linktree:</i> 자세한 사용 방법은 [**myhub 사용법**](appendix-12-how-to-use-containers.md#myhub)을 참조하시기 바랍니다.&#x20;
 {% endhint %}
+
+
 
 #### 나. 이미지 태그(Tag) 설정
 
@@ -153,6 +167,8 @@ $ podman tag localhost/my_pytorch:v1 docker.io/[Username]/my_pytorch:v1
 $ podman tag localhost/my_pytorch:v1 myhub.ksc.re.kr/[프로젝트명]/my_pytorch:v1
 ```
 
+
+
 #### 다. 이미지 업로드(Push)
 
 태그가 완료된 이미지를 Docker Hub 또는 myhub로 전송합니다.
@@ -169,6 +185,8 @@ $ podman push docker.io/[Username]/my_pytorch:v1
 $ podman push myhub.ksc.re.kr/[프로젝트명]/my_pytorch:v1
 ```
 
+
+
 ### 4. 이미지 변환&#x20;
 
 Podman으로 준비한 이미지는 컨테이너 실행 도구에 맞는 변환 과정을 거쳐야  합니다.
@@ -181,6 +199,8 @@ Podman으로 준비한 이미지는 컨테이너 실행 도구에 맞는 변환 
 # .sqsh 이미지 생성
 $ enroot import -o my_pytorch.sqsh podman://my_pytorch:v1
 ```
+
+
 
 {% hint style="info" %}
 **Enroot 이미지 관련 명령어**&#x20;
@@ -290,7 +310,7 @@ srun python train.py
 
 ```
 [예시 3 : Resnet-50 모델 기반 분산 학습 예시]
-#!/bin/sh
+#!/bin/bash
 #SBATCH -J pytorch_horovod_enroot # job name
 #SBATCH --time=24:00:00 # walltime
 #SBATCH --comment=pytorch # application name
@@ -319,7 +339,7 @@ python $Base/examples/horovod/examples/pytorch/pytorch_imagenet_resnet50.py \
 ```
 
 <pre><code>[예시 4 : Gemma 4 31B 모델 기반 추론 예시]
-<strong>#!/bin/sh
+<strong>#!/bin/bash
 </strong>#SBATCH -J gemma-nim # job name
 #SBATCH --time=24:00:00 # walltime
 #SBATCH --comment=etc # application name
