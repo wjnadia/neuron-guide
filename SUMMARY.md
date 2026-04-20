@@ -28,8 +28,13 @@
 * [SSH Port Forwarding 을 통한 Jupyter 작업 실행](appendix/appendix-10-ssh-port-forwarding-jupyter.md)
 * [NVIDIA GPU Profiling](appendix/appendix-11-nvidia-gpu-profiling.md)
 * [컨테이너 활용 가이드](appendix/appendix-12-how-to-use-containers.md)
+* [TensorRT-LLM 추론 성능 벤치마크](appendix/tensorrt-llm.md)
 
 ## External Link
 
 * [Nurion Guide(Eng)](https://docs-ksc.gitbook.io/nurion-user-guide-eng/)
 * [Neuron Guide(Eng)](https://docs-ksc.gitbook.io/neuron-user-guide-eng/)
+
+***
+
+* [KISTI TensorRT-LLM Inference Benchmarks](kisti-tensorrt-llm-inference-benchmarks.md)
