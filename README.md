@@ -66,6 +66,6 @@
 [appendix-8-how-to-use-deep-learning-framework-parallelization-horovod.md](appendix/appendix-8-how-to-use-deep-learning-framework-parallelization-horovod.md)
 {% endcontent-ref %}
 
-{% content-ref url="appendix/ai.md" %}
-[ai.md](appendix/ai.md)
+{% content-ref url="appendix/appendix-9-how-to-use-ai-multi-nodes.md" %}
+[appendix-9-how-to-use-ai-multi-nodes.md](appendix/appendix-9-how-to-use-ai-multi-nodes.md)
 {% endcontent-ref %}

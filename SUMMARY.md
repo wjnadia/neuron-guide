@@ -24,10 +24,10 @@
 * [Keras 기반 Multi GPU 사용법](appendix/appendix-6-how-to-use-keras-based-multi-gpu.md)
 * [Conda 기반 Horovod 설치 방법](appendix/appendix-7-conda-environment-based-horovod-tensorflow-installation-method.md)
 * [딥러닝 프레임워크 병렬화 (Horovod)](appendix/appendix-8-how-to-use-deep-learning-framework-parallelization-horovod.md)
-* [AI 멀티노드 활용](appendix/ai.md)
-* [SSH Port Forwarding 을 통한 Jupyter 작업 실행](appendix/ssh-port-forwarding-jupyter.md)
-* [NVIDIA GPU Profiling](appendix/nvidia-gpu-profiling.md)
-* [컨테이너 활용 가이드](appendix/how-to-use-containers.md)
+* [AI 멀티노드 활용](appendix/appendix-9-how-to-use-ai-multi-nodes.md)
+* [SSH Port Forwarding 을 통한 Jupyter 작업 실행](appendix/appendix-10-ssh-port-forwarding-jupyter.md)
+* [NVIDIA GPU Profiling](appendix/appendix-11-nvidia-gpu-profiling.md)
+* [컨테이너 활용 가이드](appendix/appendix-12-how-to-use-containers.md)
 
 ## External Link
 
