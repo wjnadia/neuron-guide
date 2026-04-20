@@ -2,7 +2,7 @@
 hidden: true
 ---
 
-# 컨테이너 활용 가이드(초안)
+# 컨테이너 활용 가이드
 
 뉴론 시스템은 HPC 응용 및 AI 학습/추론 등에서 복잡한 소프트웨어 의존성을 해결하고 다양한 시스템에서 일관된 작업 환경을  유지할 수 있도록 최적화된 컨테이너 활용 환경을 제공합니다. 사용자는 자신의 작업 단계(빌드, 실행)에 맞춰 적절한 도구를 선택하여 사용할 수 있습니다.
 
@@ -322,7 +322,7 @@ python $Base/examples/horovod/examples/pytorch/pytorch_imagenet_resnet50.py \
 
 ```
 
-<pre><code>[예시 4 : Gemma 4 31B 모델 기반추론 예시]
+<pre><code>[예시 4 : Gemma 4 31B 모델 기반 추론 예시]
 <strong>#!/bin/sh
 </strong>#SBATCH -J gemma-nim # job name
 #SBATCH --time=24:00:00 # walltime
@@ -336,7 +336,7 @@ python $Base/examples/horovod/examples/pytorch/pytorch_imagenet_resnet50.py \
 #SBATCH --gres=gpu:1 # number of GPUs per node
 
 ## Environment variables
-export NGC_API_KEY="*********"
+#export NGC_API_KEY="*********"
 export NIM_CACHE_PATH="/scratch/$USER/nim_cache"
 mkdir -p $NIM_CACHE_PATH
 
