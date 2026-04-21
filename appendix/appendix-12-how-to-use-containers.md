@@ -430,7 +430,7 @@ export NIM_CACHE_PATH="/opt/nim/.cache"
 ## 2. Executing NIM server in singularity container
 Base=/apps/applications/singularity_images
 
-# Copy model data cache to scratch directory
+# Prepare model data cache in a writable scratch directory
 cp -rf $Base/examples/nim_cache /scratch/$USER/
 
 singularity run \
