@@ -355,11 +355,6 @@ python $Base/examples/horovod/examples/pytorch/pytorch_imagenet_resnet50.py \
 #SBATCH -e %x_%j.err
 #SBATCH --gres=gpu:1 # number of GPUs per node
 
-## Environment variables
-#export NGC_API_KEY="*********"
-export NIM_CACHE_PATH="/scratch/$USER/nim_cache"
-mkdir -p $NIM_CACHE_PATH
-
 ## NIM environment variables
 export NIM_TENSOR_PARALLEL_SIZE=1
 export NIM_OFFLINE_MODE=1  # Use the downloaded cache
