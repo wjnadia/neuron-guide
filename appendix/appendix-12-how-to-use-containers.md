@@ -435,7 +435,7 @@ cp -rf $Base/examples/nim_cache /scratch/$USER/
 
 singularity run \
     --nv \
-    --bind $Base/examples/nim_cache:/opt/nim/.cache \
+    --bind /scratch/$USER/nim_cache:/opt/nim/.cache \
     gemma-4-31b-it-1.7.0-x86_64.sif \
     /opt/nim/start_server.sh
 ```
