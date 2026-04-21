@@ -355,13 +355,13 @@ python $Base/examples/horovod/examples/pytorch/pytorch_imagenet_resnet50.py \
 #SBATCH -e %x_%j.err
 #SBATCH --gres=gpu:1 # number of GPUs per node
 
-## NIM environment variables
+## 1. NIM environment variables
 export NIM_TENSOR_PARALLEL_SIZE=1
 export NIM_OFFLINE_MODE=1  # Use the downloaded cache
 export NIM_MAX_MODEL_LEN=65536
 export NIM_GPU_MEMORY_UTILIZATION=0.9
 
-## Executing NIM server
+## 2. Executing NIM server in enroot container
 Base=/apps/applications/singularity_images
 
 srun --container-image=$Base/ngc/gemma-4-31b-it-1.7.0-x86_64.sqsh \
@@ -420,21 +420,22 @@ python $Base/examples/horovod/examples/pytorch/pytorch_imagenet_resnet50.py \
 #SBATCH -e %x_%j.err
 #SBATCH --gres=gpu:1 # number of GPUs per node
 
-# 1. 환경 변수 설정
+## 1. NIM environment variables
 export NIM_TENSOR_PARALLEL_SIZE=4
 export NIM_OFFLINE_MODE=1  # 이미 다운로드된 캐시 사용
 export NIM_MAX_MODEL_LEN=65536
 export NIM_GPU_MEMORY_UTILIZATION=0.9
 export NIM_CACHE_PATH="/opt/nim/.cache"
 
-# 2. Singularity로 NIM 서버 실행
+## 2. Executing NIM server in singularity container
 Base=/apps/applications/singularity_images
+
+# Copy model data cache to scratch directory
+cp -rf $Base/examples/nim_cache /scratch/$USER/
 
 singularity run \
     --nv \
-    --writable-tmpfs \
     --bind $Base/examples/nim_cache:/opt/nim/.cache \
-    --bind /scratch/$USER/tmp:/tmp \
     gemma-4-31b-it-1.7.0-x86_64.sif \
     /opt/nim/start_server.sh
 ```
