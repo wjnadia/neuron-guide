@@ -1,3 +1,7 @@
+---
+hidden: true
+---
+
 # 컨테이너 활용 가이드
 
 뉴론 시스템은 HPC 응용 및 AI 학습/추론 등에서 복잡한 소프트웨어 의존성을 해결하고     다양한 시스템에서 일관된 작업 환경을  유지할 수 있도록 최적화된 컨테이너 활용 환경을   제공합니다.        &#x20;
@@ -384,6 +388,7 @@ srun --container-image=$Base/ngc/gemma-4-31b-it-1.7.0-x86_64.sqsh \
 #### 나. Singularity 활용 예시
 
 ```
+[예시 1 : Resnet-50 모델 기반 분산 학습 예시]
 #!/bin/bash
 #SBATCH –J pytorch_horovod_sing # job name
 #SBATCH --time=24:00:00 # wall_time
@@ -405,7 +410,40 @@ python $Base/examples/horovod/examples/pytorch/pytorch_imagenet_resnet50.py \
 --batch-size=128 --epochs=50
 ```
 
+{% code expandable="true" %}
+```
+[예시 2 : Gemma 4 31B 모델 기반 추론 예시]
+#!/bin/bash
+#SBATCH -J gemma-nim-sing # job name
+#SBATCH --time=24:00:00 # walltime
+#SBATCH --comment=pytorch # application name
+##SBATCH -p amd_a100nv_8 # partition name (queue or class)
+#SBATCH --nodes=1 # the number of nodes
+#SBATCH --ntasks-per-node=1 # number of tasks per node
+#SBATCH --cpus-per-task=4 # number of cpus per task
+#SBATCH -o %x_%j.out
+#SBATCH -e %x_%j.err
+#SBATCH --gres=gpu:1 # number of GPUs per node
 
+# 1. 환경 변수 설정
+export NIM_TENSOR_PARALLEL_SIZE=4
+export NIM_OFFLINE_MODE=1  # 이미 다운로드된 캐시 사용
+export NIM_MAX_MODEL_LEN=65536
+export NIM_GPU_MEMORY_UTILIZATION=0.9
+export NIM_CACHE_PATH="/opt/nim/.cache"
+
+# 2. Singularity로 NIM 서버 실행
+Base=/apps/applications/singularity_images
+
+singularity run \
+    --nv \
+    --writable-tmpfs \
+    --bind $Base/examples/nim_cache:/opt/nim/.cache \
+    --bind /scratch/$USER/tmp:/tmp \
+    gemma-4-31b-it-1.7.0-x86_64.sif \
+    /opt/nim/start_server.sh
+```
+{% endcode %}
 
 ### 7. 기타 참고 사항
 
