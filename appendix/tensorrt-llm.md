@@ -116,7 +116,7 @@ Hopper의 FP8이 확립한 이 패턴은 다음 세대인 Blackwell에서 더욱
 
 <figure><img src="../.gitbook/assets/param.png" alt=""><figcaption></figcaption></figure>
 
-TRT-LLM 벤치마크는 입력 시퀀스 길이(ISL), 출력 시퀀스 길이(OSL), 요청 수(`$num_requests`) 세 가지 파라미터로 워크로드를 정의합니다. 합성 데이터셋은 `prepare_dataset.py` 스크립트로 생성하며, 모든 요청은 균일하게 구성됩니다. 입력과 출력 시퀀스 길이의 표준편차는 모두 0으로 고정되어 재현 가능한 벤치마크 조건을 보장합니다. ISL/OSL이 짧은 구성에서는 요청이 시스템을 빠르게 통과하므로 안정 상태(steady state)에 도달하기 위해 더 많은 `$num_requests`가 필요하며, 시퀀스가 길수록 요청이 시스템에 더 오래 머물기 때문에 더 적은 수로도 충분합니다.
+TRT-LLM 벤치마크는 입력 시퀀스 길이(ISL), 출력 시퀀스 길이(OSL), 요청 수(REQ) 세 가지 파라미터로 워크로드를 정의합니다. 합성 데이터셋은 `prepare_dataset.py` 스크립트로 생성하며, 모든 요청은 균일하게 구성됩니다. 입력과 출력 시퀀스 길이의 표준편차는 모두 0으로 고정되어 재현 가능한 벤치마크 조건을 보장합니다. ISL/OSL이 짧은 구성에서는 요청이 시스템을 빠르게 통과하므로 안정 상태(steady state)에 도달하기 위해 더 많은 REQ가 필요하며, 시퀀스가 길수록 요청이 시스템에 더 오래 머물기 때문에 더 적은 수로도 충분합니다.
 
 KISTI 테스트는 세 가지 대표 구성을 사용합니다.
 
@@ -134,8 +134,14 @@ KISTI 테스트는 세 가지 대표 구성을 사용합니다.
 
 ### 세대별 GPU 성능 비교
 
-### 텐서 병렬 성
+<figure><img src="../.gitbook/assets/Generational Uplift.jpg" alt=""><figcaption></figcaption></figure>
 
 ### FP16 vs. FP8 양자화 효과
+
+<figure><img src="../.gitbook/assets/FP8 Quantized.jpg" alt=""><figcaption></figcaption></figure>
+
+### 텐서 병렬 성능
+
+<figure><img src="../.gitbook/assets/TP Performance.jpg" alt=""><figcaption></figcaption></figure>
 
 {% embed url="https://vitduck.github.io/KISTI-llmbench" %}
