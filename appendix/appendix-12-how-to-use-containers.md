@@ -407,7 +407,7 @@ python $Base/examples/horovod/examples/pytorch/pytorch_imagenet_resnet50.py \
 
 {% code expandable="true" %}
 ```
-[예시 2 : Gemma 4 31B 모델 기반 추론 예시]
+[예시 2 : Gemma 4 31B 모델 기반 추론 예시
 #!/bin/bash
 #SBATCH -J gemma-nim-sing # job name
 #SBATCH --time=24:00:00 # walltime
@@ -435,6 +435,7 @@ cp -rf $Base/examples/nim_cache /scratch/$USER/
 
 singularity run \
     --nv \
+    --writable-tmpfs \
     --bind /scratch/$USER/nim_cache:/opt/nim/.cache \
     gemma-4-31b-it-1.7.0-x86_64.sif \
     /opt/nim/start_server.sh
