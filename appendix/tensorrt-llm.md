@@ -6,9 +6,9 @@ hidden: true
 
 본 페이지에서는 KISTI에서 측정한 NVIDIA TensorRT-LLM 프레임워크의 LLM 추론 성능 벤치마크 결과를 제공합니다.
 
-&#x20;A100 SXM 80GB를 포함한 다양한 NVIDIA GPU 환경에서 Llama-3.1-8B-Instruct 등 주요 오픈소스 모델을 대상으로, FP16·FP8 등 정밀도 설정과 다양한 입출력 시퀀스&#x20;길이(ISL/OSL) 조합에 따른 처리량(tokens/sec)을 측정하였습니다.&#x20;
+A100 SXM 80GB를 포함한 다양한 NVIDIA GPU 환경에서 Llama-3.1-8B-Instruct 등 주요 오픈소스 모델을 대상으로, FP16·FP8 등 정밀도 설정과 다양한 입출력 시퀀스&#x20;길이(ISL/OSL) 조합에 따른 처리량(tokens/sec)을 측정하였습니다.&#x20;
 
-요약된결과는 본 페이지의 [벤치마크 결과](tensorrt-llm.md#result) 섹션에서 확인 가능하며, 인터랙티브 필터를 적용시킨 결과는 외부 [웹페이지](https://vitduck.github.io/KISTI-llmbench)에서 GPU, 모델, 정밀도, 시퀀스 길이 조합별 성능을 직접 비교해 볼 수 있습니다.&#x20;
+요약된 결과는 본 페이지의 [벤치마크 결과](tensorrt-llm.md#result) 섹션에서 확인 가능하며, 외부 [웹페이지](https://vitduck.github.io/KISTI-llmbench)에서 인터랙티브 필터를 적용시킨 결과를 GPU, 모델, 정밀도, 시퀀스 길이 조합별 성능으로 직접 비교해 볼 수 있습니다.&#x20;
 
 ***
 
