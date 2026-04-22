@@ -4,7 +4,7 @@ hidden: true
 
 # TensorRT-LLM 추론 성능 벤치마크
 
-본 페이지는 KISTI에서 측정한 NVIDIA TensorRT-LLM 프레임워크의 LLM 추론 성능 벤치마크 결과를 제공합니다.
+본 페이지에서는 KISTI에서 측정한 NVIDIA TensorRT-LLM 프레임워크의 LLM 추론 성능 벤치마크 결과를 제공합니다.
 
 &#x20;A100 SXM 80GB를 포함한 다양한 NVIDIA GPU 환경에서 Llama-3.1-8B-Instruct 등 주요 오픈소스 모델을 대상으로, FP16·FP8 등 정밀도 설정과 다양한 입출력 시퀀스&#x20;길이(ISL/OSL) 조합에 따른 처리량(tokens/sec)을 측정하였습니다.&#x20;
 
