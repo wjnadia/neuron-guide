@@ -142,7 +142,7 @@ $ podman login myhub.ksc.re.kr
 {% endcode %}
 
 {% hint style="info" %}
-myhub 를 사용하기 위해서는 먼저  웹  브라우저에서 [**https://myhub.ksc.re.kr**](https://myhub.ksc.re.kr/)에              슈퍼컴퓨터 계정으로 로그인하여 **사용자 프로젝트**를 생성하고  CLI secret을  복사해               와야 합니다.&#x20;
+myhub 를 사용하기 위해서는 먼저  웹  브라우저에서 [**https://myhub.ksc.re.kr**](https://myhub.ksc.re.kr/)에 슈퍼컴퓨터 계정으로 로그인하여 **사용자 프로젝트**를 생성하고  CLI secret을  복사해 와야 합니다.&#x20;
 
 <i class="fa-linktree">:linktree:</i> 자세한 사용 방법은 [**myhub 사용법**](appendix-12-how-to-use-containers.md#myhub)을 참조하시기 바랍니다.&#x20;
 {% endhint %}
@@ -442,7 +442,7 @@ singularity run \
 
 #### 가. myhub 사용법
 
-myhub는 KISTI가 자체 구축한 컨테이너 이미지 레지스트리입니다. 슈퍼컴퓨터 계정을 가진 사용자는 웹 브라우저를 통해 로그인 및 프로젝트 생성,  Access Token 가져오기를  통해 슈퍼컴퓨터 컨테이너 환경에서 빠르게이미지를 업로드 및 다운로드 할 수 있습니다.&#x20;
+myhub는 Docker Hub와 유사한 내부 컨테이너 이미지 공유 저장소 서비스 입니다. 슈퍼컴퓨터 계정을 가진 사용자는 웹 브라우저를 통해 로그인 및 프로젝트 생성, Access Token 가져오기를  통해 슈퍼컴퓨터 컨테이너 환경에서 빠르게이미지를 업로드 및 다운로드 할 수 있습니다.&#x20;
 
 **1) myhub 접속**
 
@@ -507,7 +507,7 @@ INFO:    Token stored in /tmp/singularity_wjnadia/config/docker-config.json#> mk
 
 **4) 프로젝트의 저장 공간 할당량 및 사용량 확인**&#x20;
 
-프로젝트 선택하면 오른쪽 상단에서 프로젝트 별 이미지 저장 공간의 할당량 및 사용량을 확인할 수 있으며, 할당량을 초과하여 이미지를 저장할 수 없습니다.&#x20;
+프로젝트를 선택하면 오른쪽 상단에서 프로젝트 별 이미지 저장 공간의 할당량 및 사용량을 확인할 수 있으며, 할당량을 초과하여 이미지를 저장할 수 없습니다.&#x20;
 
 <figure><img src="../.gitbook/assets/image (11).png" alt=""><figcaption></figcaption></figure>
 
