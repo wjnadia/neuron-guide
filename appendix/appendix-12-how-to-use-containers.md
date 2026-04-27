@@ -68,8 +68,8 @@ REPOSITORY              TAG         IMAGE ID      CREATED        SIZE
 </strong>nvcr.io/nvidia/pytorch  25.12-py3   dd94fce2f83a  7 weeks ago    20.6 GB
 </code></pre>
 
+{% code title="[Dockerfile 예시]" %}
 ```
-[Dockerfile 예시]
 # 1. 베이스 이미지 지정 (NVIDIA GPU Cloud 제공 이미지)
 FROM nvcr.io/nvidia/pytorch:25.12-py3
 
@@ -91,6 +91,7 @@ RUN pip install --no-cache-dir \
 # 5. 작업 디렉토리 설정
 WORKDIR /workspace
 ```
+{% endcode %}
 
 
 
@@ -266,8 +267,8 @@ $ podman run --rm --device nvidia.com/gpu=0 \
 
 Pyxis는 Slurm의 `srun` 옵션을 확장하여, 사용자가 복잡한 Enroot 명령어를 직접 입력하지 않아도 컨테이너 환경을 자동으로 구성해 줍니다.
 
+{% code title="[예시 1]" %}
 ```
-[예시 1]
 #!/bin/bash
 #SBATCH –J pytorch # job name
 #SBATCH --time=1:00:00 # wall_time
@@ -287,9 +288,10 @@ srun --container-image=./my_env.sqsh \
      --container-workdir=/scratch/[ID] \
      python train.py
 ```
+{% endcode %}
 
+{% code title="[예시 2]" %}
 ```
-[예시 2]
 #!/bin/bash
 #SBATCH –J pytorch # job name
 #SBATCH --time=1:00:00 # wall_time
@@ -307,9 +309,10 @@ srun --container-image=./my_env.sqsh \
 
 srun python train.py
 ```
+{% endcode %}
 
+{% code title="[예시 3 : Resnet-50 모델 기반 분산 학습 예시]" %}
 ```
-[예시 3 : Resnet-50 모델 기반 분산 학습 예시]
 #!/bin/bash
 #SBATCH -J pytorch_horovod_enroot # job name
 #SBATCH --time=24:00:00 # walltime
@@ -337,10 +340,12 @@ python $Base/examples/horovod/examples/pytorch/pytorch_imagenet_resnet50.py \
 --batch-size=128 --epochs=50
 
 ```
+{% endcode %}
 
-<pre><code>[예시 4 : Gemma 4 31B 모델 기반 추론 예시]
-<strong>#!/bin/bash
-</strong>#SBATCH -J gemma-nim # job name
+{% code title="[예시 4 : Gemma 4 31B 모델 기반 추론 예시]" %}
+```
+#!/bin/bash
+#SBATCH -J gemma-nim # job name
 #SBATCH --time=24:00:00 # walltime
 #SBATCH --comment=etc # application name
 #SBATCH -p amd_a100nv_8 # partition name (queue or class)
@@ -368,7 +373,8 @@ srun --container-image=$Base/ngc/gemma-4-31b-it-1.7.0-x86_64.sqsh \
      --container-workdir=$PWD \
      /opt/nim/start_server.sh
 
-</code></pre>
+```
+{% endcode %}
 
 {% hint style="info" %}
 **Pyxis 주요 #SBATCH 파라미터 설명**
