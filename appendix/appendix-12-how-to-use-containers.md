@@ -230,7 +230,7 @@ $ singularity build --fakeroot my_pytorch.sif docker-archive://my_pytorch.tar
 # GPU 계산 노드에서 squashFS 이미지를 로드하고 실행
 # GPU 가속 연동 옵션 필요 없음(자동 연동됨)
 $ enroot start my_pytorch.sqsh nvidia-smi
-$ enroot start my_pytorch.sqsh python train.py
+$ enroot start --mount=$PWD:/workspace my_pytorch.sqsh python train.py
 ```
 
 #### 나. Singularity
