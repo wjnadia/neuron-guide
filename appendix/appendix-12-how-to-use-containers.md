@@ -1,3 +1,7 @@
+---
+hidden: true
+---
+
 # 컨테이너 활용 가이드
 
 뉴론 시스템은 HPC 응용 및 AI 학습/추론 등에서 복잡한 소프트웨어 의존성을 해결하고     다양한 시스템에서 일관된 작업 환경을  유지할 수 있도록 최적화된 컨테이너 활용 환경을   제공합니다.        &#x20;
@@ -197,8 +201,11 @@ Podman으로 준비한 이미지는 컨테이너 실행 도구에 맞는 변환 
 이미지를 SquashFS 포맷으로 변환하여 로딩 속도를 높이고 GPU 연산 효율을 최적화 합니다.
 
 ```
-# .sqsh 이미지 생성
-$ enroot import -o my_pytorch.sqsh podman://my_pytorch:v1
+# .sqsh 이미지 파일 생성(read-only, 계산 노드에서 작업 실행에 적합)
+$ enroot import -o my_pytorch-v1.sqsh podman://my_pytorch:v1
+
+# 컨테이너 root 파일시스템 생성(write 가능, 이미지 빌드 및 시험에적합) 
+$ enroot create -n my_pytorch-v1 podman://my_pytorch:v1
 ```
 
 
@@ -207,7 +214,7 @@ $ enroot import -o my_pytorch.sqsh podman://my_pytorch:v1
 **Enroot 이미지 관련 명령어**&#x20;
 {% endhint %}
 
-<table data-header-hidden><thead><tr><th width="74.86663818359375" align="center"></th><th width="149.5999755859375" align="center"></th><th></th></tr></thead><tbody><tr><td align="center"><sub><strong>단계</strong></sub></td><td align="center"><sub><strong>작업 내용</strong></sub></td><td><sub><strong>명령어 / 설정 예시</strong></sub></td></tr><tr><td align="center"><sub>이미지 가져오기</sub></td><td align="center"><sub>Docker Hub 및 myhub 등  외부 레지스트리에서 직접 가져오기</sub></td><td><p></p><p><sub><code>$ enroot import docker://[Username]/my_pytorch:v1</code></sub><br><sub><code>$ enroot import docker://myhub.ksc.re.kr/[프로젝트명]/ubuntu:latest</code></sub></p></td></tr><tr><td align="center"><sub>이미지 리스트</sub></td><td align="center"><sub>이미지 목록 확인</sub></td><td><sub><code>$ enroot list</code></sub></td></tr><tr><td align="center"><sub>이미지 삭제</sub></td><td align="center"><sub>더 이상 사용하지 않는 이미지 제거</sub></td><td><sub><code>$ enroot remove [image_name]</code></sub></td></tr></tbody></table>
+<table data-header-hidden><thead><tr><th width="74.86663818359375" align="center"></th><th width="149.5999755859375" align="center"></th><th></th></tr></thead><tbody><tr><td align="center"><sub><strong>단계</strong></sub></td><td align="center"><sub><strong>작업 내용</strong></sub></td><td><sub><strong>명령어 / 설정 예시</strong></sub></td></tr><tr><td align="center"><sub>이미지 가져오기</sub></td><td align="center"><sub>Docker Hub 및 myhub 등  외부 레지스트리에서 직접 가져오기</sub></td><td><p></p><p><sub><code>$ enroot import -o my_pytorch-v1.sqsh docker://[Username]/my_pytorch:v1</code></sub><br><sub><code>$ enroot import -o my_pytorch-v1.sqsh docker://myhub.ksc.re.kr/[프로젝트명]/ubuntu:latest</code></sub></p></td></tr><tr><td align="center"><sub>컨테이너 생성</sub></td><td align="center"><sub>root 파일시스템(unpacked 디렉터리) 생성하기</sub></td><td><code>$ enroot create -n my_pytorch-v1[컨테이너 이름] my_pytorch-v1.sqsh[이미지 파일]</code></td></tr><tr><td align="center"><sub>컨테이너</sub> <br><sub>리스트</sub></td><td align="center"><sub>enroot create 명령어로 생성한 컨테이너 목록 출력</sub></td><td><sub><code>$ enroot list</code></sub></td></tr><tr><td align="center"><sup>컨테이너 삭제</sup></td><td align="center"><sub>enroot create 명령어로 생성한 컨테이너 제거</sub></td><td><sub><code>$ enroot remove my_pytorch-v1[컨테이너 이름]</code></sub></td></tr></tbody></table>
 
 #### 나. Singularity
 
@@ -232,6 +239,8 @@ $ singularity build --fakeroot my_pytorch.sif docker-archive://my_pytorch.tar
 # GPU 가속 연동 옵션 필요 없음(자동 연동됨)
 $ enroot start my_pytorch.sqsh nvidia-smi
 $ enroot start --mount=$PWD:/workspace my_pytorch.sqsh python train.py
+
+# enroot start 
 ```
 
 #### 나. Singularity
