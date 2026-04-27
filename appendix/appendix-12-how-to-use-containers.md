@@ -146,7 +146,7 @@ $ podman login myhub.ksc.re.kr
 {% endcode %}
 
 {% hint style="info" %}
-myhub 를 사용하기 위해서는 먼저  웹  브라우저에서 [**https://my.hub.ksc.re.k**](https://my.hub.ksc.re.k/)**r**에 슈퍼컴퓨터 계정으로 로그인하여 **사용자 프로젝트**를 생성하고  CLI secret을  복사해 와야 합니다.&#x20;
+myhub 를 사용하기 위해서는 먼저  웹  브라우저에서 [**https://myhub.ksc.re.k**](https://my.hub.ksc.re.k/)**r**에              슈퍼컴퓨터 계정으로 로그인하여 **사용자 프로젝트**를 생성하고  CLI secret을  복사해               와야 합니다.&#x20;
 
 <i class="fa-linktree">:linktree:</i> 자세한 사용 방법은 [**myhub 사용법**](appendix-12-how-to-use-containers.md#myhub)을 참조하시기 바랍니다.&#x20;
 {% endhint %}
