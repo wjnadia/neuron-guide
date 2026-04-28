@@ -265,8 +265,9 @@ $ enroot export -o my_pytorch-v1_modified.sqsh my_pytorch-v1
 ```bash
 # GPU 계산노드에서 Singularity 이미지를 로드하여 실행
 # --nv: GPU 가속 연동 옵션 필수
+# 학습 프로그램 예시 : /apps/applications/singularity_images/examples/train.py
 $ singularity exec --nv my_pytorch-v1.sif nvidia-smi
-$ singularity exec --nv my_pytorch-v1.sif python train.py
+$ singularity exec --nv my_pytorch-v1.sif python /apps/applications/singularity_images/examples/train.py
 ```
 
 {% hint style="info" %}
