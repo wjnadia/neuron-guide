@@ -120,7 +120,7 @@ $ podman build -f Dockerfile.gpu -t my_pytorch:gpu_ver .
 **이미지 관리 명령어 요약**
 {% endhint %}
 
-<table data-header-hidden><thead><tr><th width="91.4000244140625" align="center"></th><th width="284.1334228515625"></th><th></th></tr></thead><tbody><tr><td align="center"><sub><strong>기능</strong></sub></td><td><sub><strong>명령어</strong></sub></td><td><sub><strong>설명</strong></sub></td></tr><tr><td align="center"><sub>목록 확인</sub></td><td><sub><code>$ podman images</code></sub></td><td><sub>로컬에 저장된 이미지 리스트 출력</sub></td></tr><tr><td align="center"><sub>이미지 삭제</sub></td><td><sub><code>$ podman rmi [이미지ID]</code></sub></td><td><sub>불필요한 이미지 제거</sub></td></tr><tr><td align="center"><sub>상세 정보</sub></td><td><sub><code>$ podman inspect [이미지ID]</code></sub></td><td><sub>이미지 레이어, 환경변수 등 상세 정보 확인</sub></td></tr><tr><td align="center"><sub>태그 변경</sub></td><td><sub><code>$ podman tag [기존이름] [새이름]</code></sub></td><td><sub>이미지에 새로운 이름/태그 부여</sub></td></tr></tbody></table>
+<table data-header-hidden><thead><tr><th width="111.66668701171875" align="center"></th><th width="235.60009765625"></th><th></th></tr></thead><tbody><tr><td align="center"><strong>기능</strong></td><td><strong>명령어</strong></td><td><strong>설명</strong></td></tr><tr><td align="center">목록 확인</td><td><sub>$ podman images</sub></td><td>로컬에 저장된 이미지 리스트 출력</td></tr><tr><td align="center">이미지 삭제</td><td><sub>$ podman rmi [이미지ID]</sub></td><td>불필요한 이미지 제거</td></tr><tr><td align="center">상세 정보</td><td><sub>$ podman inspect [이미지ID]</sub></td><td>이미지 레이어, 환경변수 등 상세 정보 확인</td></tr><tr><td align="center">태그 변경</td><td><sub>$ podman tag [기존이름] [새이름]</sub></td><td>이미지에 새로운 이름/태그 부여</td></tr></tbody></table>
 
 ### 3. 이미지 업로드
 
@@ -204,7 +204,7 @@ Podman으로 준비한 이미지는 컨테이너 실행 도구에 맞는 변환 
 # .sqsh 이미지 파일 생성(read-only, 계산 노드에서 작업 실행에 적합)
 $ enroot import -o my_pytorch-v1.sqsh podman://my_pytorch:v1
 
-# 컨테이너 root 파일시스템 생성(write 가능, 이미지 빌드 및 시험에적합) 
+# 컨테이너 root 파일시스템 생성(write 가능, 이미지 빌드 및 시험에 적합) 
 $ enroot create -n my_pytorch-v1 podman://my_pytorch:v1
 ```
 
@@ -214,7 +214,7 @@ $ enroot create -n my_pytorch-v1 podman://my_pytorch:v1
 **Enroot 이미지 관련 명령어**&#x20;
 {% endhint %}
 
-<table data-header-hidden><thead><tr><th width="74.86663818359375" align="center"></th><th width="149.5999755859375" align="center"></th><th></th></tr></thead><tbody><tr><td align="center"><sub><strong>단계</strong></sub></td><td align="center"><sub><strong>작업 내용</strong></sub></td><td><sub><strong>명령어 / 설정 예시</strong></sub></td></tr><tr><td align="center"><sub>이미지 가져오기</sub></td><td align="center"><sub>Docker Hub 및 myhub 등  외부 레지스트리에서 직접 가져오기</sub></td><td><p></p><p><sub><code>$ enroot import -o my_pytorch-v1.sqsh docker://[Username]/my_pytorch:v1</code></sub><br><sub><code>$ enroot import -o my_pytorch-v1.sqsh docker://myhub.ksc.re.kr/[프로젝트명]/ubuntu:latest</code></sub></p></td></tr><tr><td align="center"><sub>컨테이너 생성</sub></td><td align="center"><sub>root 파일시스템(unpacked 디렉터리) 생성하기</sub></td><td><code>$ enroot create -n my_pytorch-v1[컨테이너 이름] my_pytorch-v1.sqsh[이미지 파일]</code></td></tr><tr><td align="center"><sub>컨테이너</sub> <br><sub>리스트</sub></td><td align="center"><sub>enroot create 명령어로 생성한 컨테이너 목록 출력</sub></td><td><sub><code>$ enroot list</code></sub></td></tr><tr><td align="center"><sup>컨테이너 삭제</sup></td><td align="center"><sub>enroot create 명령어로 생성한 컨테이너 제거</sub></td><td><sub><code>$ enroot remove my_pytorch-v1[컨테이너 이름]</code></sub></td></tr></tbody></table>
+<table data-header-hidden><thead><tr><th width="86.5999755859375" align="center"></th><th width="142.13336181640625" align="center"></th><th></th></tr></thead><tbody><tr><td align="center"><strong>단계</strong></td><td align="center"><strong>작업 내용</strong></td><td><strong>명령어 / 설정 예시</strong></td></tr><tr><td align="center">이미지 가져오기</td><td align="center"><sub>Docker Hub 및 myhub 등  외부 레지스트리에서 직접 가져오기</sub></td><td><p><sub>$ enroot import -o my_pytorch-v1.sqsh docker://[Username]/my_pytorch:v1</sub></p><p></p><p><sub>$ enroot import -o my_pytorch-v1.sqsh docker://myhub.ksc.re.kr/[프로젝트명]/ubuntu:latest</sub></p></td></tr><tr><td align="center">컨테이너 생성</td><td align="center"><sub>rootfs(unpacked 디렉터리) 생성하기</sub></td><td><p><sub>$ enroot create -n my_pytorch-v1</sub><sup><sub>*</sub></sup><sub> my_pytorch-v1.sqsh</sub>     </p><p><sup><sub>*</sub></sup><sub> 컨테이너(rootfs)는 /tmp/enroot_[UID</sub><sup><sub>**</sub></sup><sub>]/data/my_pytorch-v1 디렉터리에 생성됨</sub>   </p><p><sup><sub>**</sub></sup><sub>  id -u 출력값(숫자)</sub> </p></td></tr><tr><td align="center">컨테이너 <br>리스트</td><td align="center"><sub>enroot create 명령어로 생성한 컨테이너 목록 출력</sub></td><td><p><sub>$ enroot list</sub><sup><sub>*</sub></sup> </p><p><sup>*</sup><sub>컨테이너를 생성한 노드에서만 출력됨</sub></p></td></tr><tr><td align="center">컨테이너 삭제</td><td align="center"><sub>enroot create 명령어로 생성한 컨테이너 제거</sub></td><td><sub>$ enroot remove my_pytorch-v1</sub></td></tr></tbody></table>
 
 #### 나. Singularity
 
@@ -222,8 +222,8 @@ $ enroot create -n my_pytorch-v1 podman://my_pytorch:v1
 
 ```
 # Podman 이미지를 tar로 내보낸 후 .sif 파일로 빌드
-$ podman save my_pytorch:v1 -o my_pytorch.tar
-$ singularity build --fakeroot my_pytorch.sif docker-archive://my_pytorch.tar
+$ podman save my_pytorch:v1 -o my_pytorch-v1.tar
+$ singularity build --fakeroot my_pytorch-v1.sif docker-archive://my_pytorch-v1.tar
 ```
 
 
@@ -237,10 +237,14 @@ $ singularity build --fakeroot my_pytorch.sif docker-archive://my_pytorch.tar
 ```bash
 # GPU 계산 노드에서 squashFS 이미지를 로드하고 실행
 # GPU 가속 연동 옵션 필요 없음(자동 연동됨)
-$ enroot start my_pytorch.sqsh nvidia-smi
-$ enroot start --mount=$PWD:/workspace my_pytorch.sqsh python train.py
+$ enroot start my_pytorch-v1.sqsh nvidia-smi
+$ enroot start --mount=$PWD:/workspace my_pytorch-v1.sqsh python train.py
 
-# enroot start 
+# 컨테이너(rootfs)를 쓰기 가능한 상태로 실행(파일 생성, 패키지 설치, 설정 변경)
+# 컨테이너를 생성한 노드에서만 실행 가능
+$ enroot start -w my_pytorch-v1
+# 수정한 컨테이너(rootfs)를 sqsh 파일로 저장
+$ enroot -o my_pytorch-v1_modified.sqsh my_pytorch-v1
 ```
 
 #### 나. Singularity
@@ -248,8 +252,8 @@ $ enroot start --mount=$PWD:/workspace my_pytorch.sqsh python train.py
 ```bash
 # GPU 계산노드에서 Singularity 이미지를 로드하여 실행
 # --nv: GPU 가속 연동 옵션 필수
-$ singularity exec --nv my_pytorch.sif nvidia-smi
-$ singularity exec --nv my_pytorch.sif python train.py
+$ singularity exec --nv my_pytorch-v1.sif nvidia-smi
+$ singularity exec --nv my_pytorch-v1.sif python train.py
 ```
 
 {% hint style="info" %}
@@ -293,8 +297,10 @@ Pyxis는 Slurm의 `srun` 옵션을 확장하여, 사용자가 복잡한 Enroot �
 # Pyxis 플러그인을 이용한 컨테이너 실행
 # --container-image: 사용할 .sqsh 이미지 경로
 # --container-workdir: 컨테이너 내 작업 디렉토리 설정
-srun --container-image=./my_env.sqsh \
+# --container-mounts: 컨테이너 내 작업 디렉토리 마운
+srun --container-image=./my_pytorch-v1.sqsh \
      --container-workdir=/scratch/[ID] \
+     --container-mounts=$PWD:/workspace \
      python train.py
 ```
 {% endcode %}
@@ -313,8 +319,9 @@ srun --container-image=./my_env.sqsh \
 #SBATCH -e %x_%j.err
 #SBATCH —gres=gpu:1 # number of GPUs per node
 # Pyxis 전용 #SBATCH 파라미터 설정
-#SBATCH --container-image=./my_pytorch.sqsh    # 사용할 Enroot 이미지 경로
+#SBATCH --container-image=./my_pytorch-v1.sqsh    # 사용할 Enroot 이미지 경로
 #SBATCH --container-workdir=/scratch/[ID]      # 컨테이너 내 작업 디렉토리 설정
+#SBATCH --container-mounts=$PWD:/workspace
 
 srun python train.py
 ```
