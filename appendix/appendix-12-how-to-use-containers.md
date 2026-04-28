@@ -240,8 +240,8 @@ $ singularity build --fakeroot my_pytorch-v1.sif docker-archive://my_pytorch-v1.
 # GPU 가속 연동 옵션 필요 없음(자동 연동됨)
 # 학습 프로그램 예시 : /apps/applications/singularity_images/examples/train.py
 $ enroot start my_pytorch-v1.sqsh nvidia-smi
-$ cp /apps/applications/singularity_images/examples/train.py .
-$ enroot start --mount=$PWD:/workspace my_pytorch-v1.sqsh python train.py
+$ enroot start my_pytorch-v1.sqsh python /apps/applications/singularity_images/examples/train.py
+[--중략--]
 Using device: cuda
 ===== Training Start =====
 Epoch [1/5] Loss: 2.3119
@@ -314,8 +314,7 @@ Pyxis는 Slurm의 `srun` 옵션을 확장하여, 사용자가 복잡한 Enroot �
 # 학습 프로그램 예시 : /apps/applications/singularity_images/examples/train.py
 srun --container-image=./my_pytorch-v1.sqsh \
      --container-workdir=/scratch/[ID]/enroot \
-     --container-mounts=/scratch/[ID]/enroot:/workspace \
-     python train.py
+     python /apps/applications/singularity_images/examples/train.py
 ```
 {% endcode %}
 
@@ -335,9 +334,8 @@ srun --container-image=./my_pytorch-v1.sqsh \
 # Pyxis 전용 #SBATCH 파라미터 설정
 #SBATCH --container-image=./my_pytorch-v1.sqsh # 사용할 Enroot 이미지 경로
 #SBATCH --container-workdir=/scratch/[ID]/enroot      # 컨테이너 내 작업 디렉토리 설정
-#SBATCH --container-mounts=/scratch/[ID]/enroot:/workspace     # 컨테이너 내 마운트 경로 설정 
 # 학습 프로그램 예시 : /apps/applications/singularity_images/examples/train.py
-srun python train.py
+srun python /apps/applications/singularity_images/examples/train.py
 ```
 {% endcode %}
 
