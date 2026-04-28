@@ -214,7 +214,7 @@ $ enroot create -n my_pytorch-v1 podman://my_pytorch:v1
 **Enroot 이미지 관련 명령어**&#x20;
 {% endhint %}
 
-<table data-header-hidden><thead><tr><th width="86.5999755859375" align="center"></th><th width="142.13336181640625" align="center"></th><th></th></tr></thead><tbody><tr><td align="center"><strong>단계</strong></td><td align="center"><strong>작업 내용</strong></td><td><strong>명령어 / 설정 예시</strong></td></tr><tr><td align="center">이미지 가져오기</td><td align="center"><sub>Docker Hub 및 myhub 등  외부 레지스트리에서 직접 가져오기</sub></td><td><p><sub>$ enroot import -o my_pytorch-v1.sqsh docker://[Username]/my_pytorch:v1</sub></p><p></p><p><sub>$ enroot import -o my_pytorch-v1.sqsh docker://myhub.ksc.re.kr/[프로젝트명]/ubuntu:latest</sub></p></td></tr><tr><td align="center">컨테이너 생성</td><td align="center"><sub>rootfs(unpacked 디렉터리) 생성하기</sub></td><td><p><sub>$ enroot create -n my_pytorch-v1</sub><sup><sub>*</sub></sup><sub> my_pytorch-v1.sqsh</sub>     </p><p><sup><sub>*</sub></sup><sub> 컨테이너(rootfs)는 /tmp/enroot_[UID</sub><sup><sub>**</sub></sup><sub>]/data/my_pytorch-v1 디렉터리에 생성됨</sub>   </p><p><sup><sub>**</sub></sup><sub>  id -u 출력값(숫자)</sub> </p></td></tr><tr><td align="center">컨테이너 <br>리스트</td><td align="center"><sub>enroot create 명령어로 생성한 컨테이너 목록 출력</sub></td><td><p><sub>$ enroot list</sub><sup><sub>*</sub></sup> </p><p><sup>*</sup><sub>컨테이너를 생성한 노드에서만 출력됨</sub></p></td></tr><tr><td align="center">컨테이너 삭제</td><td align="center"><sub>enroot create 명령어로 생성한 컨테이너 제거</sub></td><td><sub>$ enroot remove my_pytorch-v1</sub></td></tr></tbody></table>
+<table data-header-hidden><thead><tr><th width="86.5999755859375" align="center"></th><th width="142.13336181640625" align="center"></th><th></th></tr></thead><tbody><tr><td align="center"><strong>단계</strong></td><td align="center"><strong>작업 내용</strong></td><td><strong>명령어 / 설정 예시</strong></td></tr><tr><td align="center">이미지 가져오기</td><td align="center"><sub>Docker Hub 및 myhub 등  외부 레지스트리에서 직접 가져오기</sub></td><td><p><sub>$ enroot import -o my_pytorch-v1.sqsh docker://[Username]/my_pytorch:v1</sub></p><p></p><p><sub>$ enroot import -o my_pytorch-v1.sqsh docker://myhub.ksc.re.kr/[프로젝트명]/ubuntu:latest</sub></p></td></tr><tr><td align="center">컨테이너 생성</td><td align="center"><sub>rootfs(unpacked 디렉터리) 생성하기</sub></td><td><p><sub>$ enroot create -n my_pytorch-v1</sub><sup><sub>*</sub></sup><sub> my_pytorch-v1.sqsh</sub>     </p><p><sup><sub>*</sub></sup><sub> 컨테이너(rootfs)는 /tmp/enroot_[UID</sub><sup><sub>**</sub></sup><sub>]/data/my_pytorch-v1 디렉터리에 생성됨</sub>   </p><p><sup><sub>**</sub></sup><sub>  id -u 출력값(숫자)</sub> </p></td></tr><tr><td align="center">컨테이너 <br>리스트</td><td align="center"><sub>enroot create 명령어로 생성한 컨테이너 목록 출력</sub></td><td><p><sub>$ enroot list</sub><sup><sub>*</sub></sup> </p><p><sup><sub>*</sub></sup><sub>컨테이너를 생성한 노드에서만 출력됨</sub></p></td></tr><tr><td align="center">컨테이너 삭제</td><td align="center"><sub>enroot create 명령어로 생성한 컨테이너 제거</sub></td><td><p><sub>$ enroot remove my_pytorch-v1</sub><sup><sub>*</sub></sup></p><p><sup><sub>*</sub></sup><sub>컨테이너를 생성한 노드에서만 제거할 수 있음</sub></p></td></tr></tbody></table>
 
 #### 나. Singularity
 
@@ -240,7 +240,7 @@ $ singularity build --fakeroot my_pytorch-v1.sif docker-archive://my_pytorch-v1.
 $ enroot start my_pytorch-v1.sqsh nvidia-smi
 $ enroot start --mount=$PWD:/workspace my_pytorch-v1.sqsh python train.py
 
-# 컨테이너(rootfs)를 쓰기 가능한 상태로 실행(파일 생성, 패키지 설치, 설정 변경)
+# 컨테이너(rootfs)를 쓰기 가능(-w)한 상태로 실행(파일 생성, 패키지 설치, 설정 변경)
 # 컨테이너를 생성한 노드에서만 실행 가능
 $ enroot start -w my_pytorch-v1
 # 수정한 컨테이너(rootfs)를 sqsh 파일로 저장
@@ -396,12 +396,12 @@ srun --container-image=$Base/ngc/gemma-4-31b-it-1.7.0-x86_64.sqsh \
 **Pyxis 주요 #SBATCH 파라미터 설명**
 {% endhint %}
 
-<table data-header-hidden><thead><tr><th width="202.1334228515625"></th><th></th></tr></thead><tbody><tr><td><strong>파라미터</strong></td><td><strong>설명</strong></td></tr><tr><td><code>--container-image</code></td><td>사용할 컨테이너 이미지 경로 (<code>.sqsh</code> 파일 또는 <code>docker://</code> 주소)</td></tr><tr><td><code>--container-mounts</code></td><td>마운트할 경로 설정 (형식: <code>호스트경로:컨테이너경로</code>)    <sub>* /home01, /scratch, /apps는 지정하지 않아도 자동 마운트 됨</sub></td></tr><tr><td><code>--container-workdir</code></td><td>컨테이너 실행 시 시작 위치(Working Directory) 지정</td></tr><tr><td><code>--container-name</code></td><td>실행 중인 컨테이너에 부여할 이름 (디버깅 용도)</td></tr><tr><td><code>--container-save</code></td><td>작업 종료 후 변경된 컨테이너 상태를 <code>.sqsh</code>로 저장 (필요 시)</td></tr></tbody></table>
+<table data-header-hidden><thead><tr><th width="202.1334228515625"></th><th></th></tr></thead><tbody><tr><td><strong>파라미터</strong></td><td><strong>설명</strong></td></tr><tr><td><code>--container-image</code></td><td>사용할 컨테이너 이미지 경로 (.sqsh 파일 또는 docker:// 주소)</td></tr><tr><td><code>--container-mounts</code></td><td>마운트할 경로 설정 (형식: 호스트경로:컨테이너경로)     <sub>* /home01, /scratch, /apps는 지정하지 않아도 자동 마운트 됨</sub></td></tr><tr><td><code>--container-workdir</code></td><td>컨테이너 실행 시 시작 위치(Working Directory) 지정</td></tr><tr><td><code>--container-name</code></td><td>실행 중인 컨테이너에 부여할 이름 (디버깅 용도)</td></tr><tr><td><code>--container-save</code></td><td>작업 종료 후 변경된 컨테이너 상태를 .sqsh로 저장 (필요 시)</td></tr></tbody></table>
 
 #### 나. Singularity 활용 예시
 
+{% code title="" %}
 ```
-[예시 1 : Resnet-50 모델 기반 분산 학습 예시]
 #!/bin/bash
 #SBATCH –J pytorch_horovod_sing # job name
 #SBATCH --time=24:00:00 # wall_time
@@ -422,10 +422,10 @@ mpirun_wrapper \
 python $Base/examples/horovod/examples/pytorch/pytorch_imagenet_resnet50.py \
 --batch-size=128 --epochs=50
 ```
+{% endcode %}
 
-{% code expandable="true" %}
+{% code title="[예시 2 : Gemma 4 31B 모델 기반 추론 예시]" expandable="true" %}
 ```
-[예시 2 : Gemma 4 31B 모델 기반 추론 예시
 #!/bin/bash
 #SBATCH -J gemma-nim-sing # job name
 #SBATCH --time=24:00:00 # walltime
