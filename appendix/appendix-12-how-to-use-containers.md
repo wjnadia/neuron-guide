@@ -503,26 +503,32 @@ Podman 및 Singularity, Enroot에서 아래 터미널 화면과 같이 myhub에 
 ```
 ## Podman 예시
 
-#> podman login myhub.ksc.re.kr
+$ podman login myhub.ksc.re.kr
 Username: wjnadia
 Password:
 Login Succeeded!
+
+# myhub 로그아웃(인증정보 삭제)
+$ podman logout myhub.ksc.re.kr
 ```
 
 ```
 ## Singularity 예시
 
-#> singularity registry login -u wjnadia docker://myhub.ksc.re.kr
+$ singularity registry login -u wjnadia docker://myhub.ksc.re.kr
 Password / Token:
-INFO:    Token stored in /tmp/singularity_wjnadia/config/docker-config.json#> mkdir -p ~/.config/enroot 
+INFO:    Token stored in /tmp/singularity_wjnadia/config/docker-config.json#> mkdir -p ~/.config/enroot
+
+# myhub 로그아웃(인증정보 삭제) 
+$ singularity registry logout docker://myhub.ksc.re.kr
 ```
 
 ```
 ## Enroot 예시
 
-#> mkdir -p ~/.config/enroot
-#> echo "machine myhub.ksc.re.kr login [Username] password [Password]" > ~/.config/enroot/.credentials
-#> chmod 600 ~/.config/enroot/.credentials
+$ mkdir -p ~/.config/enroot
+$ echo "machine myhub.ksc.re.kr login [Username] password [Password]" > ~/.config/enroot/.credentials
+$ chmod 600 ~/.config/enroot/.credentials
 ```
 
 
