@@ -9,9 +9,9 @@ hidden: true
 사용자는 자신의 작업 단계(빌드, 실행)에 맞춰 적절한 도구를 선택하여 사용할 수 있습니다.
 
 {% hint style="info" %}
-* **Podman**: 일반 사용자 권한 기반의 이미지 빌드 및 관리 도구입니다. Docker를 대체하여 이미지를 생성할 때 사용합니다.
-* **Enroot**: NVIDIA에서 개발한 HPC 전용 런타임입니다. 컨테이너 이미지를 SquashFS(`.sqsh`)로 변환하여 Nvidia GPU에 최적화 되어 있으며, Pyxis 플러그인을 통해 Slurm 스케줄러와 유기적으로 연동됩니다.
-* **Singularity**: HPC 환경의 표준 컨테이너 도구로, 높은 범용성과 기존 구축된 `.sif` 이미지와의 호환성을 제공합니다
+* **Podman** : 일반 사용자 권한 기반의 이미지 빌드 및 관리 도구입니다. Docker를 대체하여 이미지를 생성할 때 사용합니다.
+* **Enroot** : NVIDIA에서 개발한 HPC 전용 런타임입니다. 컨테이너 이미지를 SquashFS(`.sqsh`)로 변환하여 Nvidia GPU에 최적화 되어 있으며, Pyxis 플러그인을 통해 Slurm 스케줄러와 유기적으로 연동됩니다.
+* **Singularity** : HPC 환경의 표준 컨테이너 도구로, 높은 범용성과 기존 구축된 `.sif` 이미지와의 호환성을 제공합니다
 {% endhint %}
 
 
@@ -34,7 +34,7 @@ Singularity 에 대한 자세한 사용법은 [**Singularity 컨테이너**](htt
 
 #### 가. Podman 사용 설정
 
-Podman 사용 환경 설정을 위해서는 먼저 사용자 홈 디렉터리에 **.usepodman** 이라는 파일을 생성해야 합니다. 한 번만 생성하면 되고 로그아웃 후 다시 로그인하면 바로 적용 됩니다.
+Podman 사용 환경 설정을 위해서는 먼저 사용자 홈 디렉터리에 .usepodman 이라는 파일을 생성해야 합니다. 한 번만 생성하면 되고 로그아웃 후 다시 로그인 하면 바로 적용 됩니다.
 
 ```
 $ cd ~                # 사용자홈 디렉터리(/home01/[ID])로 이동             
@@ -57,10 +57,10 @@ REPOSITORY              TAG         IMAGE ID      CREATED      SIZE
 
 사용자 소스 코드나 특정 라이브러리를 포함한 커스텀 이미지를 생성합니다.
 
-이미지 빌드에 많은 시간이 소요되고 부하가 많이 걸리는 경우, 스케줄러(SLURM)를 통해 인터랙티브 모드로 할당된  계산  노드에 접속하여 빌드하는 것을 권장합니다. &#x20;
+이미지 빌드 시간이 길고 부하가 많이 걸리는 경우, 스케줄러(SLURM)를 통해 인터랙티브 모드로 할당된  계산  노드에 접속하여 빌드하는 것을 권장합니다. &#x20;
 
 <pre><code>## 스케줄러(SLURM)를 통해 인터랙티브 모드로 할당된 계산노드에 접속
-$  srun --partition=cas_v100_4 --nodes=1 --ntasks-per-node=2 --cpus-per-task=10 --comment=pytorch --pty bash
+$  srun --partition=cas_v100_4 --nodes=1 --ntasks-per-node=2 --cpus-per-task=10 --gres=gpu:2 --comment=pytorch --pty bash
 
 # 현재 디렉터리(.)의 Dockerfile로 'my_pytorch:v1' 이미지 빌드
 $ ls Dockerfile
