@@ -235,8 +235,7 @@ $ singularity build --fakeroot my_pytorch-v1.sif docker-archive://my_pytorch-v1.
 
 #### 가.Enroot&#x20;
 
-```bash
-# GPU 계산 노드에서 squashFS 이미지 파일을 로드하고 실행
+<pre class="language-bash"><code class="lang-bash"># GPU 계산 노드에서 squashFS 이미지 파일을 로드하고 실행
 # GPU 가속 연동 옵션 필요 없음(자동 연동됨)
 # 학습 프로그램 예시 : /apps/applications/singularity_images/examples/train.py
 $ enroot start my_pytorch-v1.sqsh nvidia-smi
@@ -255,10 +254,27 @@ GPU Memory Allocated: 82.48 MB
 
 # 컨테이너(rootfs)를 쓰기 가능(-w)한 상태로 실행(파일 생성, 패키지 설치, 설정 변경)
 # 컨테이너를 생성한 노드에서만 실행 가능
-$ enroot start -w my_pytorch-v1
-# 수정한 컨테이너(rootfs)를 squashFS 이미지파일로 저장
-$ enroot export -o my_pytorch-v1_modified.sqsh my_pytorch-v1
-```
+790% [s1234a01@glogin03 enroot]$ cat /etc/os-release  # 로그인 노드 OS 정보 출력
+NAME="Rocky Linux"
+VERSION="9.4 (Blue Onyx)"
+[--중략--]
+790% [s1234a01@glogin03]$ enroot start -w my_pytorch-v1
+root@glogin03:/workspace# cat /etc/os-release   # 컨테이너의의 OS 정보출력 
+PRETTY_NAME="Ubuntu 24.04.1 LTS"
+NAME="Ubuntu"
+VERSION_ID="24.04"
+[--중략--]
+root@glogin03:/workspace# pip install jupyterlab   # 컨테이너에 파이썬jupyterlab 패키지 설치
+<strong>[--중략--]
+</strong>Downloading jupyterlab-4.5.6-py3-none-any.whl (12.4 MB)
+Installing collected packages: jupyterlab
+Successfully installed jupyterlab-4.5.6
+root@glogin03:/workspace# exit                     # 컨테이너 종료
+790% [s1234a01@glogin03]$
+ 
+# 수정한 컨테이너(rootfs)를 squashFS 이미지 파일로 저장
+790% [s1234a01@glogin03]$ enroot export -o my_pytorch-v1_modified.sqsh my_pytorch-v1
+</code></pre>
 
 #### 나. Singularity
 
