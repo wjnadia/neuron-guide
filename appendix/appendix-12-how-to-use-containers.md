@@ -334,8 +334,10 @@ srun --container-image=./my_pytorch-v1.sqsh \
 # Pyxis 전용 #SBATCH 파라미터 설정
 #SBATCH --container-image=./my_pytorch-v1.sqsh # 사용할 Enroot 이미지 경로
 #SBATCH --container-workdir=/scratch/[ID]/enroot      # 컨테이너 내 작업 디렉토리 설정
+
 # 학습 프로그램 예시 : /apps/applications/singularity_images/examples/train.py
-srun python /apps/applications/singularity_images/examples/train.py
+# 아래 사용자 명령어는 enroot 컨테이너(my_pytorch-v1.sqsh) 내부에서 실행됨
+python /apps/applications/singularity_images/examples/train.py
 ```
 {% endcode %}
 
