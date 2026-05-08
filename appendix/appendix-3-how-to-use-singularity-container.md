@@ -14,6 +14,10 @@ Tensorflow, Pytorch와 같은 딥러닝 프레임워크와 Quantum Espresso, Lam
 
 {% hint style="info" %}
 ## 뉴론 시스템에  추가된 컨테이너 도구인  podman 및 enroot을 활용하기 위해서는 [컨테이너 활용 가이드](appendix-12-how-to-use-containers.md) 를  참조하시기 바랍니다.&#x20;
+
+* **Podman** : 일반 사용자 권한 기반의 이미지 빌드 및 관리 도구입니다. Docker를 대체하여 이미지를 생성할 때 사용합니다.
+* **Enroot** : NVIDIA에서 개발한 HPC 전용 런타임입니다.  Nvidia GPU에 최적화 되어 있으며, Pyxis 플러그인을 통해 Slurm 스케줄러와 유기적으로 연동됩니다.
+* **Singularity** : HPC 환경의 표준 컨테이너 도구로, 높은 범용성과 기존 구축된 `.sif` 이미지와의 호환성을 제공합니다
 {% endhint %}
 
 ## 가. 컨테이너 이미지 빌드하기
