@@ -12,7 +12,9 @@ Tensorflow, Pytorch와 같은 딥러닝 프레임워크와 Quantum Espresso, Lam
 
 {% embed url="https://youtu.be/5PYAE0fuvBk?si=23ZvE7NhBAyZ9LM1" %}
 
-##
+{% hint style="info" %}
+## 뉴론 시스템에  추가된 컨테이너 도구인  podman 및 enroot을 활용하기 위해서는 [컨테이너 활용 가이드](appendix-12-how-to-use-containers.md) 를  참조하시기 바랍니다.&#x20;
+{% endhint %}
 
 ## 가. 컨테이너 이미지 빌드하기
 
