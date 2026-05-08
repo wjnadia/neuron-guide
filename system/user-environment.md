@@ -224,6 +224,20 @@ $ ls -lu test.file
 -rw-r--r-- 1 testuser testgroup 58 Jan 1 17:06  test.file
 ```
 
+## 사. 컨테이너 도구
+
+뉴론 시스템은 HPC 응용 및 AI 학습/추론 등에서 복잡한 소프트웨어 의존성을 해결하고 다양한 시스템에서 일관된 작업 환경을  유지할 수 있도록 최적화된 컨테이너 활용 환경을 제공합니다.        &#x20;
+
+사용자는 자신의 작업 단계(빌드, 실행)에 맞춰 적절한 도구를 선택하여 사용할 수 있습니다.
+
+자세한  사용법은 [**컨테이너 활용 가이드**](../appendix/appendix-12-how-to-use-containers.md)를 참조하시기 바랍니다.&#x20;
+
+{% hint style="info" %}
+* **Podman** : 일반 사용자 권한 기반의 이미지 빌드 및 관리 도구입니다. Docker를 대체하여 이미지를 생성할 때 사용합니다.
+* **Enroot** : NVIDIA에서 개발한 HPC 전용 런타임입니다. Nvidia GPU에 최적화 되어 있으며, Pyxis 플러그인을 통해 Slurm 스케줄러와 유기적으로 연동됩니다.
+* **Singularity** : HPC 환경에  최적화된 컨테이너 도구로 HPC 시스템에서 보편적으로 활용되고 있습니다. &#x20;
+{% endhint %}
+
 {% hint style="info" %}
 2024년 11월 22일에 마지막으로 업데이트 되었습니다.
 {% endhint %}
