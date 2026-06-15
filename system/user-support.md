@@ -7,7 +7,7 @@
 | <p>기술지원 안내<br>(상담 및 최적병렬화)</p> | [https://www.ksc.re.kr/gsjw/gsjwan](https://www.ksc.re.kr/gsjw/gsjwan)    |
 | 교육 문의                          | [https://kacademy.kisti.re.kr/](https://kacademy.kisti.re.kr/)            |
 | 시스템 활용 정보                      | [https://docs-ksc.gitbook.io/blog/](https://docs-ksc.gitbook.io/blog/)    |
-| 카톡사용자 챗봇(MyKSCBot)             | [https://pf.kakao.com/\_xgxchsn/chat](https://pf.kakao.com/_xgxchsn/chat) |
+| 카톡 사용자 챗봇(MyKSCBot)            | [https://pf.kakao.com/\_xgxchsn/chat](https://pf.kakao.com/_xgxchsn/chat) |
 
 {% hint style="info" %}
 2022년 3월 15일에 마지막으로 업데이트 되었습니다.
