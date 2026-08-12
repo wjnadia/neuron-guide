@@ -44,29 +44,21 @@ Neuron 시스템의 작업 스케쥴러는 SLURM을 사용합니다. 이 장에�
 
 ※ sinfo --help 명령어를 이용하여 sinfo의 옵션을 확인하실 수 있습니다.
 
-<mark style="color:red;">※</mark> <mark style="color:red;">**Neuron 시스템**</mark> <mark style="color:red;">**사용자 편익 증대를 위한 자료 수집의 목적으로, 아래와 같이 SBATCH 옵션을 통한 사용 프로그램 정보 작성을 의무화 합니다. 즉, 사용하는 어플리케이션에 맞게 SBATCH의 --comment 옵션을 아래 표를 참조하여 반드시**</mark> <mark style="color:red;">**기입한 후 작업을 제출해야 합니다.**</mark>
+<mark style="color:red;">※</mark> <mark style="color:red;">**Neuron 시스템의 사용자 활용 현황을 보다 정확하게 분석하고, AI/HPC 응용 분야별 자원 이용 통계 및 운영 정책 수립에 활용하기 위해  아래와 같이 SBATCH 옵션을 통한 응용 분야(field)와 사용 프로그램 (appl) 정보 작성을 의무화 합니다. 즉, 사용하는 분야와 어플리케이션에 맞게 SBATCH의 --comment 옵션을 다음 형식으로 반드시**</mark> <mark style="color:red;">**기입한 후 작업을 제출해야 합니다.**</mark>\ <mark style="color:red;">**\[입력방법] #SBATCH --comment="field=<분야>;appl=<프로그램>"**</mark> &#x20;
 
-<mark style="color:red;">**※ 딥러닝 또는 기계학습을 위한 application을 사용하시는 경우 tensorflow, caffe, R, pytorch 등으로 구체적으로 명시해주시기 바랍니다.**</mark>
+<mark style="color:red;">**※ 분야(field)와 프로그램(appl)에는 허용되는 값만 입력할 수 있으며 허용되는 값은 아래 분야별 SBATCH 옵션 이름표, 프로그램별 SBATCH 옵션 이름표를 참조하거나 로그인 노드에서 아래와 같은 명령어를 이용해 확인 가능합니다.**</mark>\ <mark style="color:red;">**\[명령어] $ showappl**</mark>
 
 <mark style="color:red;">**※ 어플리케이션 구분을 추가는 주기적으로 수집된 사용자 요구에 맞추어 진행됩니다. 추가를 원하시면**</mark> [<mark style="color:red;">**consult@ksc.re.kr로**</mark>](mailto:consult@ksc.re.kr%EB%A1%9C) <mark style="color:red;">**해당 어플리케이션에 대한 추가 요청을 해주시기 바랍니다.**</mark>
 
 
 
-**\[Application 별 SBATCH 옵션 이름표]**
+**\[분야별 SBATCH 옵션 이름표]**
 
-| **Application종류** | **SBATCH 옵션 이름** | **Application종류** | **SBATCH 옵션 이름** |
-| ----------------- | ---------------- | ----------------- | ---------------- |
-| Charmm            | charmm           | LAMMPS            | lammps           |
-| Gaussian          | gaussian         | NAMD              | namd             |
-| OpenFoam          | openfoam         | Quantum Espresso  | qe               |
-| WRF               | wrf              | SIESTA            | siesta           |
-| in-house code     | inhouse          | Tensorflow        | tensorflow       |
-| PYTHON            | python           | Caffe             | caffe            |
-| R                 | R                | Pytorch           | pytorch          |
-| VASP              | vasp             | Sklearn           | sklearn          |
-| Gromacs           | gromacs          | 그 외 applications  | etc              |
+<table data-header-hidden><thead><tr><th width="103.91145833333331" align="center"></th><th width="163.3203125" align="center"></th><th></th></tr></thead><tbody><tr><td align="center">대분류</td><td align="center">분야</td><td>분야 설명</td></tr><tr><td align="center">AI</td><td align="center">agenticai</td><td>Agentic AI</td></tr><tr><td align="center">AI</td><td align="center">robotics</td><td>Physical AI &#x26; Robotics</td></tr><tr><td align="center">AI</td><td align="center">aim</td><td>Autonomous Driving &#x26; AI Mobility</td></tr><tr><td align="center">AI</td><td align="center">nlp</td><td>Natural Language Processing, Large Language Models</td></tr><tr><td align="center">AI</td><td align="center">cv</td><td>Computer Vision &#x26; Spatial Intelligence</td></tr><tr><td align="center">AI</td><td align="center">speech</td><td>Speech, Audio AI</td></tr><tr><td align="center">AI</td><td align="center">recsys</td><td>Recommendation System &#x26; Decision Making</td></tr><tr><td align="center">AI</td><td align="center">multimodal</td><td>Multimodal, Generative AI, World Model, Media Synthesis</td></tr><tr><td align="center">AI</td><td align="center">sciai</td><td>AI for Science &#x26; Graph AI</td></tr><tr><td align="center">AI</td><td align="center">efficientai</td><td>Efficient &#x26; Scalable AI Systems, Quantization, Edge AI</td></tr><tr><td align="center">AI</td><td align="center">healthai</td><td>Healthcare AI</td></tr><tr><td align="center">AI</td><td align="center">finai</td><td>Finance AI</td></tr><tr><td align="center">AI</td><td align="center">misc</td><td>Miscellaneous</td></tr><tr><td align="center">HPC</td><td align="center">math</td><td>Mathematics</td></tr><tr><td align="center">HPC</td><td align="center">phys</td><td>Physics</td></tr><tr><td align="center">HPC</td><td align="center">chem</td><td>Chemistry</td></tr><tr><td align="center">HPC</td><td align="center">aac</td><td>Astrophysics and Cosmology</td></tr><tr><td align="center">HPC</td><td align="center">ees</td><td>Earth and Environmental Science</td></tr><tr><td align="center">HPC</td><td align="center">bio</td><td>Bio/life science</td></tr><tr><td align="center">HPC</td><td align="center">med</td><td>Medical/Health science</td></tr><tr><td align="center">HPC</td><td align="center">bns</td><td>Brain and Neurosciences</td></tr><tr><td align="center">HPC</td><td align="center">agf</td><td>Agriculture, Fishery and Food</td></tr><tr><td align="center">HPC</td><td align="center">qst</td><td>Quantum Science and Technology</td></tr><tr><td align="center">HPC</td><td align="center">mse</td><td>Material Science and engineering</td></tr><tr><td align="center">HPC</td><td align="center">ere</td><td>Energy and Resources engineering</td></tr><tr><td align="center">HPC</td><td align="center">mae</td><td>Mechanical and Aerospace engineering</td></tr><tr><td align="center">HPC</td><td align="center">ne</td><td>Nuclear engineering</td></tr><tr><td align="center">HPC</td><td align="center">che</td><td>Chemical Engineering</td></tr><tr><td align="center">HPC</td><td align="center">eee</td><td>Electrical and electronic engineering</td></tr><tr><td align="center">HPC</td><td align="center">ict</td><td>Information/Communication Technology</td></tr><tr><td align="center">HPC</td><td align="center">cse</td><td>Computer science and engineering</td></tr><tr><td align="center">HPC</td><td align="center">cte</td><td>Civil and transportation engineering</td></tr><tr><td align="center">HPC</td><td align="center">ss</td><td>Social Science</td></tr><tr><td align="center">HPC</td><td align="center">caa</td><td>Culture and Arts</td></tr><tr><td align="center">HPC</td><td align="center">hum</td><td>Humanities</td></tr><tr><td align="center">HPC</td><td align="center">misc</td><td>Miscellaneous</td></tr></tbody></table>
 
+**\[프로그램별 SBATCH 옵션 이름표]**
 
+<table data-search="true"><thead><tr><th width="83.203125" align="center"></th><th></th><th width="79.0859375" align="center"></th><th></th><th width="81.82421875" align="center"></th><th></th></tr></thead><tbody><tr><td align="center">분야</td><td>프로그램명</td><td align="center">분야</td><td>프로그램명</td><td align="center">분야</td><td>프로그램명</td></tr><tr><td align="center">AI</td><td>pytorch</td><td align="center">AI</td><td>jax</td><td align="center">AI</td><td>triton</td></tr><tr><td align="center">AI</td><td>pytorch-ddp</td><td align="center">AI</td><td>tensorflow</td><td align="center">AI</td><td>jupyter</td></tr><tr><td align="center">AI</td><td>pytorch-fsdp</td><td align="center">AI</td><td>tensorrt</td><td align="center">AI</td><td>r</td></tr><tr><td align="center">AI</td><td>deepspeed</td><td align="center">AI</td><td>ollama</td><td align="center">AI</td><td>misc</td></tr><tr><td align="center">AI</td><td>megatron-lm</td><td align="center">AI</td><td>vllm</td><td align="center"></td><td></td></tr><tr><td align="center">HPC</td><td>abaqus</td><td align="center">HPC</td><td>grims</td><td align="center">HPC</td><td>q-chem</td></tr><tr><td align="center">HPC</td><td>amber</td><td align="center">HPC</td><td>gromacs</td><td align="center">HPC</td><td>qmcpack</td></tr><tr><td align="center">HPC</td><td>ansys</td><td align="center">HPC</td><td>kflow</td><td align="center">HPC</td><td>quantum_espresso</td></tr><tr><td align="center">HPC</td><td>berkeleygw</td><td align="center">HPC</td><td>lammps</td><td align="center">HPC</td><td>r</td></tr><tr><td align="center">HPC</td><td>bwa</td><td align="center">HPC</td><td>ls-dyna</td><td align="center">HPC</td><td>ramses</td></tr><tr><td align="center">HPC</td><td>castep</td><td align="center">HPC</td><td>materials_studio</td><td align="center">HPC</td><td>raspa</td></tr><tr><td align="center">HPC</td><td>cesm</td><td align="center">HPC</td><td>matlab</td><td align="center">HPC</td><td>roms</td></tr><tr><td align="center">HPC</td><td>cgyro</td><td align="center">HPC</td><td>mfdn</td><td align="center">HPC</td><td>rosetta</td></tr><tr><td align="center">HPC</td><td>charmm</td><td align="center">HPC</td><td>mom</td><td align="center">HPC</td><td>siesta</td></tr><tr><td align="center">HPC</td><td>cp2k</td><td align="center">HPC</td><td>mpas</td><td align="center">HPC</td><td>star-ccm</td></tr><tr><td align="center">HPC</td><td>fhi_aims</td><td align="center">HPC</td><td>msc_one</td><td align="center">HPC</td><td>su2</td></tr><tr><td align="center">HPC</td><td>fvcom</td><td align="center">HPC</td><td>namd</td><td align="center">HPC</td><td>vasp</td></tr><tr><td align="center">HPC</td><td>gadget</td><td align="center">HPC</td><td>nw_chem</td><td align="center">HPC</td><td>wannier90</td></tr><tr><td align="center">HPC</td><td>gatk</td><td align="center">HPC</td><td>openfoam</td><td align="center">HPC</td><td>wien2k</td></tr><tr><td align="center">HPC</td><td>gaussian</td><td align="center">HPC</td><td>openmm</td><td align="center">HPC</td><td>wrf</td></tr><tr><td align="center">HPC</td><td>geant4</td><td align="center">HPC</td><td>openmx</td><td align="center">HPC</td><td>xtb</td></tr><tr><td align="center">HPC</td><td>gotpm</td><td align="center">HPC</td><td>orca</td><td align="center">HPC</td><td>in_house</td></tr><tr><td align="center">HPC</td><td>gpaw</td><td align="center">HPC</td><td>pyfr</td><td align="center">HPC</td><td>misc</td></tr></tbody></table>
 
 ### **2. 배치 작업 제출**
 
@@ -110,20 +102,7 @@ $ nvidia-smi -l 2
 
 * SLURM 키워드
 
-| 키워드                                  | 설명                    |
-| ------------------------------------ | --------------------- |
-| #SBATCH –J                           | 작업명 지정                |
-| #SBATCH --time                       | 최대 작업 수행 시간 지정        |
-| #SBATCH –o                           | 작업 로그 파일명 지정          |
-| #SBATCH –e                           | 에러 로그 파일명 지정          |
-| #SBATCH –p                           | 사용할 파티션 지정            |
-| #SBATCH --comment                    | 사용할 애플리케이션명           |
-| #SBATCH -–nodelist=(노드 리스트)          | 작업을 수행할 노드 지정         |
-| #SBATCH -–nodes=(노드 수)               | 작업을 수행할 노드 수 지정       |
-| #SBATCH --ntasks-per-node=(프로세스 수)   | 노드 당 수행될 프로세스 수 지정    |
-| #SBATCH --cpus-per-task=(cpu core 수) | 프로세스 당 할당될 cpu core 수 |
-| #SBATCH --cpus-per-gpu=(cpu core 수)  | GPU 당 할당될 cpu core 수  |
-| #SBATCH --exclusive                  | 노드를 전용으로 사용하기 위한 옵션   |
+<table><thead><tr><th width="432.77734375">키워드</th><th>설명</th></tr></thead><tbody><tr><td>#SBATCH –J</td><td>작업명 지정</td></tr><tr><td>#SBATCH --time</td><td>최대 작업 수행 시간 지정</td></tr><tr><td>#SBATCH –o</td><td>작업 로그 파일명 지정</td></tr><tr><td>#SBATCH –e</td><td>에러 로그 파일명 지정</td></tr><tr><td>#SBATCH –p</td><td>사용할 파티션 지정</td></tr><tr><td>#SBATCH --comment="field=&#x3C;분야>;appl=&#x3C;프로그램>"</td><td>사용할 분야와 프로그램 </td></tr><tr><td>#SBATCH -–nodelist=(노드 리스트)</td><td>작업을 수행할 노드 지정</td></tr><tr><td>#SBATCH -–nodes=(노드 수)</td><td>작업을 수행할 노드 수 지정</td></tr><tr><td>#SBATCH --ntasks-per-node=(프로세스 수)</td><td>노드 당 수행될 프로세스 수 지정</td></tr><tr><td>#SBATCH --cpus-per-task=(cpu core 수)</td><td>프로세스 당 할당될 cpu core 수</td></tr><tr><td>#SBATCH --cpus-per-gpu=(cpu core 수)</td><td>GPU 당 할당될 cpu core 수</td></tr><tr><td>#SBATCH --exclusive</td><td>노드를 전용으로 사용하기 위한 옵션</td></tr></tbody></table>
 
 
 
@@ -158,7 +137,7 @@ cpus-per-gpu = node의 총 core 수 / node의 총 GPU 수 * 요청 GPU 수(--gre
 #SBATCH -o %x_%j.out
 #SBATCH -e %x_%j.err
 #SBATCH --time=01:00:00
-#SBATCH --comment xxx #Application별 SBATCH 옵션 이름표 참고
+#SBATCH --comment="field=xxx;appl=yyy" #분야 및 프로그램별 SBATCH 옵션 이름표 참고
 
 export OMP_NUM_THREADS=1
 
@@ -184,7 +163,7 @@ exit 0
 #SBATCH -o %x_%j.out
 #SBATCH -e %x_%j.err
 #SBATCH --time=01:00:00
-#SBATCH --comment xxx #Application별 SBATCH 옵션 이름표 참고
+#SBATCH --comment="field=xxx;appl=yyy" #분야 및 프로그램 SBATCH 옵션 이름표 참고
 
 export OMP_NUM_THREADS=10
 
@@ -209,7 +188,7 @@ exit 0
 #SBATCH -o %x_%j.out
 #SBATCH -e %x_%j.err
 #SBATCH --time=01:00:00
-#SBATCH --comment xxx #Application별 SBATCH 옵션 이름표 참고
+#SBATCH --comment="field=xxx;appl=yyy" #분야 및 프로그램별 SBATCH 옵션 이름표 참고
 
 module purge
 module load intel/25.3.0 mpi/impi-21.17
@@ -231,7 +210,7 @@ mpirun ./test_mpi.exe
 #SBATCH -o %x_%j.out
 #SBATCH -e %x_%j.err
 #SBATCH --time=01:00:00
-#SBATCH --comment xxx #Application별 SBATCH 옵션 이름표 참고
+#SBATCH --comment="field=xxx;appl=yyy" #분야 및 프로그램 SBATCH 옵션 이름표 참고
 
 module purge
 module load intel/25.3.0 mpi/impi-21.17
@@ -255,7 +234,7 @@ mpirun ./test_mpi.exe
 #SBATCH -e %x_%j.err
 #SBATCH --time=01:00:00
 #SBATCH --gres=gpu:1 # using 2 gpus per node
-#SBATCH --comment xxx #Application별 SBATCH 옵션 이름표 참고
+#SBATCH --comment="field=xxx;appl=yyy" #분야 및 프로그램 SBATCH 옵션 이름표 참고
 
 export OMP_NUM_THREADS=1
 
@@ -282,7 +261,7 @@ exit 0
 #SBATCH -e %x_%j.err
 #SBATCH --time=01:00:00
 #SBATCH --gres=gpu:2 # using 2 gpus per node
-#SBATCH --comment xxx #Application별 SBATCH 옵션 이름표 참고
+#SBATCH --comment="field=xxx;appl=yyy" #분야 및 프로그램별 SBATCH 옵션 이름표 참고
 
 export OMP_NUM_THREADS=10
 
@@ -308,7 +287,7 @@ exit 0
 #SBATCH -e %x_%j.err
 #SBATCH --time=01:00:00
 #SBATCH --gres=gpu:2 # using 2 gpus per node
-#SBATCH --comment xxx #Application별 SBATCH 옵션 이름표 참고
+#SBATCH --comment="field=xxx;appl=yyy" #분야 및 프로그램 SBATCH 옵션 이름표 참고
 
 module purge
 module load intel/25.3.0 cuda/12.4.1 cudampi/openmpi-4.1.8
@@ -330,7 +309,7 @@ srun ./test_mpi.exe
 #SBATCH -e %x_%j.err
 #SBATCH --time=01:00:00
 #SBATCH --gres=gpu:2 
-#SBATCH --comment xxx 
+#SBATCH --comment="field=xxx;appl=yyy" #분야 및 프로그램별 SBATCH 옵션 이름표 참고
 
 module purge
 module load intel/25.3.0 cuda/12.4.1 cudampi/openmpi-4.1.8
@@ -352,7 +331,7 @@ srun ./test_mpi.exe
 #SBATCH -e %x_%j.err
 #SBATCH --time=01:00:00
 #SBATCH --gres=gpu:4
-#SBATCH --comment xxx 
+#SBATCH --comment="field=xxx;appl=yyy" #분야 및 프로그램 SBATCH 옵션 이름표 참고
 
 module purge
 module load intel/25.3.0 cuda/12.4.1 cudampi/openmpi-4.1.8
@@ -375,7 +354,7 @@ srun ./test_mpi.exe
 #SBATCH -o %x_%j.out
 #SBATCH -e %x_%j.err
 #SBATCH --time=01:00:00
-#SBATCH --comment xxx #Application별 SBATCH 옵션 이름표 참고
+#SBATCH --comment="field=xxx;appl=yyy" #분야 및 프로그램 SBATCH 옵션 이름표 참고
 
 module purge
 module load intel/25.3.0 mpi/impi-21.17
@@ -402,7 +381,7 @@ exit 0
   **cas\_v100\_4** 파티션의 gpu 2노드(각각 2core, 2gpu)를 interactive 용도로 사용
 
 ```shell-session
-$ salloc --partition=cas_v100_4 --nodes=2 --ntasks-per-node=2 --gres=gpu:2 --comment={SBATCH 옵션이름} #Application별 SBATCH 옵션 이름표 참고
+$ salloc --partition=cas_v100_4 --nodes=2 --ntasks-per-node=2 --gres=gpu:2 --comment=="field=<분야>;appl=<프로그램>" #분야 및 프로그램별 SBATCH 옵션 이름표 참고
 ```
 
 <mark style="color:red;">**※ 인터렉티브 작업의 walltime은 8시간으로 고정됨**</mark>
@@ -527,5 +506,5 @@ $ scancel 761
 * 필요시 모든 파티션에서 SLURM Interactive Job 기능을 이용해 컴파일, 디버깅이 가능합니다.
 
 {% hint style="info" %}
-2026년 2월 23일에 마지막으로 업데이트 되었습니다.
+2026년 8월 12일에 마지막으로 업데이트 되었습니다.
 {% endhint %}
