@@ -1,7 +1,3 @@
----
-hidden: true
----
-
 # TensorRT-LLM 추론 성능 벤치마크
 
 본 페이지에서는 KISTI에서 측정한 NVIDIA TensorRT-LLM 프레임워크의 LLM 추론 성능 벤치마크 결과를 제공합니다.
