@@ -6,7 +6,7 @@ hidden: true
 
 ### 1. 개요
 
-6호기 한강  시스템은 컨테이너 이미지 준비와 계산 작업 실행을 분리합니다. Podman은 OCI 이미지를 빌드하고 관리하는 도구입니다. 계산 작업은 `kisti-container`를 통해 SingularityCE, Apptainer, Enroot 또는 Pyxis로 실행합니다.
+6호기 한강  시스템은 컨테이너 이미지 준비와 계산 작업 실행을 분리합니다. Podman은 OCI 이미지를 빌드하고 관리하는 도구입니다. 계산 작업은 `kisti-container`를 통해 Singularity, Apptainer, Enroot 또는 Pyxis로 실행합니다.
 
 `kisti-container`는 다음 항목을 작업 특성에 맞게 구성합니다.
 
@@ -16,17 +16,17 @@ hidden: true
 * AWS OFI NCCL, Cray Libfabric 및 CXI 경로 연결
 * 체크포인트 디렉터리의 쓰기 가능 마운트
 
-뉴론 시스템의 기존 컨테이너  활용가이드와 마찬가지로 Podman은 빌드·관리, `.sif`와 `.sqsh`는 계산 작업 실행에 사용합니다. 한강시스템에서는 `kisti-container`가 런타임 별 옵션을 통일한다는 점이 추가됩니다.
+[뉴론 시스템의 기존 컨테이너  활용 가이드](../)와 마찬가지로 Podman은 빌드·관리, `.sif`와 `.sqsh`는 계산 작업 실행에 사용합니다. 한강 시스템에서는 `kisti-container`가 런타임 별 옵션을 통일한다는 점이 추가됩니다.
 
 ### 2. 도구 선택
 
-| 목적                 | 권장 도구         | 이미지 형식               | `kisti-container` 역할       |
-| ------------------ | ------------- | -------------------- | -------------------------- |
-| 이미지 빌드·수정·레지스트리 전송 | Podman        | OCI 이미지              | 실행 백엔드가 아님                 |
-| 기존 HPC 이미지 실행      | SingularityCE | `.sif`               | GPU, MPI, NCCL 환경 구성       |
-| Singularity 호환 실행  | Apptainer     | `.sif`               | GPU, MPI, NCCL 환경 구성       |
-| GH200 작업의 직접 실행    | Enroot        | `.sqsh`              | Enroot 명령과 마운트 생성          |
-| Slurm 통합 Enroot 실행 | Pyxis         | `.sqsh` 또는 Pyxis URI | `srun --container-*` 명령 생성 |
+| 목적                 | 권장 도구       | 이미지 형식               | `kisti-container` 역할       |
+| ------------------ | ----------- | -------------------- | -------------------------- |
+| 이미지 빌드·수정·레지스트리 전송 | Podman      | OCI 이미지              | 실행 백엔드가 아님                 |
+| 기존 HPC 이미지 실행      | Singularity | `.sif`               | GPU, MPI, NCCL 환경 구성       |
+| Singularity 호환 실행  | Apptainer   | `.sif`               | GPU, MPI, NCCL 환경 구성       |
+| GH200 작업의 직접 실행    | Enroot      | `.sqsh`              | Enroot 명령과 마운트 생성          |
+| Slurm 통합 Enroot 실행 | Pyxis       | `.sqsh` 또는 Pyxis URI | `srun --container-*` 명령 생성 |
 
 처음 사용하는 경우에는 기존 `.sif` 이미지가 있으면 Singularity/Apptainer를, GH200용 `.sqsh` 이미지가 있으면 Pyxis를 권장합니다. 장애 분석이나 Enroot 자체 동작 확인에는 `--runtime enroot`가 유용합니다.
 
@@ -146,7 +146,7 @@ singularity build --fakeroot pytorch-aarch64.sif \
   docker-archive://pytorch-aarch64.tar
 ```
 
-로그인/계산 노드의 로컬 컨테이너 저장소는 영구 보관 대상으로 가정하지 않습니다. 완성한 이미지는 `/scratch` 등의 승인된 공유 경로 또는 KISTI 내부 레지스트리에 보관해야합니다.
+로그인/계산 노드의 로컬 컨테이너 저장소는 영구 보관 대상으로 가정하지 않습니다. 완성한 이미지는 `/scratch` 등의 승인된 공유 경로 또는 [KISTI 내부 레지스트리](appendix-12-how-to-use-containers.md#id-3)에 보관해야합니다.
 
 ### 7. 배치 작업 실행 방식
 
