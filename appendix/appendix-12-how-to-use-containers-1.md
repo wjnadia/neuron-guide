@@ -16,19 +16,19 @@ hidden: true
 * AWS OFI NCCL, Cray Libfabric 및 CXI 경로 연결
 * 체크포인트 디렉터리의 쓰기 가능 마운트
 
-[뉴론 시스템의 기존 컨테이너  활용 가이드](../)와 마찬가지로 Podman은 빌드·관리, `.sif`와 `.sqsh`는 계산 작업 실행에 사용합니다. 한강 시스템에서는 `kisti-container`가 런타임 별 옵션을 통일한다는 점이 추가됩니다.
+[뉴론 시스템의 기존 컨테이너  활용 가이드](appendix-12-how-to-use-containers.md)와 마찬가지로 Podman은 빌드·관리, Singularity/Apptainer/Enroot/Pyxis는 계산 작업 실행에 사용합니다. 한강 시스템에서는 `kisti-container`가 런타임 별 옵션을 통일한다는 점이 추가됩니다.
 
 ### 2. 도구 선택
 
-| 목적                 | 권장 도구       | 이미지 형식               | `kisti-container` 역할       |
-| ------------------ | ----------- | -------------------- | -------------------------- |
-| 이미지 빌드·수정·레지스트리 전송 | Podman      | OCI 이미지              | 실행 백엔드가 아님                 |
-| 기존 HPC 이미지 실행      | Singularity | `.sif`               | GPU, MPI, NCCL 환경 구성       |
-| Singularity 호환 실행  | Apptainer   | `.sif`               | GPU, MPI, NCCL 환경 구성       |
-| GH200 작업의 직접 실행    | Enroot      | `.sqsh`              | Enroot 명령과 마운트 생성          |
-| Slurm 통합 Enroot 실행 | Pyxis       | `.sqsh` 또는 Pyxis URI | `srun --container-*` 명령 생성 |
+| 목적                    | 권장 도구       | 이미지 형식               | `kisti-container` 역할       |
+| --------------------- | ----------- | -------------------- | -------------------------- |
+| 이미지 빌드·수정·레지스트리 전송    | Podman      | OCI 이미지              | 실행 백엔드가 아님                 |
+| 기존 Singularity 이미지 실행 | Singularity | `.sif`               | GPU, MPI, NCCL 환경 구성       |
+| Singularity 호환 실행     | Apptainer   | `.sif`               | GPU, MPI, NCCL 환경 구성       |
+| GH200 작업의 직접 실행       | Enroot      | `.sqsh`              | enroot 명령과 마운트 생성          |
+| Slurm 통합 Enroot 실행    | Pyxis       | `.sqsh` 또는 Pyxis URI | `srun --container-*` 명령 생성 |
 
-처음 사용하는 경우에는 기존 `.sif` 이미지가 있으면 Singularity/Apptainer를, GH200용 `.sqsh` 이미지가 있으면 Pyxis를 권장합니다. 장애 분석이나 Enroot 자체 동작 확인에는 `--runtime enroot`가 유용합니다.
+처음 사용하는 경우에는 기존 `.sif` 이미지가 있으면 Singularity/Apptainer를, GH200용 `.sqsh` 이미지가 있으면 Pyxis를 권장합니다. Enroot 자체 동작 확인에는 `--runtime enroot`가 유용합니다.
 
 ### 3. 아키텍처와 이미지 호환성
 
@@ -65,7 +65,7 @@ srun --help | grep -- --container-image
 
 마지막 명령에 `--container-image`가 표시되면 Pyxis가 Slurm에 등록된 상태입니다.
 
-사이트 기본 설정은 다음 파일에 있습니다.
+사이트 기본 설정은 다음 파일에 존재합니다.
 
 ```
 /apps/common/kisti-container/conf/kisti-container.conf
@@ -111,7 +111,7 @@ kisti-container [Wrapper 옵션] IMAGE COMMAND [ARG ...]
 
 #### 6.1 Podman 이미지빌드
 
-뉴론 컨테이너 활용 가이드와 동일하게 Podman을 이용해 Dockerfile 기반 이미지를 빌드할 수 있습니다.&#x20;
+[뉴론 컨테이너 활용 가이드](appendix-12-how-to-use-containers.md#id-2.-podman)와 동일하게 Podman을 이용해 Dockerfile 기반 이미지를 빌드할 수 있습니다.&#x20;
 
 ```bash
 cd /apps/common/kisti-container/examples/00-image-build

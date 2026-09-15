@@ -24,7 +24,7 @@ Singularity 에 대한 자세한 사용법은 [**Singularity 컨테이너**](htt
 
 
 
-### 2. 이미지 빌드 및 관리 (Podman)
+### 2. 이미지 빌드(Podman)
 
 로그인 노드 또는 계산 노드에서 Podman을 사용하여 컨테이너 이미지를 준비합니다.
 
