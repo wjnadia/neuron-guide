@@ -109,9 +109,9 @@ kisti-container [Wrapper 옵션] IMAGE COMMAND [ARG ...]
 
 ### 6. 이미지 준비
 
-#### 6.1 Podman 빌드
+#### 6.1 Podman 이미지빌드
 
-뉴론 가이드와 동일하게 Podman을 이용해 Dockerfile 기반 이미지를 준비할 수 있습니다. 6호기에서 Podman 사용 전 별도의 사이트 활성화 절차가 있다면 해당 운영 지침을 먼저 적용합니다.
+뉴론 컨테이너 활용 가이드와 동일하게 Podman을 이용해 Dockerfile 기반 이미지를 빌드할 수 있습니다.&#x20;
 
 ```bash
 cd /apps/common/kisti-container/examples/00-image-build
@@ -121,36 +121,32 @@ cd /scratch/$USER/kisti-image-build
 ./build-with-podman.sh
 ```
 
-레지스트리에서 직접 가져오는 예:
+레지스트리에서 직접 가져오는 예시:
 
 ```bash
 podman pull nvcr.io/nvidia/pytorch:25.03-py3
 podman images
 ```
 
-#### 6.2 `.sqsh`와 `.sif` 변환
+#### 6.2    Singularity/Enroot 이미지로 변환
 
 ```bash
-PODMAN_IMAGE=localhost/kisti-pytorch:tutorial \
-OUTPUT_DIR=/scratch/$USER/container-images \
-./convert-images.sh
-```
-
-직접 실행할 경우의 기본 명령은 다음과 같습니다.
-
-```bash
+## Enroot
 enroot import -o pytorch-aarch64.sqsh podman://localhost/kisti-pytorch:tutorial
 
+## Singularity
 podman save localhost/kisti-pytorch:tutorial -o pytorch-aarch64.tar
 singularity build --fakeroot pytorch-aarch64.sif \
   docker-archive://pytorch-aarch64.tar
 ```
 
-로그인/계산 노드의 로컬 컨테이너 저장소는 영구 보관 대상으로 가정하지 않습니다. 완성한 이미지는 `/scratch` 등의 승인된 공유 경로 또는 [KISTI 내부 레지스트리](appendix-12-how-to-use-containers.md#id-3)에 보관해야합니다.
+빌드된 이미지는 홈/스크래치 디렉터리 또는 [KISTI 내부 레지스트리](appendix-12-how-to-use-containers.md#id-3)에 보관해야 합니다.
+
+
 
 ### 7. 배치 작업 실행 방식
 
-#### 7.1 SingularityCE, Apptainer, Enroot
+#### 7.1 Singularity, Apptainer, Enroot
 
 이 세 백엔드에서 `kisti-container`는 Slurm task 안에서 실행되는 Wrapper입니다. 따라서 배치 파일에 `srun`을 사용합니다.
 

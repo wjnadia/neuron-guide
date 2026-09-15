@@ -40,7 +40,7 @@ $ ls -la .usepodman
 $ exit                # 로그아웃 후 다시 로그인
 ```
 
-#### 나. 외부 이미지 가져오기 (Pull)
+#### 나. 이미지 빌드 하기
 
 NGC(NVIDIA GPU Cloud) 등에서 이미지를 가져옵니다.
 
