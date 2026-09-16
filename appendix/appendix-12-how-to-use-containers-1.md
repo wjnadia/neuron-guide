@@ -109,17 +109,36 @@ kisti-container [Wrapper 옵션] IMAGE COMMAND [ARG ...]
 
 ### 6. 이미지 준비
 
-#### 6.1 Podman 이미지빌드
+#### 6.1 Podman 이미지  빌드
 
 [뉴론 컨테이너 활용 가이드](appendix-12-how-to-use-containers.md#id-2.-podman)와 동일하게 Podman을 이용해 Dockerfile 기반 이미지를 빌드할 수 있습니다.&#x20;
 
-```bash
-cd /apps/common/kisti-container/examples/00-image-build
-cp -a . /scratch/$USER/kisti-image-build
-cd /scratch/$USER/kisti-image-build
-
-./build-with-podman.sh
 ```
+# Podman 사용 환경 설정을 위해서는 먼저 사용자 홈 디렉터리에 .usepodman 이라는 파일을 생성해야 합니다. 
+# 한 번만 생성하면 되고 로그아웃 후 다시 로그인 하면 바로 적용 됩니다.
+$ cd ~                # 사용자홈 디렉터리(/home01/[ID])로 이동             
+$ touch .usepodman    
+$ ls -la .usepodman
+-rw-r--r-- 1 test test 0  3월  3 11:19 .usepodman
+$ exit                # 로그아웃 후 다시 로그인
+```
+
+<pre class="language-bash"><code class="lang-bash">$ cat Dockerfile.pytorch   # 이미지 빌드를 위한 Dockerfile 생성
+ARG BASE_IMAGE=nvcr.io/nvidia/pytorch:25.03-py3
+FROM ${BASE_IMAGE}
+
+LABEL org.opencontainers.image.title="kisti-container tutorial image"
+WORKDIR /workspace
+
+RUN python3 -m pip install --no-cache-dir numpy
+
+CMD ["python3", "--version"]
+
+# 이미지 빌드 및 아키텍처 확인
+$ podman build -f Dockerfile.pytorch -t localhost/kisti-pytorch:tutorial .
+$ podman image inspect localhost/kisti-pytorch:tutorial --format 'image={{.RepoTags}} arch={{.Architecture}} os={{.Os}}'
+<strong>  image=[localhost/kisti-pytorch:tutorial] arch=arm64 os=linux
+</strong></code></pre>
 
 레지스트리에서 직접 가져오는 예시:
 
@@ -128,7 +147,7 @@ podman pull nvcr.io/nvidia/pytorch:25.03-py3
 podman images
 ```
 
-#### 6.2    Singularity/Enroot 이미지로 변환
+#### 6.2 Singularity/Enroot 이미지로 변환
 
 ```bash
 ## Enroot
@@ -177,14 +196,16 @@ srun kisti-container --runtime pyxis ...
 
 이 형식은 이미 생성된 Slurm step 안에서 Pyxis용 새 `srun`을 만들려고 하므로 Wrapper가 오류로 중단합니다.
 
-### 8. 워크로드 프로파일
+
+
+### 8. 작업 유형 별 예시
 
 #### 8.1 일반 CPU/GPU 작업
 
 `--workload generic`을 사용합니다. 단일 GPU에서는 `--nccl native` 또는 `--nccl none`을 선택할 수 있습니다.
 
 ```bash
-sbatch --export=ALL,IMAGE=/absolute/path/pytorch-arm64.sqsh \
+sbatch --export=ALL,IMAGE=/apps/common/kisti-container/images/pytorch:25.03-py3-aarch64.sqsh \
   /apps/common/kisti-container/examples/02-gpu-smoke/run-enroot.sbatch
 ```
 
