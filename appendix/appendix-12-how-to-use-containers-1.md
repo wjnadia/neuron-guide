@@ -6,27 +6,19 @@ hidden: true
 
 ### 1. 개요
 
-6호기 한강  시스템은 컨테이너 이미지 준비와 계산 작업 실행을 분리합니다. Podman은 OCI 이미지를 빌드하고 관리하는 도구입니다. 계산 작업은 `kisti-container`를 통해 Singularity, Apptainer, Enroot 또는 Pyxis로 실행합니다.
+6호기 한강  시스템에서 컨테이너 활용 환경은  [뉴론 시스템의 기존 컨테이너  활용 가이드](appendix-12-how-to-use-containers.md)와 마찬가지로이미지 준비와 계산 작업 실행으로 구분하고 있습니다. Podman은 OCI 이미지를 빌드하고 관리하는 도구이고, 계산 작업을 실행하기 위해서는 Singularity, Apptainer, Enroot 또는 Pyxis와 같은 컨테이너 런타임을 선택적으로 사용할 수 있습니다.
 
-`kisti-container`는 다음 항목을 작업 특성에 맞게 구성합니다.
+다양한 컨테이너 런타임과 시스템 아키텍처를 반영하여 다음 항목을 작업 특성에 맞게 구성하는 Wrapper 프로그램인 kisti-container를 제공하고 있습니다. &#x20;
 
 * 호스트 GPU와 컨테이너 연결
+* AWS OFI NCCL, Cray Libfabric 및 CXI 경로 연결
 * Slurm rank와 torchrun rank 구성
 * 단일 노드와 다중 노드의 NCCL 전송 방식 선택
-* AWS OFI NCCL, Cray Libfabric 및 CXI 경로 연결
 * 체크포인트 디렉터리의 쓰기 가능 마운트
-
-[뉴론 시스템의 기존 컨테이너  활용 가이드](appendix-12-how-to-use-containers.md)와 마찬가지로 Podman은 빌드·관리, Singularity/Apptainer/Enroot/Pyxis는 계산 작업 실행에 사용합니다. 한강 시스템에서는 `kisti-container`가 런타임 별 옵션을 통일한다는 점이 추가됩니다.
 
 ### 2. 도구 선택
 
-| 목적                    | 권장 도구       | 이미지 형식               | `kisti-container` 역할       |
-| --------------------- | ----------- | -------------------- | -------------------------- |
-| 이미지 빌드·수정·레지스트리 전송    | Podman      | OCI 이미지              | 실행 백엔드가 아님                 |
-| 기존 Singularity 이미지 실행 | Singularity | `.sif`               | GPU, MPI, NCCL 환경 구성       |
-| Singularity 호환 실행     | Apptainer   | `.sif`               | GPU, MPI, NCCL 환경 구성       |
-| GH200 작업의 직접 실행       | Enroot      | `.sqsh`              | enroot 명령과 마운트 생성          |
-| Slurm 통합 Enroot 실행    | Pyxis       | `.sqsh` 또는 Pyxis URI | `srun --container-*` 명령 생성 |
+<table data-header-hidden><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td>목적</td><td>권장 도구</td><td>이미지 형식</td><td><code>kisti-container</code> 역할</td></tr><tr><td>이미지 빌드·수정·레지스트리 전송</td><td>Podman</td><td>OCI 이미지</td><td>실행 백엔드가 아님</td></tr><tr><td>기존 Singularity 이미지 실행</td><td>Singularity</td><td rowspan="2"><code>.sif</code></td><td rowspan="4">GPU, MPI, NCCL 환경 구성</td></tr><tr><td>Singularity 호환 실행</td><td>Apptainer</td></tr><tr><td>GH200 작업의 직접 실행</td><td>Enroot</td><td rowspan="2"><code>.sqsh</code></td></tr><tr><td>Slurm 통합 Enroot 실행</td><td>Pyxis</td></tr></tbody></table>
 
 처음 사용하는 경우에는 기존 `.sif` 이미지가 있으면 Singularity/Apptainer를, GH200용 `.sqsh` 이미지가 있으면 Pyxis를 권장합니다. Enroot 자체 동작 확인에는 `--runtime enroot`가 유용합니다.
 
@@ -53,14 +45,14 @@ podman image inspect IMAGE:TAG --format '{{.Architecture}}'
 
 `exec format error`가 발생하면 이미지와 계산 노드의 아키텍처를 먼저 비교합니다. Enroot/Pyxis는 `.sqsh`를 실행하기 위해 컨테이너를 시작하지 않고 아키텍처를 완전히 판별하기 어렵기 때문에 파일명에 `aarch64` 또는 `x86_64`를 넣는 것을 권장합니다.
 
-### 4. 기본 확인
+### 4. kisti-container 실행 환경&#x20;
 
 ```bash
 KISTI_CONTAINER=/apps/common/kisti-container/bin/kisti-container
 
-$KISTI_CONTAINER --version
-$KISTI_CONTAINER --help
-srun --help | grep -- --container-image
+$ KISTI_CONTAINER --version
+$ KISTI_CONTAINER --help
+$ srun --help | grep -- --container-image
 ```
 
 마지막 명령에 `--container-image`가 표시되면 Pyxis가 Slurm에 등록된 상태입니다.
@@ -71,7 +63,7 @@ srun --help | grep -- --container-image
 /apps/common/kisti-container/conf/kisti-container.conf
 ```
 
-사용자  별 설정은 필요할 때만 다음 파일에 작성합니다.
+사용자 별 설정은 필요할 때만 다음 파일에 작성합니다.
 
 ```
 $HOME/.config/kisti-container.conf
@@ -83,7 +75,7 @@ $HOME/.config/kisti-container.conf
 export KISTI_CONTAINER_CONFIG=/absolute/path/kisti-container.conf
 ```
 
-### 5. 기본 명령 형식
+### 5. kisti-container 기본 명령 형식
 
 ```bash
 kisti-container [Wrapper 옵션] IMAGE COMMAND [ARG ...]
@@ -113,7 +105,7 @@ kisti-container [Wrapper 옵션] IMAGE COMMAND [ARG ...]
 
 [뉴론 컨테이너 활용 가이드](appendix-12-how-to-use-containers.md#id-2.-podman)와 동일하게 Podman을 이용해 Dockerfile 기반 이미지를 빌드할 수 있습니다.&#x20;
 
-```
+```bash
 # Podman 사용 환경 설정을 위해서는 먼저 사용자 홈 디렉터리에 .usepodman 이라는 파일을 생성해야 합니다. 
 # 한 번만 생성하면 되고 로그아웃 후 다시 로그인 하면 바로 적용 됩니다.
 $ cd ~                # 사용자홈 디렉터리(/home01/[ID])로 이동             
@@ -143,8 +135,8 @@ $ podman image inspect localhost/kisti-pytorch:tutorial --format 'image={{.RepoT
 레지스트리에서 직접 가져오는 예시:
 
 ```bash
-podman pull nvcr.io/nvidia/pytorch:25.03-py3
-podman images
+$ podman pull nvcr.io/nvidia/pytorch:25.03-py3
+$ podman images
 ```
 
 #### 6.2 Singularity/Enroot 이미지로 변환
@@ -167,7 +159,7 @@ singularity build --fakeroot pytorch-aarch64.sif \
 
 #### 7.1 Singularity, Apptainer, Enroot
 
-이 세 백엔드에서 `kisti-container`는 Slurm task 안에서 실행되는 Wrapper입니다. 따라서 배치 파일에 `srun`을 사용합니다.
+컨테이너 백엔드에서 `kisti-container`는 Slurm task 안에서 실행되는 Wrapper입니다. 따라서 배치 파일에 `srun`을 사용합니다.
 
 ```bash
 srun --mpi=none \
@@ -205,9 +197,34 @@ srun kisti-container --runtime pyxis ...
 `--workload generic`을 사용합니다. 단일 GPU에서는 `--nccl native` 또는 `--nccl none`을 선택할 수 있습니다.
 
 ```bash
-sbatch --export=ALL,IMAGE=/apps/common/kisti-container/images/pytorch:25.03-py3-aarch64.sqsh \
-  /apps/common/kisti-container/examples/02-gpu-smoke/run-enroot.sbatch
+## 배치 스크립트 파일 예제
+## /apps/common/kisti-container/examples/02-gpu-smoke/run-enroot.sbatch
+$ cat run-enroot.sbatch
+#!/usr/bin/env bash
+#SBATCH --job-name=kc-gpu-enroot
+#SBATCH --partition=gpu
+#SBATCH --comment=etc
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --gpus-per-node=1
+#SBATCH --cpus-per-task=4
+#SBATCH --time=00:05:00
+#SBATCH --output=%x-%j.out
+#SBATCH --error=%x-%j.err
+#SBATCH --export=ALL,TMPDIR=/tmp,TMP=/tmp,TEMP=/tmp
+
+set -Eeuo pipefail
+: "${IMAGE:?Set IMAGE to .sqsh image path}"
+ROOT=/apps/common/kisti-container
+srun --mpi=none "$ROOT/bin/kisti-container" \
+  --runtime enroot --platform gh200 --workload generic \
+  --mpi none --nccl native --gpu nvidia \
+  "$IMAGE" python3 "$ROOT/examples/02-gpu-smoke/gpu_smoke.py"
 ```
+
+<pre class="language-bash"><code class="lang-bash"><strong>sbatch --export=ALL,IMAGE=/apps/common/kisti-container/images/pytorch:25.03-py3-aarch64.sqsh \
+</strong>  /apps/common/kisti-container/examples/02-gpu-smoke/run-enroot.sbatch
+</code></pre>
 
 성공 로그:
 
@@ -322,7 +339,7 @@ DOCTOR_PASS
 | ----------------------------------------- | ------------------------------------------ | -------------------------------------------- |
 | `Command not found: nvidia-container-cli` | 계산 노드의 libnvidia-container 설치              | 관리자에게 노드 패키지/Enroot hook 확인 요청               |
 | `libfuse3.so.4` 없음                        | `ldd $(command -v squashfuse)`             | 사이트의 SquashFUSE/FUSE3 설치 확인                  |
-| Zstd `.sqsh` 마운트 실패                       | `ldd squashfuse`의 `libzstd.so.1`           | Zstd 지원 SquashFUSE 사용                        |
+| zstd `.sqsh` 마운트 실패                       | `ldd squashfuse`의 `libzstd.so.1`           | zstd 지원 SquashFUSE 사용                        |
 | `Pyxis is not registered`                 | `srun --help`의 `--container-image`         | Slurm SPANK 설정과 계산 노드 플러그인 확인                |
 | `invoke kisti-container directly`         | Pyxis 앞에 외부 `srun` 사용 여부                   | 외부 `srun` 제거                                 |
 | `network AWS Libfabric not found`         | OFI plugin과 libfabric 로딩                   | 두 모듈 로드, `--doctor` 실행                       |
@@ -346,7 +363,7 @@ grep -hE 'PASS|FAIL|NCCL|Libfabric|CXI|Traceback|BATCH_ERROR' \
 
 ### 12. 예제 파일 배포 및 사용
 
-관리자 배포 위치:
+예제  파일 배포 위치:
 
 ```
 /apps/common/kisti-container/examples
@@ -371,4 +388,66 @@ cd /scratch/$USER/kisti-container-tutorial
 * [NVIDIA Enroot](https://github.com/NVIDIA/enroot)
 * [NVIDIA Pyxis](https://github.com/NVIDIA/pyxis)
 * [Podman build 문서](https://docs.podman.io/en/latest/markdown/podman-build.1.html)
-* [Apptainer GPU 지원](https://apptainer.org/docs/user/main/gpu.html)
+* [Apptainer GPU 지원](https://apptainer.org/docs/user/main/gpu.html)<br>
+
+#### 13.1 kisti-container.conf 예시
+
+```
+# kisti-container site defaults for the KISTI 6th system GH200 profile.
+# Install as /apps/common/kisti-container/conf/kisti-container.conf (mode 0644).
+#
+# Enroot runtime/cache/data paths, system mounts and hooks remain configured in
+# /etc/enroot/enroot.conf, /etc/enroot/mounts.d and /etc/enroot/hooks.d.
+
+HPC_DEFAULT_RUNTIME=enroot
+HPC_DEFAULT_PLATFORM=gh200
+HPC_DEFAULT_WORKLOAD=generic
+HPC_DEFAULT_LAUNCHER=srun-native
+HPC_DEFAULT_MPI=auto
+HPC_DEFAULT_GPU=auto
+HPC_DEFAULT_NCCL=none
+
+# Distributed PyTorch/NeMo profiles select image-native NCCL on one node and
+# aws-ofi-nccl with the Cray CXI provider on two or more nodes.
+HPC_NCCL_AUTO_SINGLE_NODE=native
+HPC_NCCL_AUTO_MULTI_NODE=ofi
+
+HPC_GH200_GPUS_PER_NODE=4
+HPC_SHARED_FS_PREFIXES=/scratch:/appsdata:/home01
+HPC_REQUIRE_SHARED_CHECKPOINT=1
+
+# Validated NCCL-OFI and libfabric installation paths.
+HPC_GH200_NCCL_OFI_PREFIX=/apps/library/aws-ofi-nccl/1.20.0/aarch64
+HPC_NCCL_OFI_PLUGIN=libnccl-net-ofi.so
+HPC_NCCL_OFI_NETWORK='AWS Libfabric'
+HPC_NCCL_OFI_PROVIDER=cxi
+HPC_NCCL_OFI_LIBFABRIC_PREFIX=/opt/cray/libfabric/2.3.1
+HPC_NCCL_OFI_BIND_PREFIX=1
+HPC_NCCL_OFI_BIND_LIBFABRIC=1
+
+# Required for host libcxi and the validated system dependencies exposed by
+# kisti-container's /host/usr/lib64 mapping.
+HPC_BIND_HOST_USR_LIB64=1
+
+# Validate that all GPUs allocated to each node remain visible to the local
+# ranks. Each rank selects cuda:SLURM_LOCALID.
+HPC_NCCL_REQUIRE_NODE_GPUS_VISIBLE=1
+
+# Module-derived MPI/runtime paths remain enabled. The Enroot DDP test uses
+# --mpi none explicitly; aws-ofi-nccl and libfabric modules provide NCCL/CXI.
+HPC_AUTO_MPI_FROM_MODULES=1
+
+HPC_APPTAINER_BIN_DIR=""
+HPC_APPTAINER_BIN_DIR_AARCH64=/apps/common/apptainer/1.4.5/aarch64/bin
+HPC_APPTAINER_BIN_DIR_X86_64=/apps/common/apptainer/1.4.5/x86_64/bin
+```
+
+#### &#x20;13.2 한강 시스템 컨테이너 OMB 통신 성능 비교<br>
+
+* OMB 7.5.2
+* Native / Singularity
+* GH200 노드 : Slingshot NIC 4ea
+* AMD CPU 노드 : Slingshot NIC 1ea
+* GH200 노드 대역폭(2노드 · 4 Pair · 4 MiB)<br>
+
+<div align="center"><figure><img src="../.gitbook/assets/image (16).png" alt=""><figcaption></figcaption></figure></div>
