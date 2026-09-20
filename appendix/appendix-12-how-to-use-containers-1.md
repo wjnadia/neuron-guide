@@ -192,59 +192,299 @@ srun kisti-container --runtime pyxis ...
 
 ### 8. 작업 유형 별 예시
 
-#### 8.1 일반 CPU/GPU 작업
+#### 8.1 일반  CPU/GPU 작업
 
-`--workload generic`을 사용합니다. 단일 GPU에서는 `--nccl native` 또는 `--nccl none`을 선택할 수 있습니다.
+&#x20;일반 CPU/GPU 작업에서 kisti-container의 옵션은 `--workload generic` 을 사용합니다. 단일 GPU에서는 `--nccl native` 또는 `--nccl none`을 선택할 수 있습니다.
 
 ```bash
-## 배치 스크립트 파일 예제
-## /apps/common/kisti-container/examples/02-gpu-smoke/run-enroot.sbatch
-$ cat run-enroot.sbatch
-#!/usr/bin/env bash
-#SBATCH --job-name=kc-gpu-enroot
+## (pyxis) 일반 GPU 작업 스크립트 예제
+## /apps/common/kisti-container/examples/02-gpu-smoke/run-pyxis.sbatch
+$ cat run-pyxis.sbatch
+#!/bin/bash
+#SBATCH --job-name=gpu-pyxis
 #SBATCH --partition=gpu
 #SBATCH --comment=etc
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --gpus-per-node=1
-#SBATCH --cpus-per-task=4
+#SBATCH --cpus-per-task=8
 #SBATCH --time=00:05:00
 #SBATCH --output=%x-%j.out
 #SBATCH --error=%x-%j.err
-#SBATCH --export=ALL,TMPDIR=/tmp,TMP=/tmp,TEMP=/tmp
 
-set -Eeuo pipefail
-: "${IMAGE:?Set IMAGE to .sqsh image path}"
 ROOT=/apps/common/kisti-container
-srun --mpi=none "$ROOT/bin/kisti-container" \
-  --runtime enroot --platform gh200 --workload generic \
+IMAGE=$ROOT/images/pytorch:25.03-py3-aarch64.sqsh
+PROGRAM=$ROOT/examples/02-gpu-smoke/gpu_smoke.py
+
+module load enroot/4.2.0
+
+"$ROOT/bin/kisti-container" \
+  --runtime pyxis --platform gh200 --workload generic \
   --mpi none --nccl native --gpu nvidia \
-  "$IMAGE" python3 "$ROOT/examples/02-gpu-smoke/gpu_smoke.py"
+  "$IMAGE" python3 "$PROGRAM"
 ```
 
-<pre class="language-bash"><code class="lang-bash"><strong>sbatch --export=ALL,IMAGE=/apps/common/kisti-container/images/pytorch:25.03-py3-aarch64.sqsh \
-</strong>  /apps/common/kisti-container/examples/02-gpu-smoke/run-enroot.sbatch
+작업제출:
+
+<pre class="language-bash"><code class="lang-bash"><strong>$ sbatch /apps/common/kisti-container/examples/02-gpu-smoke/run-pyxis.sbatch
+</strong></code></pre>
+
+결과파일:
+
+```bash
+$ cat gpu-pyxis-20590.out
+GPU_SMOKE_PASS host=gpu0014 gpu=NVIDIA GH200 120GB shape=(2048, 2048) mean=0.011777
+```
+
+#### 8.2  MPI 작업
+
+&#x20;MPI 작업은 `--workload generic` 을 사용합니다.  MPI 유형에 따라 slingshot 네트워크를 사용하기 위한 관련옵션은 아래와 같습니다.&#x20;
+
+|    구분   |  srun --mpi= | kisti-container --mpi |
+| :-----: | :----------: | :-------------------: |
+| CrayMPI | cray\_shasta |          cray         |
+| OpenMPI |     pmix     |        openmpi        |
+
+```bash
+## (Singularity) MPI 작업 스크립트 예제
+## /apps/common/kisti-container/examples/03-mpi-omb/run-gh200-singularity.sbatch
+$ cat run-gh200-singularity.sbatch
+#!/bin/bash
+#SBATCH --job-name=gh200-omb-sing
+#SBATCH --comment=etc
+#SBATCH --partition=gpu
+#SBATCH --nodes=2
+#SBATCH --ntasks-per-node=4
+#SBATCH --gpus-per-node=4
+#SBATCH --cpus-per-task=1
+#SBATCH --time=00:10:00
+#SBATCH --output=%x-%j.out
+#SBATCH --error=%x-%j.err
+
+ROOT=/apps/common/kisti-container
+IMAGE=$ROOT/images/pytorch:25.03-py3-aarch64.sif
+
+OMB="$ROOT/OMB/omb-7.5.2-gh200/cray/libexec/osu-micro-benchmarks/mpi/pt2pt"
+module purge
+module load cray-mpich/9.0.1
+module load libfabric/2.3.1
+module load singularity/4.5.0
+
+echo "===== [CrayMPI] GH200 OMB SINGULARITY BANDWIDTH ====="
+srun \
+  --mpi=cray_shasta --nodes=2 --ntasks=8 --ntasks-per-node=4 --cpus-per-task=1 \
+  --distribution=block:block --cpu-bind=cores \
+  "$ROOT/bin/kisti-container" \
+    --runtime singularity --platform gh200 --workload generic --mpi cray \
+    --provider cxi --diagnose \
+    "$IMAGE" "$OMB/osu_mbw_mr"
+
+OMB="$ROOT/OMB/omb-7.5.2-gh200/openmpi/libexec/osu-micro-benchmarks/mpi/pt2pt"
+module purge
+module load openmpi/5.0.10
+module load libfabric/2.3.1
+module load singularity/4.5.0
+
+echo "===== [OpenMPI] AMD OMB SINGULARITY BANDWIDTH ====="
+srun \
+  --mpi=pmix --nodes=2 --ntasks=8 --ntasks-per-node=4 --cpus-per-task=1 \
+  --distribution=block:block --cpu-bind=cores \
+  "$ROOT/bin/kisti-container" \
+    --runtime singularity --platform gh200 --workload generic --mpi openmpi \
+    --provider cxi --diagnose \
+    "$IMAGE" "$OMB/osu_mbw_mr"
+```
+
+작업제출:
+
+<pre class="language-bash"><code class="lang-bash"><strong>$ sbatch /apps/common/kisti-container/examples/03-mpi-omb/run-gh200-singularity.sbatch
+</strong></code></pre>
+
+결과파일:
+
+<pre class="language-bash"><code class="lang-bash"><strong>$ cat gh200-omb-sing-20548.out
+</strong>===== [CrayMPI] GH200 OMB SINGULARITY BANDWIDTH =====
+# OSU MPI Multiple Bandwidth / Message Rate Test v7.5.2
+# [ pairs: 4 ] [ window size: 64 ]
+# Datatype: MPI_CHAR.
+# Size                  MB/s        Messages/s
+1                       8.36        8361985.11
+2                      16.57        8284756.13
+4                      33.39        8348405.71
+8                      66.63        8328298.94
+16                    132.68        8292748.94
+32                    264.68        8271214.41
+64                    539.18        8424707.26
+128                  1093.55        8543336.87
+256                  2361.93        9226298.30
+512                  4762.16        9301087.75
+1024                 9532.32        9308903.88
+2048                19069.25        9311156.29
+4096                38041.09        9287376.18
+8192                75100.02        9167483.30
+16384              138962.42        8481592.79
+32768              151199.58        4614244.85
+65536              169302.95        2583358.08
+131072             180156.90        1374488.08
+262144             185277.89         706779.06
+524288             190569.95         363483.34
+1048576            192158.82         183256.93
+2097152            193140.30          92096.47
+4194304            193711.29          46184.37
+===== [OpenMPI] GH200 OMB SINGULARITY BANDWIDTH =====
+# OSU MPI Multiple Bandwidth / Message Rate Test v7.5.2
+# [ pairs: 4 ] [ window size: 64 ]
+# Datatype: MPI_CHAR.
+# Size                  MB/s        Messages/s
+1                       5.71        5711864.23
+2                      11.63        5816973.47
+4                      23.18        5793892.90
+8                      46.28        5785194.05
+16                     93.43        5839613.20
+32                    185.89        5809137.39
+64                    376.66        5885318.59
+128                   746.86        5834845.61
+256                  1505.84        5882194.13
+512                  3043.19        5943724.08
+1024                 6050.44        5908636.67
+2048                12102.72        5909531.76
+4096                23954.69        5848312.59
+8192                48628.59        5936107.31
+16384               95052.14        5801522.22
+32768              148685.54        4537522.54
+65536              168811.67        2575861.71
+131072             179137.31        1366709.25
+262144             184658.59         704416.62
+524288             190285.40         362940.59
+1048576            191985.38         183091.53
+2097152            193126.48          92089.88
+4194304            193713.41          46184.88
 </code></pre>
 
-성공 로그:
-
-```
-GPU_SMOKE_PASS host=... gpu=NVIDIA GH200 120GB ...
-```
-
-#### 8.2 PyTorch DDP
+#### 8.3 PyTorch DDP
 
 2노드 8GPU 예제는 노드당 4개의 Slurm rank를 생성합니다. `--nccl auto`는 2노드에서 사이트의 AWS OFI NCCL, Cray Libfabric, CXI 프로파일을 선택합니다.
 
 ```bash
-sbatch --export=ALL,IMAGE=/absolute/path/pytorch-arm64.sqsh \
-  /apps/common/kisti-container/examples/03-pytorch-ddp/run-pyxis.sbatch
+## (Pyxis) Pytorch DDP 작업 스크립트 예제
+## /apps/common/kisti-container/examples/04-pytorch-ddp/run-pyxis.sbatch
+$ cat run-pyxis.sbatch
+#!/bin/bash
+#SBATCH --job-name=ddp-pyxis
+#SBATCH --partition=gpu
+#SBATCH --comment=etc
+#SBATCH --nodes=2
+#SBATCH --ntasks-per-node=4
+#SBATCH --gpus-per-node=4
+#SBATCH --cpus-per-task=4
+#SBATCH --time=00:15:00
+#SBATCH --output=%x-%j.out
+#SBATCH --error=%x-%j.err
+
+ROOT=/apps/common/kisti-container
+IMAGE=$ROOT/images/pytorch:25.03-py3-aarch64.sqsh
+PROGRAM=$ROOT/examples/03-pytorch-ddp/ddp_smoke.py
+
+CHECKPOINT_DIR=$SLURM_SUBMIT_DIR/checkpoints/ddp-pyxis-$SLURM_JOB_ID
+mkdir -p "$CHECKPOINT_DIR"
+
+module load aws-ofi-nccl/1.20.0
+module load libfabric/2.3.1
+module load enroot/4.2.0
+
+"$ROOT/bin/kisti-container" \
+  --runtime pyxis --platform gh200 --workload pytorch-ddp \
+  --launcher srun-native --mpi none --nccl auto \
+  --provider cxi --gpu nvidia \
+  --checkpoint-dir "$CHECKPOINT_DIR" --diagnose \
+  "$IMAGE" python3 "$PROGRAM"
 ```
+
+
+
+작업제출:
+
+<pre class="language-bash"><code class="lang-bash"><strong>$ sbatch /apps/common/kisti-container/examples/04-pytorch-ddp/run-pyxis.sbatch
+</strong></code></pre>
+
+
 
 결과 파일:
 
-```
-$SLURM_SUBMIT_DIR/checkpoints/ddp-pyxis-JOBID/ddp-smoke-result.json
+```bash
+$ cat ddp-pyxis-20445.out
+--[중략]--
+DDP_RANK_PASS rank=7 host=gpu0015 gpu=3
+DDP_RANK_PASS rank=0 host=gpu0014 gpu=0
+DDP_RANK_PASS rank=3 host=gpu0014 gpu=3
+DDP_RANK_PASS rank=4 host=gpu0015 gpu=0
+DDP_RANK_PASS rank=2 host=gpu0014 gpu=2
+DDP_RANK_PASS rank=1 host=gpu0014 gpu=1
+DDP_RANK_PASS rank=6 host=gpu0015 gpu=2
+DDP_RANK_PASS rank=5 host=gpu0015 gpu=1
+
+$ cat checkpoints/ddp-pyxis-20445/ddp-smoke-result.json
+{
+  "status": "PASS",
+  "world_size": 8,
+  "collective_sum": 36.0,
+  "nodes": [
+    "gpu0014",
+    "gpu0015"
+  ],
+  "ranks": [
+    {
+      "rank": 0,
+      "local_rank": 0,
+      "host": "gpu0014",
+      "gpu": "NVIDIA GH200 120GB"
+    },
+    {
+      "rank": 1,
+      "local_rank": 1,
+      "host": "gpu0014",
+      "gpu": "NVIDIA GH200 120GB"
+    },
+    {
+      "rank": 2,
+      "local_rank": 2,
+      "host": "gpu0014",
+      "gpu": "NVIDIA GH200 120GB"
+    },
+    {
+      "rank": 3,
+      "local_rank": 3,
+      "host": "gpu0014",
+      "gpu": "NVIDIA GH200 120GB"
+    },
+    {
+      "rank": 4,
+      "local_rank": 0,
+      "host": "gpu0015",
+      "gpu": "NVIDIA GH200 120GB"
+    },
+    {
+      "rank": 5,
+      "local_rank": 1,
+      "host": "gpu0015",
+      "gpu": "NVIDIA GH200 120GB"
+    },
+    {
+      "rank": 6,
+      "local_rank": 2,
+      "host": "gpu0015",
+      "gpu": "NVIDIA GH200 120GB"
+    },
+    {
+      "rank": 7,
+      "local_rank": 3,
+      "host": "gpu0015",
+      "gpu": "NVIDIA GH200 120GB"
+    }
+  ],
+  "nccl_net": "Libfabric",
+  "fi_provider": "cxi"
+}
 ```
 
 #### 8.3 PyTorch FSDP2
@@ -252,22 +492,123 @@ $SLURM_SUBMIT_DIR/checkpoints/ddp-pyxis-JOBID/ddp-smoke-result.json
 FSDP2 예제는 노드당 Slurm task 1개를 만들고, 각 task 안에서 torchrun worker 4개를 실행합니다. 전체 `WORLD_SIZE`는 8입니다.
 
 ```bash
-sbatch --export=ALL,IMAGE=/absolute/path/pytorch-arm64.sqsh \
-  /apps/common/kisti-container/examples/04-pytorch-fsdp2/run-enroot.sbatch
+## (Pyxis) Pytorch FSDP2 작업 스크립트 예제
+## /apps/common/kisti-container/examples/04-pytorch-ddp/run-pyxis.sbatch
+$ cat run-pyxis.sbatch
+#!/bin/bash
+#SBATCH --job-name=fsdp-pyxis
+#SBATCH --partition=gpu
+#SBATCH --comment=etc
+#SBATCH --nodes=2
+#SBATCH --ntasks-per-node=1
+#SBATCH --gpus-per-node=4
+#SBATCH --cpus-per-task=32
+#SBATCH --time=00:30:00
+#SBATCH --output=%x-%j.out
+#SBATCH --error=%x-%j.err
+
+ROOT=/apps/common/kisti-container
+IMAGE=$ROOT/images/pytorch:25.03-py3-aarch64.sqsh
+TRAIN_SCRIPT=$ROOT/examples/04-pytorch-fsdp2/fsdp2_train_smoke.py
+
+CHECKPOINT_DIR=${SLURM_SUBMIT_DIR}/checkpoints/fsdp-pyxis-${SLURM_JOB_ID}
+mkdir -p "$CHECKPOINT_DIR"
+
+module load aws-ofi-nccl/1.20.0
+module load libfabric/2.3.1
+module load enroot/4.2.0
+
+"$ROOT/bin/kisti-container" \
+  --runtime pyxis --platform gh200 --workload pytorch-fsdp2 \
+  --launcher torchrun --local-processes 4 --mpi none --nccl auto --provider cxi --gpu nvidia \
+  --checkpoint-dir "$CHECKPOINT_DIR" --diagnose \
+  "$IMAGE" "$TRAIN_SCRIPT"
+
 ```
 
+
+
+작업제출:
+
+```bash
+$ sbatch /apps/common/kisti-container/examples/05-pytorch-fsdp2/run-pyxis.sbatch
+```
+
+결과 파일:\
 성공 여부는 종료 코드와 `RESULT ... correctness=True` 로그로 확인합니다. 이 프로그램은 합성 데이터 기반 통신·학습 smoke test이며 실제 모델 성능 기준은 아닙니다.
 
-#### 8.4 NeMo/Megatron TP=4, DP=2
+```bash
+$ cat fsdp-pyxis-20459.out
+--[중략]--
+step=1/25 loss=1.136039 ms=401.150
+step=2/25 loss=0.601430 ms=28.652
+step=3/25 loss=0.480413 ms=24.631
+step=4/25 loss=0.272872 ms=22.903
+--[중략]--
+step=22/25 loss=54.140591 ms=22.411
+step=23/25 loss=35.631592 ms=22.266
+step=24/25 loss=24.416914 ms=22.344
+step=25/25 loss=54.308086 ms=22.022
+RESULT backend=nccl workload=fsdp2 world_size=8 precision=bf16 mean_step_ms=22.373 median_step_ms=22.333 final_check=36.0 expected=36.0 correctness=True
+```
+
+#### 8.4 NeMo/Megatron&#x20;
 
 NeMo 예제는 GH200 2노드에서 노드 내부 TP=4, 노드 간 DP=2를 확인합니다.
 
+컨테이너에는 NeMo, Megatron Core, Transformer Engine 및 호환 PyTorch/CUDA가 설치되어 있어야 합니다. 제공 smoke test의 검증 환경은 NeMo 2.3.0rc5, Megatron Core 0.12.0rc4, Transformer Engine 2.2.0 개발 버전 계열입니다.
+
 ```bash
-sbatch --export=ALL,IMAGE=/absolute/path/nemo-aarch64.sqsh \
-  /apps/common/kisti-container/examples/05-nemo-megatron/run-pyxis.sbatch
+## (Pyxis) NeMO Megatron 작업 스크립트 예제
+## /apps/common/kisti-container/examples/06-nemo-megatron/run-pyxis.sbatch
+$ cat 06-nemo-megatron/run-pyxis.sbatch
+#!/bin/bash
+#SBATCH --job-name=nemo-pyxis
+#SBATCH --partition=gpu
+#SBATCH --comment=etc
+#SBATCH --nodes=2
+#SBATCH --ntasks-per-node=1
+#SBATCH --gpus-per-node=4
+#SBATCH --cpus-per-task=32
+#SBATCH --time=00:30:00
+#SBATCH --output=%x-%j.out
+#SBATCH --error=%x-%j.err
+
+ROOT=/apps/common/kisti-container
+IMAGE=$ROOT/images/nemo:25.04.00-aarch64.sqsh
+TRAIN_SCRIPT=$ROOT/examples/05-nemo-megatron/nemo_megatron_tp4_dp2_smoke_v2.py
+
+CHECKPOINT_DIR=${SLURM_SUBMIT_DIR}/checkpoints/nemo-pyxis-${SLURM_JOB_ID}
+mkdir -p "$CHECKPOINT_DIR"
+export CUDA_DEVICE_MAX_CONNECTIONS=${CUDA_DEVICE_MAX_CONNECTIONS:-1}
+
+module load aws-ofi-nccl/1.20.0
+module load libfabric/2.3.1
+module load enroot/4.2.0
+
+"$ROOT/bin/kisti-container" \
+  --runtime pyxis --platform gh200 --workload nemo \
+  --launcher torchrun --local-processes 4 --mpi none --nccl ofi \
+  --provider cxi --gpu nvidia --checkpoint-dir "$CHECKPOINT_DIR" \
+  --env "CUDA_DEVICE_MAX_CONNECTIONS=$CUDA_DEVICE_MAX_CONNECTIONS" \
+  --debug-nccl --diagnose \
+  "$IMAGE" "$TRAIN_SCRIPT" --steps 5 --tp-size 4 --expected-dp-size 2
+
 ```
 
-컨테이너에는 NeMo, Megatron Core, Transformer Engine 및 호환 PyTorch/CUDA가 설치되어 있어야 합니다. 제공 smoke test의 검증 환경은 NeMo 2.3.0rc5, Megatron Core 0.12.0rc4, Transformer Engine 2.2.0 개발 버전 계열이었습니다.
+작업제출:
+
+```bash
+sbatch /apps/common/kisti-container/examples/06-nemo-megatron/run-pyxis.sbatch
+```
+
+결과 파일:
+
+```bash
+$ cat nemo-pyxis-20467.out
+--[중략]--
+NEMO_MCORE_TPDP_RESULT status=PASS world_size=8 tp_size=4 dp_size=2 steps=5 last_dp_loss_avg=8.43100882 mean_step_ms=395.784 steady_mean_step_ms=49.037 collective=28.0 expected=28.0
+```
 
 ### 9. 체크포인트와 데이터 마운트
 
