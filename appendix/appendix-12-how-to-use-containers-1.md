@@ -246,7 +246,7 @@ GPU_SMOKE_PASS host=gpu0014 gpu=NVIDIA GH200 120GB shape=(2048, 2048) mean=0.011
 | OpenMPI |     pmix     |        openmpi        |
 
 ```bash
-## (Singularity) MPI 작업 스크립트 예제
+## (Singularity) MPI OMB 작업 스크립트 예제
 ## /apps/common/kisti-container/examples/03-mpi-omb/run-gh200-singularity.sbatch
 $ cat run-gh200-singularity.sbatch
 #!/bin/bash
@@ -679,7 +679,7 @@ DOCTOR_PASS
 | 오류 또는 현상                                  | 확인 항목                                      | 조치                                           |
 | ----------------------------------------- | ------------------------------------------ | -------------------------------------------- |
 | `Command not found: nvidia-container-cli` | 계산 노드의 libnvidia-container 설치              | 관리자에게 노드 패키지/Enroot hook 확인 요청               |
-| `libfuse3.so.4` 없음                        | `ldd $(command -v squashfuse)`             | 사이트의 SquashFUSE/FUSE3 설치 확인                  |
+| `libfuse3.so.4` 없음                        | `ldd $(command -v squashfuse)`             | 관리자에게 SquashFUSE/FUSE3 설치 확인 요청              |
 | zstd `.sqsh` 마운트 실패                       | `ldd squashfuse`의 `libzstd.so.1`           | zstd 지원 SquashFUSE 사용                        |
 | `Pyxis is not registered`                 | `srun --help`의 `--container-image`         | Slurm SPANK 설정과 계산 노드 플러그인 확인                |
 | `invoke kisti-container directly`         | Pyxis 앞에 외부 `srun` 사용 여부                   | 외부 `srun` 제거                                 |
@@ -791,4 +791,4 @@ HPC_APPTAINER_BIN_DIR_X86_64=/apps/common/apptainer/1.4.5/x86_64/bin
 * AMD CPU 노드 : Slingshot NIC 1ea
 * GH200 노드 대역폭(2노드 · 4 Pair · 4 MiB)<br>
 
-<div align="center"><figure><img src="../.gitbook/assets/image (16).png" alt=""><figcaption></figcaption></figure></div>
+<figure><img src="../.gitbook/assets/image (18).png" alt=""><figcaption></figcaption></figure>
