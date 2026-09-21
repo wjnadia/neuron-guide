@@ -365,6 +365,12 @@ srun \
 
 DDP 2노드 8GPU 예제는 노드당 4개의 Slurm rank를 생성합니다. `--nccl auto`는 2노드에서 사이트의 AWS OFI NCCL, Cray Libfabric, CXI 프로파일을 선택합니다.<br>
 
+{% hint style="info" %}
+**DDP :  Distributed Data Parallel**
+
+&#x20;**Pytorch**의 **기본 분산 학습 방식**으로 각 GPU에 모델 전체를 복제하고, 서로 다른 데이터로 계산한 그래디언트를 동기화해 동일한 모델 상태를 유지합니다.
+{% endhint %}
+
 ```bash
 ## (Pyxis) Pytorch DDP 작업 스크립트 예제
 ## /apps/common/kisti-container/examples/04-pytorch-ddp/run-pyxis.sbatch
@@ -565,7 +571,7 @@ TP·DP 등 모델 병렬과 데이터 병렬을 조합하는 대규모 모델 �
 
 {% hint style="info" %}
 **NeMo**: **Neural Modules**에서 유래한 이름\
-NVIDIA의 AI 모델 개발·학습 프레임워크입니다. 현재 예제의 **NeMo/Megatron**은 NeMo와 Megatron의 분산 학습 기능을 활용하는 구성을 뜻합니다.
+NVIDIA의 AI 모델 개발·학습 프레임워크입니다. 현재 예제의 **NeMo/Megatron**은 NeMo와 Megatron의 Tensor Parallel 등 모델 병렬과 데이터 병렬을 조합한 분산 학습 기능을 활용하는 구성을 뜻합니다.
 {% endhint %}
 
 ```bash
@@ -620,7 +626,9 @@ $ cat nemo-pyxis-20467.out
 NEMO_MCORE_TPDP_RESULT status=PASS world_size=8 tp_size=4 dp_size=2 steps=5 last_dp_loss_avg=8.43100882 mean_step_ms=395.784 steady_mean_step_ms=49.037 collective=28.0 expected=28.0
 ```
 
-### 9. 체크포인트와 데이터 마운트
+
+
+### 9. 체크포인트  및 마운트
 
 체크포인트에는 계산 노드 모두에서 접근 가능한 절대 경로를 사용합니다.
 
@@ -629,20 +637,13 @@ CHECKPOINT_DIR=/scratch/$USER/checkpoints/run01
 mkdir -p "$CHECKPOINT_DIR"
 ```
 
-배치 제출 시 지정:
-
-```bash
-sbatch --export=ALL,IMAGE=/path/image.sqsh,CHECKPOINT_DIR=$CHECKPOINT_DIR \
-  run-pyxis.sbatch
-```
-
-`CHECKPOINT_DIR`를 생략한 예제는 다음 형식으로 작업별 경로를 만듭니다.
+`CHECKPOINT_DIR`를 생략한 예제는 다음 형식으로 작업 별 경로를 만듭니다.
 
 ```
-${SLURM_SUBMIT_DIR}/checkpoints/WORKLOAD-RUNTIME-${SLURM_JOB_ID}
+CHECKPOINT_DIR=${SLURM_SUBMIT_DIR}/checkpoints/WORKLOAD-RUNTIME-${SLURM_JOB_ID}
 ```
 
-기존 체크포인트에서 재시작할 때는 동일한 `CHECKPOINT_DIR`를 명시합니다.
+기존 체크포인트에서 재시작 할 때는 동일한 `CHECKPOINT_DIR`를 명시합니다.
 
 추가 데이터 마운트:
 
@@ -652,6 +653,8 @@ kisti-container ... \
   -B /scratch/$USER/output:/workspace/output:rw \
   IMAGE COMMAND
 ```
+
+
 
 ### 10. 다중 노드 NCCL-OFI/CXI
 
@@ -684,6 +687,8 @@ LIBCXI=PASS
 DOCTOR_PASS
 ```
 
+
+
 ### 11. 문제 해결
 
 | 오류 또는 현상                                  | 확인 항목                                      | 조치                                           |
@@ -712,6 +717,8 @@ grep -hE 'PASS|FAIL|NCCL|Libfabric|CXI|Traceback|BATCH_ERROR' \
   JOBNAME-JOBID.out JOBNAME-JOBID.err
 ```
 
+
+
 ### 12. 예제 파일 배포 및 사용
 
 예제  파일 배포 위치:
@@ -731,7 +738,7 @@ cd /scratch/$USER/kisti-container-tutorial
 
 배치 파일의 `IMAGE`, 파티션, 시간, CPU/GPU 수 등을 확인한 뒤 제출합니다.&#x20;
 
-###
+
 
 ### 13. 참고 자료
 
