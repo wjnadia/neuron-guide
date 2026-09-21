@@ -238,12 +238,12 @@ GPU_SMOKE_PASS host=gpu0014 gpu=NVIDIA GH200 120GB shape=(2048, 2048) mean=0.011
 
 #### 8.2  MPI 작업
 
-&#x20;MPI 작업은 `--workload generic` 을 사용합니다.  MPI 유형에 따라 slingshot 네트워크를 사용하기 위한 관련옵션은 아래와 같습니다.&#x20;
+&#x20;MPI 작업은 `--workload generic`을 사용하며, MPI 유형에 따른 관련 옵션은 아래와 같습니다.&#x20;
 
-|    구분   |  srun --mpi= | kisti-container --mpi |
-| :-----: | :----------: | :-------------------: |
-| CrayMPI | cray\_shasta |          cray         |
-| OpenMPI |     pmix     |        openmpi        |
+|    구분   |       srun 옵션      | kisti-container 옵션 |
+| :-----: | :----------------: | :----------------: |
+| CrayMPI | --mpi=cray\_shasta |     --mpi cray     |
+| OpenMPI |     --mpi=pmix     |    --mpi openmpi   |
 
 ```bash
 ## (Singularity) MPI OMB 작업 스크립트 예제
@@ -363,7 +363,7 @@ srun \
 
 #### 8.3 PyTorch DDP
 
-2노드 8GPU 예제는 노드당 4개의 Slurm rank를 생성합니다. `--nccl auto`는 2노드에서 사이트의 AWS OFI NCCL, Cray Libfabric, CXI 프로파일을 선택합니다.
+DDP 2노드 8GPU 예제는 노드당 4개의 Slurm rank를 생성합니다. `--nccl auto`는 2노드에서 사이트의 AWS OFI NCCL, Cray Libfabric, CXI 프로파일을 선택합니다.<br>
 
 ```bash
 ## (Pyxis) Pytorch DDP 작업 스크립트 예제
@@ -491,6 +491,11 @@ $ cat checkpoints/ddp-pyxis-20445/ddp-smoke-result.json
 
 FSDP2 예제는 노드당 Slurm task 1개를 만들고, 각 task 안에서 torchrun worker 4개를 실행합니다. 전체 `WORLD_SIZE`는 8입니다.
 
+{% hint style="info" %}
+**FSDP2**: **Fully Sharded Data Parallel, version 2**\
+PyTorch의 **완전 분할 데이터 병렬 학습 방식 2세대**입니다. 모델 파라미터, 그래디언트, 옵티마이저 상태를 GPU 간에 분산해 GPU당 메모리 부담을 줄입니다.
+{% endhint %}
+
 ```bash
 ## (Pyxis) Pytorch FSDP2 작업 스크립트 예제
 ## /apps/common/kisti-container/examples/04-pytorch-ddp/run-pyxis.sbatch
@@ -535,7 +540,7 @@ $ sbatch /apps/common/kisti-container/examples/05-pytorch-fsdp2/run-pyxis.sbatch
 ```
 
 결과 파일:\
-성공 여부는 종료 코드와 `RESULT ... correctness=True` 로그로 확인합니다. 이 프로그램은 합성 데이터 기반 통신·학습 smoke test이며 실제 모델 성능 기준은 아닙니다.
+성공 여부는 종료 코드와 `RESULT ... correctness=True` 로그로 확인합니다. 이 프로그램은 합성 데이터 기반 통신·학습 smoke test 용도이며 실제 모델 훈련의 실행을 목적으로 하지 않습니다.
 
 ```bash
 $ cat fsdp-pyxis-20459.out
@@ -554,9 +559,14 @@ RESULT backend=nccl workload=fsdp2 world_size=8 precision=bf16 mean_step_ms=22.3
 
 #### 8.4 NeMo/Megatron&#x20;
 
-NeMo 예제는 GH200 2노드에서 노드 내부 TP=4, 노드 간 DP=2를 확인합니다.
+TP·DP 등 모델 병렬과 데이터 병렬을 조합하는 대규모 모델 학습을 위한 NeMo 예제는 GH200 2노드에서 노드 내부 TP=4, 노드 간 DP=2를 확인합니다.
 
 컨테이너에는 NeMo, Megatron Core, Transformer Engine 및 호환 PyTorch/CUDA가 설치되어 있어야 합니다. 제공 smoke test의 검증 환경은 NeMo 2.3.0rc5, Megatron Core 0.12.0rc4, Transformer Engine 2.2.0 개발 버전 계열입니다.
+
+{% hint style="info" %}
+**NeMo**: **Neural Modules**에서 유래한 이름\
+NVIDIA의 AI 모델 개발·학습 프레임워크입니다. 현재 예제의 **NeMo/Megatron**은 NeMo와 Megatron의 분산 학습 기능을 활용하는 구성을 뜻합니다.
+{% endhint %}
 
 ```bash
 ## (Pyxis) NeMO Megatron 작업 스크립트 예제
