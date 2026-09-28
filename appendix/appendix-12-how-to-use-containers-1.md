@@ -742,14 +742,6 @@ cd /scratch/$USER/kisti-container-tutorial
 
 ### 13. 참고 자료
 
-#### 13.1  관련 자료&#x20;
-
-* [뉴론 컨테이너 활용 가이드](https://docs-ksc.gitbook.io/neuron-user-guide/appendix/appendix-12-how-to-use-containers)
-* [NVIDIA Enroot](https://github.com/NVIDIA/enroot)
-* [NVIDIA Pyxis](https://github.com/NVIDIA/pyxis)
-* [Podman build 문서](https://docs.podman.io/en/latest/markdown/podman-build.1.html)
-* [Apptainer GPU 지원](https://apptainer.org/docs/user/main/gpu.html)
-
 #### 13.1 kisti-container 실행 워크플로우
 
 사용자 옵션과 Slurm 환경을 해석하여 컨테이너 실행 명령을 구성하는 Bash Wrapper
@@ -829,3 +821,11 @@ HPC_APPTAINER_BIN_DIR_X86_64=/apps/common/apptainer/1.4.5/x86_64/bin
 * GH200 노드 대역폭(2노드 · 4 Pair · 4 MiB)<br>
 
 <figure><img src="../.gitbook/assets/image (18).png" alt=""><figcaption></figcaption></figure>
+
+#### 13.6  기타 &#x20;
+
+* [뉴론 컨테이너 활용 가이드](https://docs-ksc.gitbook.io/neuron-user-guide/appendix/appendix-12-how-to-use-containers)
+* [NVIDIA Enroot](https://github.com/NVIDIA/enroot)
+* [NVIDIA Pyxis](https://github.com/NVIDIA/pyxis)
+* [Podman build 문서](https://docs.podman.io/en/latest/markdown/podman-build.1.html)
+* [Apptainer GPU 지원](https://apptainer.org/docs/user/main/gpu.html)
