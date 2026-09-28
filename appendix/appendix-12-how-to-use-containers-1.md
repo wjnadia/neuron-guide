@@ -389,7 +389,7 @@ $ cat run-pyxis.sbatch
 
 ROOT=/apps/common/kisti-container
 IMAGE=$ROOT/images/pytorch:25.03-py3-aarch64.sqsh
-PROGRAM=$ROOT/examples/03-pytorch-ddp/ddp_smoke.py
+PROGRAM=$ROOT/examples/04-pytorch-ddp/ddp_smoke.py
 
 CHECKPOINT_DIR=$SLURM_SUBMIT_DIR/checkpoints/ddp-pyxis-$SLURM_JOB_ID
 mkdir -p "$CHECKPOINT_DIR"
@@ -504,23 +504,23 @@ PyTorch의 **완전 분할 데이터 병렬 학습 방식 2세대**입니다. �
 
 ```bash
 ## (Pyxis) Pytorch FSDP2 작업 스크립트 예제
-## /apps/common/kisti-container/examples/04-pytorch-ddp/run-pyxis.sbatch
+## /apps/common/kisti-container/examples/05-pytorch-fsdp2/run-pyxis.sbatch
 $ cat run-pyxis.sbatch
 #!/bin/bash
 #SBATCH --job-name=fsdp-pyxis
 #SBATCH --partition=gpu
 #SBATCH --comment=etc
 #SBATCH --nodes=2
-#SBATCH --ntasks-per-node=1
+#SBATCH --ntasks-per-node=4
 #SBATCH --gpus-per-node=4
-#SBATCH --cpus-per-task=32
+#SBATCH --cpus-per-task=8
 #SBATCH --time=00:30:00
 #SBATCH --output=%x-%j.out
 #SBATCH --error=%x-%j.err
 
 ROOT=/apps/common/kisti-container
 IMAGE=$ROOT/images/pytorch:25.03-py3-aarch64.sqsh
-TRAIN_SCRIPT=$ROOT/examples/04-pytorch-fsdp2/fsdp2_train_smoke.py
+TRAIN_SCRIPT=$ROOT/examples/05-pytorch-fsdp2/fsdp2_train_smoke.py
 
 CHECKPOINT_DIR=${SLURM_SUBMIT_DIR}/checkpoints/fsdp-pyxis-${SLURM_JOB_ID}
 mkdir -p "$CHECKPOINT_DIR"
@@ -531,7 +531,7 @@ module load enroot/4.2.0
 
 "$ROOT/bin/kisti-container" \
   --runtime pyxis --platform gh200 --workload pytorch-dist \
-  --launcher torchrun --local-processes 4 --mpi none --nccl auto --provider cxi --gpu nvidia \
+  --launcher srun-native --mpi none --nccl auto --provider cxi --gpu nvidia \
   --checkpoint-dir "$CHECKPOINT_DIR" --diagnose \
   "$IMAGE" "$TRAIN_SCRIPT"
 
@@ -592,7 +592,7 @@ $ cat 06-nemo-megatron/run-pyxis.sbatch
 
 ROOT=/apps/common/kisti-container
 IMAGE=$ROOT/images/nemo:25.04.00-aarch64.sqsh
-TRAIN_SCRIPT=$ROOT/examples/05-nemo-megatron/nemo_megatron_tp4_dp2_smoke_v2.py
+TRAIN_SCRIPT=$ROOT/examples/06-nemo-megatron/nemo_megatron_tp4_dp2_smoke_v2.py
 
 CHECKPOINT_DIR=${SLURM_SUBMIT_DIR}/checkpoints/nemo-pyxis-${SLURM_JOB_ID}
 mkdir -p "$CHECKPOINT_DIR"
