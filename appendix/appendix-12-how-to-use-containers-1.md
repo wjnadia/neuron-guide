@@ -83,21 +83,21 @@ kisti-container [Wrapper 옵션] IMAGE COMMAND [ARG ...]
 
 주요 옵션:
 
-| 옵션                  | 값                                                 | 설명                        |
-| ------------------- | ------------------------------------------------- | ------------------------- |
-| `--runtime`         | `singularity`, `apptainer`, `enroot`, `pyxis`     | 실행 백엔드                    |
-| `--platform`        | `gh200`, `amd`                                    | 노드 아키텍처와 사이트 프로파일         |
-| `--workload`        | `generic`, `pytorch-ddp`, `pytorch-fsdp2`, `nemo` | 워크로드별 검증 규칙               |
-| `--launcher`        | `srun-native`, `torchrun`                         | 분산 프로세스 생성 방식             |
-| `--local-processes` | 양의 정수                                             | 노드별 torchrun worker 수     |
-| `--mpi`             | `none`, `cray`, `openmpi`, `auto`                 | MPI 구성                    |
-| `--nccl`            | `none`, `native`, `ofi`, `auto`                   | NCCL 전송 구성                |
-| `--checkpoint-dir`  | 절대 경로                                             | 쓰기 가능한 체크포인트 경로           |
-| `-B`, `--bind`      | `SRC:DST:MODE`                                    | 추가 마운트                    |
-| `--env`             | `NAME=VALUE`                                      | 컨테이너에 전달할 환경변수            |
-| `--diagnose`        | 값 없음                                              | rank 0에서 결정된 설정 출력        |
-| `--doctor`          | 값 없음                                              | GPU, CXI, OFI 라이브러리 사전 점검 |
-| `--dry-run`         | 값 없음                                              | 실행하지 않고 최종 명령 출력          |
+| 옵션                  | 값                                             | 설명                        |
+| ------------------- | --------------------------------------------- | ------------------------- |
+| `--runtime`         | `singularity`, `apptainer`, `enroot`, `pyxis` | 실행 백엔드                    |
+| `--platform`        | `gh200`, `amd`                                | 노드 아키텍처와 사이트 프로파일         |
+| `--workload`        | `generic`, `pytorch-dist`, `nemo`             | 워크로드별 검증 규칙               |
+| `--launcher`        | `srun-native`, `torchrun`                     | 분산 프로세스 생성 방식             |
+| `--local-processes` | 양의 정수                                         | 노드별 torchrun worker 수     |
+| `--mpi`             | `none`, `cray`, `openmpi`, `auto`             | MPI 구성                    |
+| `--nccl`            | `none`, `native`, `ofi`, `auto`               | NCCL 전송 구성                |
+| `--checkpoint-dir`  | 절대 경로                                         | 쓰기 가능한 체크포인트 경로           |
+| `-B`, `--bind`      | `SRC:DST:MODE`                                | 추가 마운트                    |
+| `--env`             | `NAME=VALUE`                                  | 컨테이너에 전달할 환경변수            |
+| `--diagnose`        | 값 없음                                          | rank 0에서 결정된 설정 출력        |
+| `--doctor`          | 값 없음                                          | GPU, CXI, OFI 라이브러리 사전 점검 |
+| `--dry-run`         | 값 없음                                          | 실행하지 않고 최종 명령 출력          |
 
 ### 6. 이미지 준비
 
@@ -399,7 +399,7 @@ module load libfabric/2.3.1
 module load enroot/4.2.0
 
 "$ROOT/bin/kisti-container" \
-  --runtime pyxis --platform gh200 --workload pytorch-ddp \
+  --runtime pyxis --platform gh200 --workload pytorch-dist \
   --launcher srun-native --mpi none --nccl auto \
   --provider cxi --gpu nvidia \
   --checkpoint-dir "$CHECKPOINT_DIR" --diagnose \
@@ -530,7 +530,7 @@ module load libfabric/2.3.1
 module load enroot/4.2.0
 
 "$ROOT/bin/kisti-container" \
-  --runtime pyxis --platform gh200 --workload pytorch-fsdp2 \
+  --runtime pyxis --platform gh200 --workload pytorch-dist \
   --launcher torchrun --local-processes 4 --mpi none --nccl auto --provider cxi --gpu nvidia \
   --checkpoint-dir "$CHECKPOINT_DIR" --diagnose \
   "$IMAGE" "$TRAIN_SCRIPT"
