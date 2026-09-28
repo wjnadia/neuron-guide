@@ -742,13 +742,33 @@ cd /scratch/$USER/kisti-container-tutorial
 
 ### 13. 참고 자료
 
+#### 13.1  관련 자료&#x20;
+
 * [뉴론 컨테이너 활용 가이드](https://docs-ksc.gitbook.io/neuron-user-guide/appendix/appendix-12-how-to-use-containers)
 * [NVIDIA Enroot](https://github.com/NVIDIA/enroot)
 * [NVIDIA Pyxis](https://github.com/NVIDIA/pyxis)
 * [Podman build 문서](https://docs.podman.io/en/latest/markdown/podman-build.1.html)
-* [Apptainer GPU 지원](https://apptainer.org/docs/user/main/gpu.html)<br>
+* [Apptainer GPU 지원](https://apptainer.org/docs/user/main/gpu.html)
 
-#### 13.1 kisti-container.conf 예시
+#### 13.1 kisti-container 실행 워크플로우
+
+사용자 옵션과 Slurm 환경을 해석하여 컨테이너 실행 명령을 구성하는 Bash Wrapper
+
+<figure><img src="../.gitbook/assets/image (19).png" alt=""><figcaption></figcaption></figure>
+
+#### 13.2 kisti-container 기능별 주요 코드 구성&#xD;
+
+정책 결정과 런타임 실행을 분리하고, 공통 배열에 실행 환경을 모아 전달
+
+<figure><img src="../.gitbook/assets/image (20).png" alt=""><figcaption></figcaption></figure>
+
+#### 13.3 kisti-container 런타임별 실행과 통신 환경
+
+Slurm 작업에서 직접 런타임은 task 안에서 실행하고, Pyxis는 Wrapper가 srun을 생성
+
+<figure><img src="../.gitbook/assets/image (21).png" alt=""><figcaption></figcaption></figure>
+
+#### 13.4 kisti-container.conf 예시
 
 ```
 # kisti-container site defaults for the KISTI 6th system GH200 profile.
@@ -800,7 +820,7 @@ HPC_APPTAINER_BIN_DIR_AARCH64=/apps/common/apptainer/1.4.5/aarch64/bin
 HPC_APPTAINER_BIN_DIR_X86_64=/apps/common/apptainer/1.4.5/x86_64/bin
 ```
 
-#### &#x20;13.2 한강 시스템 컨테이너 OMB 통신 성능 비교<br>
+#### &#x20;13.5 한강 시스템 컨테이너 OMB 통신 성능 비교<br>
 
 * OMB 7.5.2
 * Native / Singularity
