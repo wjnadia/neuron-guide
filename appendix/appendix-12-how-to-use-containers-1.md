@@ -122,7 +122,9 @@ FROM ${BASE_IMAGE}
 LABEL org.opencontainers.image.title="kisti-container tutorial image"
 WORKDIR /workspace
 
-RUN python3 -m pip install --no-cache-dir numpy
+RUN umask 022
+RRUN python3 -m pip install --no-cache-dir deepspeed==0.18.9
+RUN chmod -R a+rX /usr/local /opt
 
 CMD ["python3", "--version"]
 
@@ -213,7 +215,7 @@ $ cat run-pyxis.sbatch
 #SBATCH --error=%x-%j.err
 
 ROOT=/apps/common/kisti-container
-IMAGE=$ROOT/images/pytorch:25.03-py3-aarch64.sqsh
+IMAGE=$ROOT/images/pytorch-25.03-py3-aarch64.sqsh
 PROGRAM=$ROOT/examples/02-gpu-smoke/gpu_smoke.py
 
 module load enroot/4.2.0
@@ -262,7 +264,7 @@ $ cat run-gh200-singularity.sbatch
 #SBATCH --error=%x-%j.err
 
 ROOT=/apps/common/kisti-container
-IMAGE=$ROOT/images/pytorch:25.03-py3-aarch64.sif
+IMAGE=$ROOT/images/pytorch-25.03-py3-aarch64.sif
 
 OMB="$ROOT/OMB/omb-7.5.2-gh200/cray/libexec/osu-micro-benchmarks/mpi/pt2pt"
 module purge
@@ -388,7 +390,7 @@ $ cat run-pyxis.sbatch
 #SBATCH --error=%x-%j.err
 
 ROOT=/apps/common/kisti-container
-IMAGE=$ROOT/images/pytorch:25.03-py3-aarch64.sqsh
+IMAGE=$ROOT/images/pytorch-25.03-py3-aarch64.sqsh
 PROGRAM=$ROOT/examples/04-pytorch-ddp/ddp_smoke.py
 
 CHECKPOINT_DIR=$SLURM_SUBMIT_DIR/checkpoints/ddp-pyxis-$SLURM_JOB_ID
@@ -519,7 +521,7 @@ $ cat run-pyxis.sbatch
 #SBATCH --error=%x-%j.err
 
 ROOT=/apps/common/kisti-container
-IMAGE=$ROOT/images/pytorch:25.03-py3-aarch64.sqsh
+IMAGE=$ROOT/images/pytorch-25.03-py3-aarch64.sqsh
 TRAIN_SCRIPT=$ROOT/examples/05-pytorch-fsdp2/fsdp2_train_smoke.py
 
 CHECKPOINT_DIR=${SLURM_SUBMIT_DIR}/checkpoints/fsdp-pyxis-${SLURM_JOB_ID}
@@ -563,6 +565,8 @@ step=25/25 loss=54.308086 ms=22.022
 RESULT backend=nccl workload=fsdp2 world_size=8 precision=bf16 mean_step_ms=22.373 median_step_ms=22.333 final_check=36.0 expected=36.0 correctness=True
 ```
 
+
+
 #### 8.4 NeMo/Megatron&#x20;
 
 TP·DP 등 모델 병렬과 데이터 병렬을 조합하는 대규모 모델 학습을 위한 NeMo 예제는 GH200 2노드에서 노드 내부 TP=4, 노드 간 DP=2를 확인합니다.
@@ -591,7 +595,7 @@ $ cat 06-nemo-megatron/run-pyxis.sbatch
 #SBATCH --error=%x-%j.err
 
 ROOT=/apps/common/kisti-container
-IMAGE=$ROOT/images/nemo:25.04.00-aarch64.sqsh
+IMAGE=$ROOT/images/nemo-25.04.00-aarch64.sqsh
 TRAIN_SCRIPT=$ROOT/examples/06-nemo-megatron/nemo_megatron_tp4_dp2_smoke_v2.py
 
 CHECKPOINT_DIR=${SLURM_SUBMIT_DIR}/checkpoints/nemo-pyxis-${SLURM_JOB_ID}
