@@ -7,7 +7,7 @@ hidden: true
 
 ### 1. 개요
 
-6호기 한강  시스템에서 컨테이너 활용 환경은  [뉴론 시스템의 기존 컨테이너  활용 가이드](appendix-12-how-to-use-containers.md)와 마찬가지로이미지 준비와 계산 작업 실행으로 구분하고 있습니다. Podman은 OCI 이미지를 빌드하고 관리하는 도구이고, 계산 작업을 실행하기 위해서는 Singularity, Apptainer, Enroot 또는 Pyxis와 같은 컨테이너 런타임을 선택적으로 사용할 수 있습니다.
+6호기 한강  시스템에서 컨테이너 활용 환경은  [뉴론 시스템의 기존 컨테이너  활용 가이드](appendix-12-how-to-use-containers.md)와 마찬가지로 이미지 준비와 계산 작업 실행으로 구분하고 있습니다. Podman은 OCI 이미지를 빌드하고 관리하는 도구이고, 계산  작업을 실행하기 위해서는 Singularity, Apptainer, Enroot 또는 Pyxis와 같은 컨테이너 런타임을 선택적으로 사용할 수 있습니다.
 
 다양한 컨테이너 런타임과 시스템 아키텍처를 반영하여 다음 항목을 작업 특성에 맞게 구성하는 Wrapper 프로그램인 kisti-container를 제공하고 있습니다. &#x20;
 
