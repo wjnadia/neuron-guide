@@ -893,7 +893,7 @@ HPC_NCCL_AUTO_SINGLE_NODE=native
 HPC_NCCL_AUTO_MULTI_NODE=ofi
 
 HPC_GH200_GPUS_PER_NODE=4
-HPC_SHARED_FS_PREFIXES=/scratch:/appsdata:/home01
+HPC_SHARED_FS_PREFIXES=/scratch:/appsdata:/home01:/apps
 HPC_REQUIRE_SHARED_CHECKPOINT=1
 
 # Validated NCCL-OFI and libfabric installation paths.
@@ -916,10 +916,6 @@ HPC_NCCL_REQUIRE_NODE_GPUS_VISIBLE=1
 # Module-derived MPI/runtime paths remain enabled. The Enroot DDP test uses
 # --mpi none explicitly; aws-ofi-nccl and libfabric modules provide NCCL/CXI.
 HPC_AUTO_MPI_FROM_MODULES=1
-
-HPC_APPTAINER_BIN_DIR=""
-HPC_APPTAINER_BIN_DIR_AARCH64=/apps/common/apptainer/1.4.5/aarch64/bin
-HPC_APPTAINER_BIN_DIR_X86_64=/apps/common/apptainer/1.4.5/x86_64/bin
 ```
 
 #### &#x20;13.5 한강 시스템 컨테이너 OMB 통신 성능 비교<br>
@@ -931,3 +927,6 @@ HPC_APPTAINER_BIN_DIR_X86_64=/apps/common/apptainer/1.4.5/x86_64/bin
 * GH200 노드 대역폭(2노드 · 4 Pair · 4 MiB)<br>
 
 <figure><img src="../.gitbook/assets/image (18).png" alt=""><figcaption></figcaption></figure>
+
+#### 13.6 MLPerf 실행 예시<br>
+
