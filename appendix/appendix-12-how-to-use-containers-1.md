@@ -225,7 +225,7 @@ srun kisti-container --runtime pyxis ...
 ```bash
 ## (pyxis) 일반 GPU 작업 스크립트 예제
 ## /apps/common/kisti-container/examples/02-gpu-smoke/run-pyxis.sbatch
-$ cat run-pyxis.sbatch
+
 #!/bin/bash
 #SBATCH --job-name=gpu-pyxis
 #SBATCH --partition=gpu
@@ -252,7 +252,7 @@ module load enroot/4.2.0
 
 작업제출:
 
-<pre class="language-bash"><code class="lang-bash"><strong>$ sbatch /apps/common/kisti-container/examples/02-gpu-smoke/run-pyxis.sbatch
+<pre class="language-bash"><code class="lang-bash"><strong>$ sbatch run-pyxis.sbatch
 </strong></code></pre>
 
 결과파일:
@@ -274,7 +274,7 @@ GPU_SMOKE_PASS host=gpu0014 gpu=NVIDIA GH200 120GB shape=(2048, 2048) mean=0.011
 ```bash
 ## (Singularity) MPI OMB 작업 스크립트 예제
 ## /apps/common/kisti-container/examples/03-mpi-omb/run-gh200-singularity.sbatch
-$ cat run-gh200-singularity.sbatch
+
 #!/bin/bash
 #SBATCH --job-name=gh200-omb-sing
 #SBATCH --comment=etc
@@ -323,7 +323,7 @@ srun \
 
 작업제출:
 
-<pre class="language-bash"><code class="lang-bash"><strong>$ sbatch /apps/common/kisti-container/examples/03-mpi-omb/run-gh200-singularity.sbatch
+<pre class="language-bash"><code class="lang-bash"><strong>$ sbatch run-gh200-singularity.sbatch
 </strong></code></pre>
 
 결과파일:
@@ -400,7 +400,7 @@ DDP 2노드 8GPU 예제는 노드당 4개의 Slurm rank를 생성합니다. `--n
 ```bash
 ## (Pyxis) Pytorch DDP 작업 스크립트 예제
 ## /apps/common/kisti-container/examples/04-pytorch-ddp/run-pyxis.sbatch
-$ cat run-pyxis.sbatch
+
 #!/bin/bash
 #SBATCH --job-name=ddp-pyxis
 #SBATCH --partition=gpu
@@ -436,7 +436,7 @@ module load enroot/4.2.0
 
 작업제출:
 
-<pre class="language-bash"><code class="lang-bash"><strong>$ sbatch /apps/common/kisti-container/examples/04-pytorch-ddp/run-pyxis.sbatch
+<pre class="language-bash"><code class="lang-bash"><strong>$ sbatch run-pyxis.sbatch
 </strong></code></pre>
 
 
@@ -531,7 +531,7 @@ PyTorch의 **완전 분할 데이터 병렬 학습 방식 2세대**입니다. �
 ```bash
 ## (Pyxis) Pytorch FSDP2 작업 스크립트 예제
 ## /apps/common/kisti-container/examples/05-pytorch-fsdp2/run-pyxis.sbatch
-$ cat run-pyxis.sbatch
+
 #!/bin/bash
 #SBATCH --job-name=fsdp-pyxis
 #SBATCH --partition=gpu
@@ -563,12 +563,10 @@ module load enroot/4.2.0
 
 ```
 
-
-
 작업제출:
 
 ```bash
-$ sbatch /apps/common/kisti-container/examples/05-pytorch-fsdp2/run-pyxis.sbatch
+$ sbatch run-pyxis.sbatch
 ```
 
 결과 파일:\
@@ -605,6 +603,7 @@ NVIDIA의 AI 모델 개발·학습 프레임워크입니다. 현재 예제의 **
 ```bash
 ## (Pyxis) NeMO Megatron 작업 스크립트 예제
 ## /apps/common/kisti-container/examples/06-nemo-megatron/run-pyxis.sbatch
+
 #!/bin/bash
 #SBATCH --job-name=nemo-pyxis
 #SBATCH --partition=gpu
@@ -642,7 +641,7 @@ module load enroot/4.2.0
 작업제출:
 
 ```bash
-sbatch /apps/common/kisti-container/examples/06-nemo-megatron/run-pyxis.sbatch
+sbatch run-pyxis.sbatch
 ```
 
 결과 파일:
@@ -668,6 +667,7 @@ ZeRO 최적화로 옵티마이저 상태와 그래디언트를 GPU들에 나눠 
 ```bash
 ## (Pyxis) DeepSpeed 작업 스크립트 예제
 ## /apps/common/kisti-container/examples/07-pytorch-deepspeed/run-pyxis.sbatch
+
 #!/bin/bash
 #SBATCH --job-name=ds-pyxis
 #SBATCH --partition=gpu
@@ -707,7 +707,7 @@ kisti-container \
 작업제출:
 
 ```bash
-sbatch /apps/common/kisti-container/examples/07-pytorch-deepspeed/run-pyxis.sbatch
+sbatch run-pyxis.sbatch
 ```
 
 결과 파일:
