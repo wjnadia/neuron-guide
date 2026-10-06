@@ -23,6 +23,19 @@ hidden: true
 
 처음 사용하는 경우에는 기존 `.sif` 이미지가 있으면 Singularity/Apptainer를, GH200용 `.sqsh` 이미지가 있으면 Pyxis를 권장합니다. Enroot 자체 동작 확인에는 `--runtime enroot`가 유용합니다.
 
+{% hint style="info" %}
+**도구 별 참고 자료**
+
+* [뉴론 컨테이너 활용 가이드](https://docs-ksc.gitbook.io/neuron-user-guide/appendix/appendix-12-how-to-use-containers) (Podman, Singularity, Enroot, Pyxis)  &#x20;
+* [뉴론 Singularity 컨테이너](https://docs-ksc.gitbook.io/neuron-user-guide/~/revisions/KYLAXrLpht5xTVDD1Y1G/appendix/appendix-3-how-to-use-singularity-container)
+* [Podman build 문서](https://docs.podman.io/en/latest/markdown/podman-build.1.html)
+* [Apptainer GPU 지원](https://apptainer.org/docs/user/main/gpu.html)
+* [NVIDIA Enroot](https://github.com/NVIDIA/enroot)
+* [NVIDIA Pyxis](https://github.com/NVIDIA/pyxis)
+{% endhint %}
+
+
+
 ### 3. 아키텍처와 이미지 호환성
 
 컨테이너 이미지의 CPU 아키텍처는 실행 노드와 같아야 합니다.
@@ -826,11 +839,3 @@ HPC_APPTAINER_BIN_DIR_X86_64=/apps/common/apptainer/1.4.5/x86_64/bin
 * GH200 노드 대역폭(2노드 · 4 Pair · 4 MiB)<br>
 
 <figure><img src="../.gitbook/assets/image (18).png" alt=""><figcaption></figcaption></figure>
-
-#### 13.6  기타 &#x20;
-
-* [뉴론 컨테이너 활용 가이드](https://docs-ksc.gitbook.io/neuron-user-guide/appendix/appendix-12-how-to-use-containers)
-* [NVIDIA Enroot](https://github.com/NVIDIA/enroot)
-* [NVIDIA Pyxis](https://github.com/NVIDIA/pyxis)
-* [Podman build 문서](https://docs.podman.io/en/latest/markdown/podman-build.1.html)
-* [Apptainer GPU 지원](https://apptainer.org/docs/user/main/gpu.html)
