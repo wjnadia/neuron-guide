@@ -24,7 +24,7 @@ hidden: true
 처음 사용하는 경우에는 기존 `.sif` 이미지가 있으면 Singularity/Apptainer를, GH200용 `.sqsh` 이미지가 있으면 Pyxis를 권장합니다. Enroot 자체 동작 확인에는 `--runtime enroot`가 유용합니다.
 
 {% hint style="info" %}
-**도구 별 참고 자료**
+**도구 별 사용법 참고 자료**
 
 * [뉴론 컨테이너 활용 가이드](https://docs-ksc.gitbook.io/neuron-user-guide/appendix/appendix-12-how-to-use-containers) (Podman, Singularity, Enroot, Pyxis)  &#x20;
 * [뉴론 Singularity 컨테이너](https://docs-ksc.gitbook.io/neuron-user-guide/~/revisions/KYLAXrLpht5xTVDD1Y1G/appendix/appendix-3-how-to-use-singularity-container)
@@ -59,6 +59,8 @@ podman image inspect IMAGE:TAG --format '{{.Architecture}}'
 
 `exec format error`가 발생하면 이미지와 계산 노드의 아키텍처를 먼저 비교합니다. Enroot/Pyxis는 `.sqsh`를 실행하기 위해 컨테이너를 시작하지 않고 아키텍처를 완전히 판별하기 어렵기 때문에 파일명에 `aarch64` 또는 `x86_64`를 넣는 것을 권장합니다.
 
+
+
 ### 4. kisti-container 실행 환경&#x20;
 
 ```bash
@@ -89,6 +91,8 @@ $HOME/.config/kisti-container.conf
 export KISTI_CONTAINER_CONFIG=/absolute/path/kisti-container.conf
 ```
 
+
+
 ### 5. kisti-container 기본 명령 형식
 
 ```bash
@@ -101,7 +105,7 @@ kisti-container [Wrapper 옵션] IMAGE COMMAND [ARG ...]
 | ------------------- | --------------------------------------------- | ------------------------- |
 | `--runtime`         | `singularity`, `apptainer`, `enroot`, `pyxis` | 실행 백엔드                    |
 | `--platform`        | `gh200`, `amd`                                | 노드 아키텍처와 사이트 프로파일         |
-| `--workload`        | `generic`, `pytorch-dist`, `nemo`             | 워크로드별 검증 규칙               |
+| `--workload`        | `generic`, `pytorch-dist*`, `nemo**`          | 워크로드별 검증 규칙               |
 | `--launcher`        | `srun-native`, `torchrun`                     | 분산 프로세스 생성 방식             |
 | `--local-processes` | 양의 정수                                         | 노드별 torchrun worker 수     |
 | `--mpi`             | `none`, `cray`, `openmpi`, `auto`             | MPI 구성                    |
@@ -112,6 +116,12 @@ kisti-container [Wrapper 옵션] IMAGE COMMAND [ARG ...]
 | `--diagnose`        | 값 없음                                          | rank 0에서 결정된 설정 출력        |
 | `--doctor`          | 값 없음                                          | GPU, CXI, OFI 라이브러리 사전 점검 |
 | `--dry-run`         | 값 없음                                          | 실행하지 않고 최종 명령 출력          |
+
+\*pytorch-dist : DDP, FDSP2, DeepSpeed 등 기반의 분산학습 프로파일&#x20;
+
+\*\*nemo : NeMo(NVIDIA의 AI 모델 개발·학습 프레임워크) 기반  분산학습  프로파일
+
+
 
 ### 6. 이미지 준비
 
