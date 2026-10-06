@@ -605,7 +605,6 @@ NVIDIA의 AI 모델 개발·학습 프레임워크입니다. 현재 예제의 **
 ```bash
 ## (Pyxis) NeMO Megatron 작업 스크립트 예제
 ## /apps/common/kisti-container/examples/06-nemo-megatron/run-pyxis.sbatch
-$ cat 06-nemo-megatron/run-pyxis.sbatch
 #!/bin/bash
 #SBATCH --job-name=nemo-pyxis
 #SBATCH --partition=gpu
@@ -652,6 +651,89 @@ sbatch /apps/common/kisti-container/examples/06-nemo-megatron/run-pyxis.sbatch
 $ cat nemo-pyxis-20467.out
 --[중략]--
 NEMO_MCORE_TPDP_RESULT status=PASS world_size=8 tp_size=4 dp_size=2 steps=5 last_dp_loss_avg=8.43100882 mean_step_ms=395.784 steady_mean_step_ms=49.037 collective=28.0 expected=28.0
+```
+
+
+
+#### 8.5 DeepSpeed&#x20;
+
+ZeRO 최적화로 옵티마이저 상태와 그래디언트를 GPU들에 나눠 저장하는 데이터 병렬 학습 예제입니다. GH200 2노드에서 노드당 GPU 4장, 총 8개 rank로 ZeRO-2 학습이 동작하는지 확인합니다.
+
+컨테이너에는 DeepSpeed와 호환 PyTorch/CUDA가 설치되어 있어야 합니다. 제공 예제의 검증 환경은 NGC PyTorch 25.03(PyTorch 2.7.0a0, CUDA 12.8)에 DeepSpeed 0.18.9를 설치한 이미지입니다.&#x20;
+
+{% hint style="info" %}
+**DeepSpeed**: Microsoft가 개발한 대규모 모델 학습 최적화 라이브러리입니다. 현재 예제의 ZeRO-2(Zero Redundancy Optimizer stage 2)는 각 GPU가 모델 전체를 가지되, 옵티마이저 상태와 그래디언트는 GPU 수만큼 나눠 저장해 GPU당 메모리 사용량을 줄이는 방식입니다.
+{% endhint %}
+
+```bash
+## (Pyxis) DeepSpeed 작업 스크립트 예제
+## /apps/common/kisti-container/examples/07-pytorch-deepspeed/run-pyxis.sbatch
+#!/bin/bash
+#SBATCH --job-name=ds-pyxis
+#SBATCH --partition=gpu
+#SBATCH --comment=etc
+#SBATCH --nodes=2
+#SBATCH --ntasks-per-node=1
+#SBATCH --gpus-per-node=4
+#SBATCH --cpus-per-task=32
+#SBATCH --time=00:30:00
+#SBATCH --output=%x-%j.out
+#SBATCH --error=%x-%j.err
+
+ROOT=/apps/common/kisti-container
+IMAGE=$ROOT/images/pytorch-25.03-py3-aarch64.sqsh
+TRAIN_SCRIPT=$ROOT/examples/07-pytorch-deepspeed/train_deepspeed.py
+
+module load aws-ofi-nccl/1.20.0
+module load libfabric/2.3.1
+module load enroot/4.2.0
+
+USER=`id -un`
+export CACHE_ROOT=/scratch/$USER/.cache/job-$SLURM_JOB_ID
+mkdir -p $CACHE_ROOT
+
+export TRITON_CACHE_DIR=$CACHE_ROOT/triton
+export TORCH_EXTENSIONS_DIR=$CACHE_ROOT/torch_extensions
+export XDG_CACHE_HOME=$CACHE_ROOT/xdg
+
+kisti-container \
+    --platform gh200  --runtime pyxis \
+    --workload pytorch-dist --launcher torchrun \
+    --local-processes 4 --nccl ofi --gpu nvidia --diagnose \
+    "$IMAGE" "$TRAIN_SCRIPT" --deepspeed \
+    --deepspeed_config ${SLURM_SUBMIT_DIR}/ds_config.json --epochs 2
+```
+
+작업제출:
+
+```bash
+sbatch /apps/common/kisti-container/examples/07-pytorch-deepspeed/run-pyxis.sbatch
+```
+
+결과 파일:
+
+```bash
+$ cat ds-pyxis-23707.out
+--[중략]--
+  epoch 0 step    0  loss=10.5625
+  epoch 0 step   20  loss=10.5000
+  epoch 0 step   40  loss=10.4375
+  epoch 0 step   60  loss=10.4375
+  epoch 0 step   80  loss=10.4375
+  epoch 0 step  100  loss=10.3750
+  epoch 0 step  120  loss=10.3750
+  epoch 0 step  140  loss=10.4375
+  epoch 0 done  avg_loss=10.4387  time=8.5s  steps=157
+  epoch 1 step    0  loss=10.4375
+  epoch 1 step   20  loss=10.3750
+  epoch 1 step   40  loss=10.3750
+  epoch 1 step   60  loss=10.3750
+  epoch 1 step   80  loss=10.3750
+  epoch 1 step  100  loss=10.3750
+  epoch 1 step  120  loss=10.3750
+  epoch 1 step  140  loss=10.3750
+  epoch 1 done  avg_loss=10.3838  time=8.7s  steps=157
+학습 완료
 ```
 
 
