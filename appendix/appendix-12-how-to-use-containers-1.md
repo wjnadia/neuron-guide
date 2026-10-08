@@ -146,7 +146,7 @@ LABEL org.opencontainers.image.title="kisti-container tutorial image"
 WORKDIR /workspace
 
 RUN umask 022
-RRUN python3 -m pip install --no-cache-dir deepspeed==0.18.9
+RUN python3 -m pip install --no-cache-dir deepspeed==0.18.9
 RUN chmod -R a+rX /usr/local /opt
 
 CMD ["python3", "--version"]
