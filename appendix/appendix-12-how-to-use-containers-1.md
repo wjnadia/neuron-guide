@@ -1,6 +1,5 @@
 ---
 description: 작성중...
-hidden: true
 ---
 
 # (6호기 한강) 컨테이너 활용 가이드
