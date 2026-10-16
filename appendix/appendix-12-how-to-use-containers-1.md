@@ -11,17 +11,11 @@ hidden: true
 
 Podman은 OCI 이미지를 빌드하고 관리하는 도구이고, 계산  작업을 실행하기 위해서는 Singularity, Apptainer, Enroot 또는 Pyxis와 같은 컨테이너 런타임을 선택적으로 사용할 수 있습니다.
 
-다양한 컨테이너 런타임과 시스템 아키텍처를 반영하여 다음 항목을 작업 특성에 맞게 구성하는 Wrapper 프로그램인 kisti-container를 제공하고 있습니다. &#x20;
-
-* 호스트 GPU와 컨테이너 연결
-* AWS OFI NCCL, Cray Libfabric 및 CXI 경로 연결
-* Slurm rank와 torchrun rank 구성
-* 단일 노드와 다중 노드의 NCCL 전송 방식 선택
-* 체크포인트 디렉터리의 쓰기 가능 마운트
+또한, 병렬 연산 및 분산  학습 작업에서 한강 시스템의 고성능 네트워크(Slingshot) 기반의 MPI 및 NCCL 환경 구성을 지원하는 컨테이너 런타임 Wrapper 프로그램(kisti-container)을 제공하고 있습니다.   &#x20;
 
 ### 2. 도구 선택
 
-<table data-header-hidden><thead><tr><th width="258.115966796875"></th><th width="118.81158447265625"></th><th width="121.5072021484375"></th><th></th></tr></thead><tbody><tr><td>목적</td><td>권장 도구</td><td>이미지 형식</td><td><code>kisti-container</code> 역할</td></tr><tr><td>이미지 빌드·수정·레지스트리 전송</td><td>Podman 4.9.5 </td><td>OCI 이미지</td><td>실행 백엔드가 아님</td></tr><tr><td>기존 Singularity 이미지 실행</td><td>Singularity 4.5.0</td><td rowspan="2"><code>.sif</code></td><td rowspan="4">GPU, MPI, NCCL 환경 구성</td></tr><tr><td>Singularity 호환 실행</td><td>Apptainer 1.4.5</td></tr><tr><td>GH200 작업의 직접 실행</td><td>Enroot 4.2.0</td><td rowspan="2"><code>.sqsh</code></td></tr><tr><td>Slurm 통합 Enroot 실행</td><td>Pyxis 0.24.0.1</td></tr></tbody></table>
+<table data-header-hidden><thead><tr><th width="258.115966796875"></th><th width="118.81158447265625"></th><th width="121.5072021484375"></th><th></th></tr></thead><tbody><tr><td>목적</td><td>권장 도구</td><td>이미지 형식</td><td><code>kisti-container</code> 역할</td></tr><tr><td>이미지 빌드·수정·레지스트리 전송</td><td>Podman 4.9.5 </td><td>OCI 이미지</td><td>실행 백엔드가 아님</td></tr><tr><td>기존 Singularity 이미지 실행</td><td>Singularity 4.5.0</td><td rowspan="2"><code>.sif 파일</code></td><td rowspan="4">GPU, MPI, NCCL 환경 구성</td></tr><tr><td>Singularity 호환 실행</td><td>Apptainer 1.4.5</td></tr><tr><td>GH200 작업의 직접 실행</td><td>Enroot 4.2.0</td><td rowspan="2"><code>.sqsh 파일</code></td></tr><tr><td>Slurm 통합 Enroot 실행</td><td>Pyxis 0.24.0.1</td></tr></tbody></table>
 
 처음 사용하는 경우에는 기존 `.sif` 이미지가 있으면 Singularity/Apptainer를, GH200용 `.sqsh` 이미지가 있으면 Pyxis를 권장합니다.&#x20;
 
@@ -76,55 +70,9 @@ Enroot/Pyxis는 `.sqsh`를 실행하기 위해 컨테이너를 시작하지 않�
 
 
 
-### 4. kisti-container 실행 환경&#x20;
+### 4. 이미지 준비
 
-```bash
-KISTI_CONTAINER=/apps/common/kisti-container/bin/kisti-container
-
-$ KISTI_CONTAINER --version
-$ KISTI_CONTAINER --help
-$ srun --help | grep -- --container-image
-```
-
-마지막 명령에 `--container-image`가 표시되면 Pyxis가 Slurm에 등록된 상태입니다.
-
-사이트 기본 설정은 다음 파일에 존재합니다.
-
-```
-/apps/common/kisti-container/conf/kisti-container.conf
-```
-
-사용자 별 설정은 필요할 때만 다음 파일에 작성합니다.
-
-```
-$HOME/.config/kisti-container.conf
-```
-
-별도 설정 파일을 지정하려면 다음 환경 변수를 사용합니다.
-
-```bash
-export KISTI_CONTAINER_CONFIG=/absolute/path/kisti-container.conf
-```
-
-
-
-### 5. kisti-container 기본 명령 형식
-
-```bash
-kisti-container [Wrapper 옵션] IMAGE COMMAND [ARG ...]
-```
-
-주요 옵션:
-
-<table><thead><tr><th width="178.07244873046875">옵션</th><th>값</th><th>설명</th></tr></thead><tbody><tr><td><code>--runtime</code></td><td><code>singularity</code>, <code>apptainer</code>, <code>enroot</code>, <code>pyxis</code></td><td>실행 백엔드</td></tr><tr><td><code>--workload</code></td><td><code>generic</code>, <code>pytorch-dist*</code></td><td>워크로드 별 검증 규칙</td></tr><tr><td><code>--launcher</code></td><td><code>srun-native</code>, <code>torchrun</code></td><td>분산 프로세스 생성 방식</td></tr><tr><td><code>--local-processes</code></td><td>양의 정수</td><td>노드별 torchrun worker 수</td></tr><tr><td><code>--mpi</code></td><td><code>none</code>, <code>cray</code>, <code>openmpi</code>, <code>auto</code></td><td>MPI 구성</td></tr><tr><td><code>--nccl</code></td><td><code>none</code>, <code>native</code>, <code>ofi</code>, <code>auto</code></td><td>NCCL 전송 구성</td></tr><tr><td><code>--checkpoint-dir</code></td><td>절대 경로</td><td>쓰기 가능한 체크포인트 경로</td></tr><tr><td><code>-B</code>, <code>--bind</code></td><td><code>SRC:DST:MODE</code></td><td>추가 마운트</td></tr><tr><td><code>--env</code></td><td><code>NAME=VALUE</code></td><td>컨테이너에 전달할 환경 변수</td></tr><tr><td><code>--diagnose</code></td><td>값 없음</td><td>rank 0에서 결정된 설정 출력</td></tr><tr><td><code>--doctor</code></td><td>값 없음</td><td>GPU, CXI, OFI 라이브러리 사전 점검</td></tr><tr><td><code>--dry-run</code></td><td>값 없음</td><td>실행하지 않고 최종 명령 출력</td></tr></tbody></table>
-
-\*pytorch-dist : DDP, FDSP, DeepSpeed, Nemo/Megatron 등 기반의 분산학습 워크로드&#x20;
-
-
-
-### 6. 이미지 준비
-
-#### 6.1 Podman 이미지  빌드
+#### 4.1 Podman 이미지  빌드
 
 [뉴론 컨테이너 활용 가이드](appendix-12-how-to-use-containers.md#id-2.-podman)와 동일하게 Podman을 이용해 Dockerfile 기반 이미지를 빌드할 수 있습니다.&#x20;
 
@@ -164,7 +112,7 @@ $ podman pull nvcr.io/nvidia/pytorch:25.03-py3
 $ podman images
 ```
 
-#### 6.2 Singularity/Enroot 이미지로 변환
+#### 4.2 Singularity/Enroot 이미지로 변환
 
 ```bash
 ## Enroot
@@ -187,6 +135,52 @@ singularity build --fakeroot pytorch-aarch64.sif \
 ```
 
 배치 파일의 `IMAGE`, 파티션, 시간, CPU/GPU 수 등을 확인한 뒤 제출합니다.
+
+###
+
+### 5. kisti-container 실행 환경&#x20;
+
+```bash
+KISTI_CONTAINER=/apps/common/kisti-container/bin/kisti-container
+
+$ KISTI_CONTAINER --version
+$ KISTI_CONTAINER --help
+$ srun --help | grep -- --container-image
+```
+
+마지막 명령에 `--container-image`가 표시되면 Pyxis가 Slurm에 등록된 상태입니다.
+
+사이트 기본 설정은 다음 파일에 존재합니다.
+
+```
+/apps/common/kisti-container/conf/kisti-container.conf
+```
+
+사용자 별 설정은 필요할 때만 다음 파일에 작성합니다.
+
+```
+$HOME/.config/kisti-container.conf
+```
+
+별도 설정 파일을 지정하려면 다음 환경 변수를 사용합니다.
+
+```bash
+export KISTI_CONTAINER_CONFIG=/absolute/path/kisti-container.conf
+```
+
+
+
+### 6. kisti-container 기본 명령 형식
+
+```bash
+kisti-container [Wrapper 옵션] IMAGE COMMAND [ARG ...]
+```
+
+주요 옵션:
+
+<table><thead><tr><th width="178.07244873046875">옵션</th><th>값</th><th>설명</th></tr></thead><tbody><tr><td><code>--runtime</code></td><td><code>singularity</code>, <code>apptainer</code>, <code>enroot</code>, <code>pyxis</code></td><td>실행 백엔드</td></tr><tr><td><code>--workload</code></td><td><code>generic</code>, <code>pytorch-dist*</code></td><td>워크로드 별 검증 규칙</td></tr><tr><td><code>--launcher</code></td><td><code>srun-native</code>, <code>torchrun</code></td><td>분산 프로세스 생성 방식</td></tr><tr><td><code>--local-processes</code></td><td>양의 정수</td><td>노드별 torchrun worker 수</td></tr><tr><td><code>--mpi</code></td><td><code>none</code>, <code>cray</code>, <code>openmpi</code>, <code>auto</code></td><td>MPI 구성</td></tr><tr><td><code>--nccl</code></td><td><code>none</code>, <code>native</code>, <code>ofi</code>, <code>auto</code></td><td>NCCL 전송 구성</td></tr><tr><td><code>--checkpoint-dir</code></td><td>절대 경로</td><td>쓰기 가능한 체크포인트 경로</td></tr><tr><td><code>-B</code>, <code>--bind</code></td><td><code>SRC:DST:MODE</code></td><td>추가 마운트</td></tr><tr><td><code>--env</code></td><td><code>NAME=VALUE</code></td><td>컨테이너에 전달할 환경 변수</td></tr><tr><td><code>--diagnose</code></td><td>값 없음</td><td>rank 0에서 결정된 설정 출력</td></tr><tr><td><code>--doctor</code></td><td>값 없음</td><td>GPU, CXI, OFI 라이브러리 사전 점검</td></tr><tr><td><code>--dry-run</code></td><td>값 없음</td><td>실행하지 않고 최종 명령 출력</td></tr></tbody></table>
+
+\*pytorch-dist : DDP, FDSP, DeepSpeed, Nemo/Megatron 등 기반의 분산학습 워크로드&#x20;
 
 
 
