@@ -23,7 +23,7 @@ Podman은 OCI 이미지를 빌드하고 관리하는 도구이고, 계산  작�
 
 
 
-### 2. 컨테이너도구 선택 가이드
+### 2. 컨테이너 도구 선택 가이드
 
 사용자의 목적 및 실행 노드 특성에 따라 최적의 도구를 선택할 수 있습니다.
 
@@ -44,47 +44,7 @@ Podman은 OCI 이미지를 빌드하고 관리하는 도구이고, 계산  작�
 
 
 
-### 3. 아키텍처와 이미지 호환성
-
-컨테이너 이미지의 CPU 아키텍처는 계산 노드와 같아야 합니다.
-
-<table><thead><tr><th width="98.94195556640625">노드 구분</th><th width="169.82598876953125">CPU 아키텍처</th><th width="87.53619384765625">GPU</th><th>이미지 파일 예시</th></tr></thead><tbody><tr><td>GPU 노드</td><td><code>aarch64(arm64)</code><br><code>(Grace CPU)</code></td><td>H100</td><td><p><code>pytorch-aarch64.sif</code>, </p><p><code>pytorch-aarch64.sqsh</code></p></td></tr><tr><td>CPU 노드</td><td><code>x86_64</code><br><code>(AMD EPYC CPU)</code></td><td>없음</td><td><code>ubuntu-x86_64.sif</code></td></tr></tbody></table>
-
-#### 3.1 현재 노드 아키텍처 확인
-
-```bash
-$ uname -m
-aarch64
-```
-
-#### 3.2 이미지 아키텍처 확인
-
-아키텍처 판별이 용이하도록  이미지 태그(Podman) 또는 파일명에 `aarch64(arm64)` 또는 `x86_64(amd64)`를 넣는 것을 권장합니다.
-
-<pre class="language-bash"><code class="lang-bash"><strong>## Podman
-</strong>## exec format error가 발생하면 이미지와 계산 노드의 아키텍처를 먼저 비교합니다. 
-<strong>$ podman image inspect myhub.ksc.re.kr/wjnadia/pytorch:25.03-py3-aarch64 --format '{{.Architecture}}'
-</strong>arm64
-
-## Singularity
-$ module load singularity/4.5.0
-$ singularity inspect --labels pytorch-25.03-py3-aarch64.sif | grep build-arch
-org.label-schema.build-arch: arm64
-
-## Apptainer
-$ module load apptainer/1.4.5
-$ singularity inspect --labels pytorch-25.03-py3-x86_64.sif | grep build-arch
-org.label-schema.build-arch: amd64   
-
-## Enroot/Pyxis
-$ module load enroot/4.2.0
-$ enroot start pytorch-25.03-py3-aarch64.sif uname -m
-aarch64
-</code></pre>
-
-
-
-### 4. 이미지 빌드 (Podman)
+### 3. 이미지 빌드 (Podman)
 
 로그인 노드 또는 계산 노드에서 Podman을 사용하여 컨테이너 이미지를 빌드합니다.&#x20;
 
@@ -92,7 +52,7 @@ aarch64
 Sugularity 컨테이너 이미지를 직접빌드 하기 위해서는 [**뉴론 컨테이너 활용 가이드의 가. 컨테이너 이미지 빌드하기**](https://docs-ksc.gitbook.io/neuron-user-guide/appendix/appendix-3-how-to-use-singularity-container#id)를 참조하시기 바랍니다.&#x20;
 {% endhint %}
 
-#### 4.1 Podman 사용 설정
+#### 3.1 Podman 사용 설정
 
 Podman 사용 환경 설정을 위해서는 먼저 사용자 홈 디렉터리에 .usepodman 이라는 파일을 생성해야 합니다. 한 번만 생성하면 되고 로그아웃 후 다시 로그인 하면 바로 적용 됩니다.
 
@@ -104,7 +64,7 @@ $ ls -la .usepodman
 $ exit                # 로그아웃 후 다시 로그인
 ```
 
-#### 4.2 이미지 빌드하기
+#### 3.2 이미지 빌드하기
 
 사용자 소스 코드나 특정 라이브러리를 포함한 커스텀 이미지를 생성합니다.
 
@@ -177,8 +137,8 @@ $ podman build [옵션] -t [이미지명]:[태그] [Dockerfile경로]
 --no-cache: 캐시를 사용하지 않고 모든 단계를 새로 빌드(라이브러리 업데이트 시 유용)
 -v, --volume: 빌드 과정 중 호스트 디렉토리를 마운트해야 할 때 사용
 
-# 특정 파일을 지정하여 빌드
-$ podman build -t my_pytorch:gpu_ver-aarch64 -f Dockerfile.gpu .
+# 현재 디렉터리의 Dockerfile을 사용하여 빌드하기
+$ podman build -t my_pytorch:deepspeed-aarch64 .
 ```
 
 
@@ -188,6 +148,8 @@ $ podman build -t my_pytorch:gpu_ver-aarch64 -f Dockerfile.gpu .
 {% endhint %}
 
 <table data-header-hidden><thead><tr><th width="111.66668701171875" align="center"></th><th width="235.60009765625"></th><th></th></tr></thead><tbody><tr><td align="center"><strong>기능</strong></td><td><strong>명령어</strong></td><td><strong>설명</strong></td></tr><tr><td align="center">목록 확인</td><td><sub>$ podman images</sub></td><td>로컬에 저장된 이미지 리스트 출력</td></tr><tr><td align="center">이미지 삭제</td><td><sub>$ podman rmi [이미지ID]</sub></td><td>불필요한 이미지 제거</td></tr><tr><td align="center">상세 정보</td><td><sub>$ podman inspect [이미지ID]</sub></td><td>이미지 레이어, 환경변수 등 상세 정보 확인</td></tr><tr><td align="center">태그 변경</td><td><sub>$ podman tag [기존이름] [새이름]</sub></td><td>이미지에 새로운 이름/태그 부여</td></tr></tbody></table>
+
+
 
 ### 3. 이미지 업로드
 
@@ -219,8 +181,6 @@ myhub 를 사용하기 위해서는 먼저  웹  브라우저에서 [**https://m
 <i class="fa-linktree">:linktree:</i> 자세한 사용 방법은 [**myhub 사용법**](appendix-12-how-to-use-containers-1.md#myhub)을 참조하시기 바랍니다.&#x20;
 {% endhint %}
 
-
-
 #### 3.2 이미지 태그(Tag) 설정
 
 업로드를 위해서는 이미지 이름을 **\[레지스트리주소]/\[Username 또는 프로젝트명]/\[이미지명]:\[버전태그]** 형식으로 지정해야 합니다.
@@ -228,45 +188,124 @@ myhub 를 사용하기 위해서는 먼저  웹  브라우저에서 [**https://m
 **1) Docker Hub**
 
 ```
-# 로컬 이미지(my_pytorch:v1)를 Docker Hub 형식으로 태그
-$ podman tag localhost/my_pytorch:v1 docker.io/[Username]/my_pytorch:v1
+# 로컬 이미지(pytorch:deepspeed-aarch64)를 Docker Hub 형식으로 태그
+$ podman tag localhost/pytorch:deepspeed-aarch64 docker.io/[Username]/pytorch:deepspeed-aarch64
 ```
 
 **2) myhub**
 
 ```
-# 로컬 이미지(my_pytorch:v1)를 myhub 형식으로 태그
-$ podman tag localhost/my_pytorch:v1 myhub.ksc.re.kr/[프로젝트명]/my_pytorch:v1
+# 로컬 이미지(pytorch:deepspeed-aarch64)를 myhub 형식으로 태그
+$ podman tag localhost/pytorch:deepspeed-aarch64 myhub.ksc.re.kr/[프로젝트명]/pytorch:deepspeed-aarch64
 ```
 
-####
+#### 3.3. 이미지 업로드(Push)
 
-#### 4.3 Singularity/Enroot 이미지로 변환
+태그가 완료된 이미지를 Docker Hub 또는 myhub로 전송합니다.
+
+**1) Docker Hub**
+
+```
+$ podman push docker.io/[Username]/pytorch:deepspeed-aarch64
+```
+
+**2) myhub**
+
+```
+$ podman push myhub.ksc.re.kr/[프로젝트명]/pytorch:deepspeed-aarch64
+```
+
+###
+
+### 4. 이미지 변환&#x20;
+
+Podman으로 준비한 이미지는 컨테이너 실행 도구에 맞는 변환 과정을 거쳐야  합니다.
+
+#### 4.1 Enroot&#x20;
+
+이미지를 SquashFS 포맷으로 변환하여 로딩 속도를 높이고 GPU 연산 효율을 최적화 합니다.
+
+<pre><code># sqsh 이미지 파일 생성(read-only, 계산 노드에서 작업 실행에 적합)
+$ module load enroot/1.4.2
+<strong>$ enroot import -o pytorch-deepspeed-aarch64.sqsh podman://localhost/pytorch:deepspeed-aarch64
+</strong>
+# sqsh 이미지 파일로부터 컨테이너 rootfs(unpacked 디렉터리) 생성 
+# write 가능하며 이미지 빌드 및 시험에 적합 
+$ enroot create -n pytorch-deepspeed-aarch64 pytorch-deepspeed-aarch64.sqsh
+</code></pre>
+
+
+
+{% hint style="info" %}
+**Enroot 이미지 관련 명령어**&#x20;
+{% endhint %}
+
+<table data-header-hidden><thead><tr><th width="86.5999755859375" align="center"></th><th width="142.13336181640625" align="center"></th><th></th></tr></thead><tbody><tr><td align="center"><strong>단계</strong></td><td align="center"><strong>작업 내용</strong></td><td><strong>명령어 / 설정 예시</strong></td></tr><tr><td align="center">이미지 가져오기</td><td align="center"><sub>Docker Hub 및 myhub 등  외부 레지스트리에서 직접 가져오기</sub></td><td><p><sub>$ enroot import -o my_pytorch-v1.sqsh docker://[Username]/my_pytorch:v1</sub></p><p></p><p><sub>$ enroot import -o my_pytorch-v1.sqsh docker://myhub.ksc.re.kr/[프로젝트명]/ubuntu:latest</sub></p></td></tr><tr><td align="center">컨테이너 생성</td><td align="center"><sub>rootfs(unpacked 디렉터리) 생성하기</sub></td><td><p><sub>$ enroot create -n my_pytorch-v1</sub><sup><sub>*</sub></sup><sub> my_pytorch-v1.sqsh</sub>     </p><p><sup><sub>*</sub></sup><sub> 컨테이너(rootfs)는 /tmp/enroot_[UID</sub><sup><sub>**</sub></sup><sub>]/data/my_pytorch-v1 디렉터리에 생성됨</sub>   </p><p><sup><sub>**</sub></sup><sub>  id -u 출력값(숫자)</sub> </p></td></tr><tr><td align="center">컨테이너 <br>리스트</td><td align="center"><sub>enroot create 명령어로 생성한 컨테이너 목록 출력</sub></td><td><p><sub>$ enroot list</sub><sup><sub>*</sub></sup> </p><p><sup><sub>*</sub></sup><sub>컨테이너를 생성한 노드에서만 출력됨</sub></p></td></tr><tr><td align="center">컨테이너 삭제</td><td align="center"><sub>enroot create 명령어로 생성한 컨테이너 제거</sub></td><td><p><sub>$ enroot remove my_pytorch-v1</sub><sup><sub>*</sub></sup></p><p><sup><sub>*</sub></sup><sub>컨테이너를 생성한 노드에서만 제거할 수 있음</sub></p></td></tr></tbody></table>
+
+#### 4.2 Singularity/Apptainer
+
+기존 작업 방식 유지 또는 타 시스템과의 이미지 공유가 필요한 경우 활용합니다.
+
+<pre class="language-bash"><code class="lang-bash">## Podman 이미지를 tar로 내보낸 후 .sif 파일로 빌드
+$ podman save localhost/pytorch:deepspeed-aarch64 -o pytorch-deepspeed-aarch64.tar
+
+# Singularity
+<strong>$ module load singularity/4.5.0
+</strong>$ singularity build --fakeroot pytorch-deepspeed-aarch64.tar.sif docker-archive://pytorch-deepspeed-aarch64.tar
+
+# Apptainer
+$ module load apptainer/1.4.5
+$ apptainer build --fakeroot pytorch-deepspeed-aarch64.tar.sif docker-archive://pytorch-deepspeed-aarch64.tar
+</code></pre>
+
+{% hint style="info" %}
+**KISTI에서 빌드하여  배포하는 Enroot, Singularity/Apptainer 이미지 파일 경로**&#x20;
+
+* Pytorch/Nemo 기본 이미지  :  /apps/common/kisti-container/images
+* Slingshot 고속 네트워크 지원 이미지(Pytorch/Nemo) : /apps/common/kisti-container/images/golden&#x20;
+{% endhint %}
+
+
+
+#### 4.3 아키텍처와 이미지 호환성
+
+컨테이너 이미지의 CPU 아키텍처는 계산 노드와 같아야 합니다.
+
+<table><thead><tr><th width="98.94195556640625">노드 구분</th><th width="169.82598876953125">CPU 아키텍처</th><th width="87.53619384765625">GPU</th><th>이미지 파일 예시</th></tr></thead><tbody><tr><td>GPU 노드</td><td><code>aarch64(arm64)</code><br><code>(Grace CPU)</code></td><td>H100</td><td><p><code>pytorch-aarch64.sif</code>, </p><p><code>pytorch-aarch64.sqsh</code></p></td></tr><tr><td>CPU 노드</td><td><code>x86_64</code><br><code>(AMD EPYC CPU)</code></td><td>없음</td><td><code>ubuntu-x86_64.sif</code></td></tr></tbody></table>
+
+**1) 현재 노드 아키텍처 확인**
 
 ```bash
-## Enroot
-module load enroot/1.4.2
-enroot import -o pytorch-aarch64.sqsh podman://localhost/kisti-pytorch:tutorial
+$ uname -m
+aarch64
+```
+
+
+
+**2) 이미지 아키텍처 확인**
+
+아키텍처 판별이 용이하도록  이미지 태그(Podman) 또는 파일명에 `aarch64(arm64)` 또는 `x86_64(amd64)`를 넣는 것을 권장합니다.
+
+<pre class="language-bash"><code class="lang-bash"><strong>## Podman
+</strong>## exec format error가 발생하면 이미지와 계산 노드의 아키텍처를 먼저 비교합니다. 
+<strong>$ podman image inspect myhub.ksc.re.kr/wjnadia/pytorch:25.03-py3-aarch64 --format '{{.Architecture}}'
+</strong>arm64
 
 ## Singularity
-podman save localhost/kisti-pytorch:tutorial -o pytorch-aarch64.tar
-singularity build --fakeroot pytorch-aarch64.sif \
-  docker-archive://pytorch-aarch64.tar
+$ module load singularity/4.5.0
+$ singularity inspect --labels pytorch-25.03-py3-aarch64.sif | grep build-arch
+org.label-schema.build-arch: arm64
 
-singularity   
-```
+## Apptainer
+$ module load apptainer/1.4.5
+$ singularity inspect --labels pytorch-25.03-py3-x86_64.sif | grep build-arch
+org.label-schema.build-arch: amd64   
 
-빌드된 이미지는 홈/스크래치 디렉터리 또는 [KISTI 내부 레지스트리](appendix-12-how-to-use-containers.md#id-3)에 보관해야 합니다.
-
-Singularity 이미지를 직접 빌드하기 위해서는 뉴론[https://app.gitbook.com/o/TiymW3ZSKXi5K5jUWvfh/sites/site\_ldW8f/s/fBmICgXvD3ihLC5OZla4/\~/edit/\~/changes/346/appendix/appendix-3-how-to-use-singularity-container#id](appendix-3-how-to-use-singularity-container.md#id)
-
-
-
-컨테이너 이미지 배포 위치
-
-```bash
-/apps/common/kisti-container/images
-```
+## Enroot/Pyxis
+$ module load enroot/4.2.0
+$ enroot start pytorch-25.03-py3-aarch64.sif uname -m
+aarch64
+</code></pre>
 
 
 
