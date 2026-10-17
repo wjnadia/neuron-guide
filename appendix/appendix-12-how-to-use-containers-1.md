@@ -7,17 +7,29 @@ hidden: true
 
 ### 1. 개요
 
-6호기 한강  시스템에서 컨테이너 활용 환경은  [뉴론 시스템의 기존 컨테이너  활용 가이드](appendix-12-how-to-use-containers.md)와 마찬가지로 이미지 준비와 계산 작업 실행으로 구분하고 있습니다.&#x20;
+한강 시스템은 HPC 응용 및 AI 학습/추론 등에서 복잡한 소프트웨어 의존성을 해결하고 다양한 시스템에서 일관된 작업 환경을  유지할 수 있도록 최적화된 컨테이너 활용 환경을 제공합니다.        &#x20;
 
-Podman은 OCI 이미지를 빌드하고 관리하는 도구이고, 계산  작업을 실행하기 위해서는 Singularity, Apptainer, Enroot 또는 Pyxis와 같은 컨테이너 런타임을 선택적으로 사용할 수 있습니다.
+사용자는 자신의 작업 단계(빌드, 실행)에 맞춰 적절한 도구를 선택하여 사용할 수 있습니다.
 
-또한, 병렬 연산 및 분산  학습 작업에서 한강 시스템의 고성능 네트워크(Slingshot) 기반의 MPI 및 NCCL 환경 구성을 지원하는 컨테이너 런타임 Wrapper 프로그램(kisti-container)을 제공하고 있습니다.   &#x20;
+Podman은 OCI 이미지를 빌드하고 관리하는 도구이고, 계산  작업을 실행하기 위해서는 Singularity, Apptainer, Enroot과 같은 컨테이너 런타임을 선택적으로 사용할 수 있습니다.
 
-### 2. 도구 선택
+또한, 병렬 연산 및 분산  학습 작업에서 고성능 네트워크(Slingshot) 기반의 MPI 및 NCCL 환경 구성을 지원하는 컨테이너 런타임 Wrapper 프로그램(kisti-container)을 제공하고 있습니다.   &#x20;
 
-<table data-header-hidden><thead><tr><th width="258.115966796875"></th><th width="118.81158447265625"></th><th width="121.5072021484375"></th><th></th></tr></thead><tbody><tr><td>목적</td><td>권장 도구</td><td>이미지 형식</td><td><code>kisti-container</code> 역할</td></tr><tr><td>이미지 빌드·수정·레지스트리 전송</td><td>Podman 4.9.5 </td><td>OCI 이미지</td><td>실행 백엔드가 아님</td></tr><tr><td>기존 Singularity 이미지 실행</td><td>Singularity 4.5.0</td><td rowspan="2"><code>.sif 파일</code></td><td rowspan="4">GPU, MPI, NCCL 환경 구성</td></tr><tr><td>Singularity 호환 실행</td><td>Apptainer 1.4.5</td></tr><tr><td>GH200 작업의 직접 실행</td><td>Enroot 4.2.0</td><td rowspan="2"><code>.sqsh 파일</code></td></tr><tr><td>Slurm 통합 Enroot 실행</td><td>Pyxis 0.24.0.1</td></tr></tbody></table>
+{% hint style="info" %}
+* **Podman** : 일반 사용자 권한 기반의 이미지 빌드 및 관리 도구입니다. Docker를 대체하여 이미지를 생성할 때 사용합니다.
+* **Enroot** : NVIDIA에서 개발한 HPC 전용 런타임입니다. Nvidia GPU에 최적화 되어 있으며, Pyxis 플러그인을 통해 Slurm 스케줄러와 유기적으로 연동됩니다.
+* **Singularity/Apptainer** : HPC 환경에  최적화된 컨테이너 도구로 HPC 시스템에서 보편적으로 활용되고 있습니다.  Apptainer는 Singularity에서 분리되어 발전한 오픈소스 컨테이너 런타임으로, 대부분의 이미지 형식과 사용 방식이 호환됩니다.
+{% endhint %}
 
-처음 사용하는 경우에는 기존 `.sif` 이미지가 있으면 Singularity/Apptainer를, GH200용 `.sqsh` 이미지가 있으면 Pyxis를 권장합니다.&#x20;
+
+
+### 2. 컨테이너도구 선택 가이드
+
+사용자의 목적 및 실행 노드 특성에 따라 최적의 도구를 선택할 수 있습니다.
+
+<table data-header-hidden><thead><tr><th width="104.800048828125" align="center"></th><th align="center"></th><th align="center"></th><th align="center"></th><th></th></tr></thead><tbody><tr><td align="center"><strong>구분</strong></td><td align="center"><strong>Podman</strong><br><strong>(빌드/관리)</strong></td><td align="center"><strong>Enroot</strong><br><strong>(GPU 실행)</strong></td><td align="center"><p><strong>Singularity</strong></p><p><strong>/Apptainer</strong><br><strong>(범용 실행)</strong></p></td><td><strong>kisti-container</strong></td></tr><tr><td align="center">주요 역할</td><td align="center"><p>이미지 생성 </p><p>및 커스터마이징</p></td><td align="center"><p>GPU 연산 가속 </p><p>(권장)</p></td><td align="center">시스템 간<br>호환성 유지</td><td>컨테이너 런타임 Wrapper 프로그램</td></tr><tr><td align="center">저장 형식</td><td align="center"><p>OCI 레이어 </p><p>(디렉터리)</p></td><td align="center"><p><code>.sqsh</code> </p><p>(단일 압축 파일)</p></td><td align="center"><p><code>.sif</code> </p><p>(단일 이미지 파일)</p></td><td>컨테이너 런타임 별 이미지 형식</td></tr><tr><td align="center">특징</td><td align="center">Docker 명령어 호환</td><td align="center">빠른 로딩, <br>Nvidia GPU 최적화<br>Slurm 스케줄러 연동 플러그인 제공(Pyxis)</td><td align="center">기존  누리온/뉴론 컨테이너 환경 유지</td><td>컨테이너에서 계산 노드에 최적화된 MPI, NCCL 환경 구성 지원</td></tr></tbody></table>
+
+
 
 {% hint style="info" %}
 **도구 별 사용법 참고 자료**
@@ -36,49 +48,55 @@ Podman은 OCI 이미지를 빌드하고 관리하는 도구이고, 계산  작�
 
 컨테이너 이미지의 CPU 아키텍처는 계산 노드와 같아야 합니다.
 
-<table><thead><tr><th width="98.94195556640625">노드 구분</th><th width="169.82598876953125">CPU 아키텍처</th><th width="87.53619384765625">GPU</th><th>이미지 파일 예시</th></tr></thead><tbody><tr><td>GPU 노드</td><td><code>aarch64/arm64</code><br><code>(Grace CPU)</code></td><td>H100</td><td><p><code>pytorch-aarch64.sif</code>, </p><p><code>pytorch-aarch64.sqsh</code></p></td></tr><tr><td>CPU 노드</td><td><code>x86_64</code><br><code>(AMD EPYC CPU)</code></td><td>없음</td><td><code>ubuntu-x86_64.sif</code></td></tr></tbody></table>
+<table><thead><tr><th width="98.94195556640625">노드 구분</th><th width="169.82598876953125">CPU 아키텍처</th><th width="87.53619384765625">GPU</th><th>이미지 파일 예시</th></tr></thead><tbody><tr><td>GPU 노드</td><td><code>aarch64(arm64)</code><br><code>(Grace CPU)</code></td><td>H100</td><td><p><code>pytorch-aarch64.sif</code>, </p><p><code>pytorch-aarch64.sqsh</code></p></td></tr><tr><td>CPU 노드</td><td><code>x86_64</code><br><code>(AMD EPYC CPU)</code></td><td>없음</td><td><code>ubuntu-x86_64.sif</code></td></tr></tbody></table>
 
-1\) 현재 노드 아키텍처 확인
+#### 3.1 현재 노드 아키텍처 확인
 
 ```bash
 $ uname -m
 aarch64
 ```
 
+#### 3.2 이미지 아키텍처 확인
 
+아키텍처 판별이 용이하도록  이미지 태그(Podman) 또는 파일명에 `aarch64(arm64)` 또는 `x86_64(amd64)`를 넣는 것을 권장합니다.
 
-2\) Podman 이미지 아키텍처 확인
-
-<pre class="language-bash"><code class="lang-bash"><strong>$ podman image inspect myhub.ksc.re.kr/wjnadia/pytorch:25.03-py3-aarch64 --format '{{.Architecture}}'
+<pre class="language-bash"><code class="lang-bash"><strong>## Podman
+</strong>## exec format error가 발생하면 이미지와 계산 노드의 아키텍처를 먼저 비교합니다. 
+<strong>$ podman image inspect myhub.ksc.re.kr/wjnadia/pytorch:25.03-py3-aarch64 --format '{{.Architecture}}'
 </strong>arm64
-</code></pre>
 
-`exec format error`가 발생하면 이미지와 계산 노드의 아키텍처를 먼저 비교합니다.&#x20;
-
-
-
-&#x20;3\) apptainer/singularity 이미지 아키텍처 확인
-
-```bash
+## Singularity
+$ module load singularity/4.5.0
 $ singularity inspect --labels pytorch-25.03-py3-aarch64.sif | grep build-arch
 org.label-schema.build-arch: arm64
-```
 
-`exec format error`가 발생하면 이미지와 계산 노드의 아키텍처를 먼저 비교합니다.&#x20;
+## Apptainer
+$ module load apptainer/1.4.5
+$ singularity inspect --labels pytorch-25.03-py3-x86_64.sif | grep build-arch
+org.label-schema.build-arch: amd64   
 
-Enroot/Pyxis는 `.sqsh`를 실행하기 위해 컨테이너를 시작하지 않고 아키텍처를 완전히 판별하기 어렵기 때문에 파일명에 `aarch64` 또는 `x86_64`를 넣는 것을 권장합니다.
+## Enroot/Pyxis
+$ module load enroot/4.2.0
+$ enroot start pytorch-25.03-py3-aarch64.sif uname -m
+aarch64
+</code></pre>
 
 
 
-### 4. 이미지 준비
+### 4. 이미지 빌드 (Podman)
 
-#### 4.1 Podman 이미지  빌드
+로그인 노드 또는 계산 노드에서 Podman을 사용하여 컨테이너 이미지를 빌드합니다.&#x20;
 
-[뉴론 컨테이너 활용 가이드](appendix-12-how-to-use-containers.md#id-2.-podman)와 동일하게 Podman을 이용해 Dockerfile 기반 이미지를 빌드할 수 있습니다.&#x20;
+{% hint style="info" %}
+Sugularity 컨테이너 이미지를 직접빌드 하기 위해서는 [**뉴론 컨테이너 활용 가이드의 가. 컨테이너 이미지 빌드하기**](https://docs-ksc.gitbook.io/neuron-user-guide/appendix/appendix-3-how-to-use-singularity-container#id)를 참조하시기 바랍니다.&#x20;
+{% endhint %}
+
+#### 4.1 Podman 사용 설정
+
+Podman 사용 환경 설정을 위해서는 먼저 사용자 홈 디렉터리에 .usepodman 이라는 파일을 생성해야 합니다. 한 번만 생성하면 되고 로그아웃 후 다시 로그인 하면 바로 적용 됩니다.
 
 ```bash
-# Podman 사용 환경 설정을 위해서는 먼저 사용자 홈 디렉터리에 .usepodman 이라는 파일을 생성해야 합니다. 
-# 한 번만 생성하면 되고 로그아웃 후 다시 로그인 하면 바로 적용 됩니다.
 $ cd ~                # 사용자홈 디렉터리(/home01/[ID])로 이동             
 $ touch .usepodman    
 $ ls -la .usepodman
@@ -86,45 +104,161 @@ $ ls -la .usepodman
 $ exit                # 로그아웃 후 다시 로그인
 ```
 
-<pre class="language-bash"><code class="lang-bash">$ cat Dockerfile.pytorch   # 이미지 빌드를 위한 Dockerfile 생성
+#### 4.2 이미지 빌드하기
+
+사용자 소스 코드나 특정 라이브러리를 포함한 커스텀 이미지를 생성합니다.
+
+```bash
+# 현재 디렉터리(.)의 Dockerfile.pytorch로 'pytorch:deepspeed-aarch64' 이미지 빌드
+$ podman build -t pytorch:deepspeed-aarch64 -f Dockerfile.pytorch .
+$ podman images
+REPOSITORY                       TAG                IMAGE ID      CREATED         SIZE
+localhost/pytorch                deepspeed-aarch64  5e7a4783117b  21 minutes ago  22.1 GB
+$ podman image inspect localhost/pytorch:deepspeed-aarch64 --format 'image={{.RepoTags}} arch={{.Architecture}} os={{.Os}}'
+image=[localhost/pytorch:deepspeed-aarch64] arch=arm64 os=linux
+```
+
+```bash
+[Dockerfile 예시  : Dockerfile.pytorch ]
+# 베이스 이미지 지정 (NVIDIA GPU Cloud 제공 이미지)
 ARG BASE_IMAGE=nvcr.io/nvidia/pytorch:25.03-py3
 FROM ${BASE_IMAGE}
 
+# 메타 데이터 설정 (`docker image inspect` 등으로 이미지의 용도 확인)
 LABEL org.opencontainers.image.title="kisti-container tutorial image"
+
+# 이후 명령의 기본 작업 디렉터리 및 컨테이너 실행 기본 위치 설정
 WORKDIR /workspace
 
-RUN umask 022
+# 추가 시스템 패키지 설치 (필요시)
+RUN apt-get update && apt-get install -y \
+    wget \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+    
+# Python 라이브러리 추가 설치 (pip 활용)
 RUN python3 -m pip install --no-cache-dir deepspeed==0.18.9
-RUN chmod -R a+rX /usr/local /opt
 
+# 컨테이너 실행 명령을 별도로 지정하지 않았을 때 실행할 기본 명령어
 CMD ["python3", "--version"]
+```
 
-# 이미지 빌드 및 아키텍처 확인
-$ podman build -f Dockerfile.pytorch -t localhost/kisti-pytorch:tutorial .
-$ podman image inspect localhost/kisti-pytorch:tutorial --format 'image={{.RepoTags}} arch={{.Architecture}} os={{.Os}}'
-<strong>  image=[localhost/kisti-pytorch:tutorial] arch=arm64 os=linux
-</strong></code></pre>
+
 
 레지스트리에서 직접 가져오는 예시:
 
 ```bash
 $ podman pull nvcr.io/nvidia/pytorch:25.03-py3
+Trying to pull nvcr.io/nvidia/pytorch:25.03-py3...
+Getting image source signatures
+Copying blob 69fbe38eb239 done   |
+Copying blob 5b17151e9710 done   |
+Copying blob 58f537c310dd done   |
+--[중략]--
+Copying config b9d9faba96 done   |
+Writing manifest to image destination
+b9d9faba9659ded5e9c72b694879edb79ef4a6e8786d367a2c22f83837536253
+
 $ podman images
+REPOSITORY                                 TAG                     IMAGE ID      CREATED        SIZE
+nvcr.io/nvidia/pytorch                     25.03-py3               b9d9faba9659  19 months ago  22 GB
 ```
 
-#### 4.2 Singularity/Enroot 이미지로 변환
+
+
+{% hint style="info" %}
+**이미지 빌드 명령어**
+{% endhint %}
+
+```
+$ podman build [옵션] -t [이미지명]:[태그] [Dockerfile경로]
+-t, --tag: 이미지 이름과 버전(태그) 지정(예: my_env:v1.0)
+-f, --file: 기본 파일명(Dockerfile)이 아닌 다른 이름의 파일을 사용할 때 지정
+--no-cache: 캐시를 사용하지 않고 모든 단계를 새로 빌드(라이브러리 업데이트 시 유용)
+-v, --volume: 빌드 과정 중 호스트 디렉토리를 마운트해야 할 때 사용
+
+# 특정 파일을 지정하여 빌드
+$ podman build -t my_pytorch:gpu_ver-aarch64 -f Dockerfile.gpu .
+```
+
+
+
+{% hint style="info" %}
+**이미지 관리 명령어 요약**
+{% endhint %}
+
+<table data-header-hidden><thead><tr><th width="111.66668701171875" align="center"></th><th width="235.60009765625"></th><th></th></tr></thead><tbody><tr><td align="center"><strong>기능</strong></td><td><strong>명령어</strong></td><td><strong>설명</strong></td></tr><tr><td align="center">목록 확인</td><td><sub>$ podman images</sub></td><td>로컬에 저장된 이미지 리스트 출력</td></tr><tr><td align="center">이미지 삭제</td><td><sub>$ podman rmi [이미지ID]</sub></td><td>불필요한 이미지 제거</td></tr><tr><td align="center">상세 정보</td><td><sub>$ podman inspect [이미지ID]</sub></td><td>이미지 레이어, 환경변수 등 상세 정보 확인</td></tr><tr><td align="center">태그 변경</td><td><sub>$ podman tag [기존이름] [새이름]</sub></td><td>이미지에 새로운 이름/태그 부여</td></tr></tbody></table>
+
+### 3. 이미지 업로드
+
+Podman으로 빌드한 이미지를 **외부 저장소인 Docker Hub** 또는 **KISTI 내부 저장소인 myhub**에 업로드하여 관리 및 공유 할 수 있습니다. 특히, 로그인  또는 계산 노드의 로컬 파일시스템에 저장된 이미지는 영구 보관되지  않기  때문에,  외부 또는 내부 저장소에 이미지를 업로드하는 것을 권장합니다.  &#x20;
+
+#### 3.1  Docker Hub 또는 myhub 로그인
+
+먼저 Podman을 통해 Docker Hub 또는 myhub 계정으로 인증합니다.
+
+**1) Docker Hub**
+
+```
+$ podman login docker.io
+# Username과 Password(또는 Access Token)를 입력합니다.
+```
+
+**2) myhub**
+
+{% code expandable="true" %}
+```
+$ podman login myhub.ksc.re.kr
+# Username(슈퍼컴퓨터 계정 ID)와 Password(CLI secert)을 입력합니다.
+```
+{% endcode %}
+
+{% hint style="info" %}
+myhub 를 사용하기 위해서는 먼저  웹  브라우저에서 [**https://myhub.ksc.re.kr**](https://myhub.ksc.re.kr/)에 슈퍼컴퓨터 계정으로 로그인하여 **사용자 프로젝트**를 생성하고  CLI secret을  복사해 와야 합니다.&#x20;
+
+<i class="fa-linktree">:linktree:</i> 자세한 사용 방법은 [**myhub 사용법**](appendix-12-how-to-use-containers-1.md#myhub)을 참조하시기 바랍니다.&#x20;
+{% endhint %}
+
+
+
+#### 3.2 이미지 태그(Tag) 설정
+
+업로드를 위해서는 이미지 이름을 **\[레지스트리주소]/\[Username 또는 프로젝트명]/\[이미지명]:\[버전태그]** 형식으로 지정해야 합니다.
+
+**1) Docker Hub**
+
+```
+# 로컬 이미지(my_pytorch:v1)를 Docker Hub 형식으로 태그
+$ podman tag localhost/my_pytorch:v1 docker.io/[Username]/my_pytorch:v1
+```
+
+**2) myhub**
+
+```
+# 로컬 이미지(my_pytorch:v1)를 myhub 형식으로 태그
+$ podman tag localhost/my_pytorch:v1 myhub.ksc.re.kr/[프로젝트명]/my_pytorch:v1
+```
+
+####
+
+#### 4.3 Singularity/Enroot 이미지로 변환
 
 ```bash
 ## Enroot
+module load enroot/1.4.2
 enroot import -o pytorch-aarch64.sqsh podman://localhost/kisti-pytorch:tutorial
 
 ## Singularity
 podman save localhost/kisti-pytorch:tutorial -o pytorch-aarch64.tar
 singularity build --fakeroot pytorch-aarch64.sif \
   docker-archive://pytorch-aarch64.tar
+
+singularity   
 ```
 
 빌드된 이미지는 홈/스크래치 디렉터리 또는 [KISTI 내부 레지스트리](appendix-12-how-to-use-containers.md#id-3)에 보관해야 합니다.
+
+Singularity 이미지를 직접 빌드하기 위해서는 뉴론[https://app.gitbook.com/o/TiymW3ZSKXi5K5jUWvfh/sites/site\_ldW8f/s/fBmICgXvD3ihLC5OZla4/\~/edit/\~/changes/346/appendix/appendix-3-how-to-use-singularity-container#id](appendix-3-how-to-use-singularity-container.md#id)
 
 
 
@@ -134,11 +268,17 @@ singularity build --fakeroot pytorch-aarch64.sif \
 /apps/common/kisti-container/images
 ```
 
-배치 파일의 `IMAGE`, 파티션, 시간, CPU/GPU 수 등을 확인한 뒤 제출합니다.
 
-###
 
-### 5. kisti-container 실행 환경&#x20;
+
+
+4. ### 컨테이너 런타임 기반 실행&#x20;
+
+
+
+### 5. kisti-container 기반 컨테이너 실행
+
+#### 5.1 실행 환경&#x20;
 
 ```bash
 KISTI_CONTAINER=/apps/common/kisti-container/bin/kisti-container
@@ -150,33 +290,15 @@ $ srun --help | grep -- --container-image
 
 마지막 명령에 `--container-image`가 표시되면 Pyxis가 Slurm에 등록된 상태입니다.
 
-사이트 기본 설정은 다음 파일에 존재합니다.
-
-```
-/apps/common/kisti-container/conf/kisti-container.conf
-```
-
-사용자 별 설정은 필요할 때만 다음 파일에 작성합니다.
-
-```
-$HOME/.config/kisti-container.conf
-```
-
-별도 설정 파일을 지정하려면 다음 환경 변수를 사용합니다.
-
-```bash
-export KISTI_CONTAINER_CONFIG=/absolute/path/kisti-container.conf
-```
 
 
-
-### 6. kisti-container 기본 명령 형식
+#### 5.2. 기본 명령 형식
 
 ```bash
 kisti-container [Wrapper 옵션] IMAGE COMMAND [ARG ...]
 ```
 
-주요 옵션:
+**1) 주요 옵션**
 
 <table><thead><tr><th width="178.07244873046875">옵션</th><th>값</th><th>설명</th></tr></thead><tbody><tr><td><code>--runtime</code></td><td><code>singularity</code>, <code>apptainer</code>, <code>enroot</code>, <code>pyxis</code></td><td>실행 백엔드</td></tr><tr><td><code>--workload</code></td><td><code>generic</code>, <code>pytorch-dist*</code></td><td>워크로드 별 검증 규칙</td></tr><tr><td><code>--launcher</code></td><td><code>srun-native</code>, <code>torchrun</code></td><td>분산 프로세스 생성 방식</td></tr><tr><td><code>--local-processes</code></td><td>양의 정수</td><td>노드별 torchrun worker 수</td></tr><tr><td><code>--mpi</code></td><td><code>none</code>, <code>cray</code>, <code>openmpi</code>, <code>auto</code></td><td>MPI 구성</td></tr><tr><td><code>--nccl</code></td><td><code>none</code>, <code>native</code>, <code>ofi</code>, <code>auto</code></td><td>NCCL 전송 구성</td></tr><tr><td><code>--checkpoint-dir</code></td><td>절대 경로</td><td>쓰기 가능한 체크포인트 경로</td></tr><tr><td><code>-B</code>, <code>--bind</code></td><td><code>SRC:DST:MODE</code></td><td>추가 마운트</td></tr><tr><td><code>--env</code></td><td><code>NAME=VALUE</code></td><td>컨테이너에 전달할 환경 변수</td></tr><tr><td><code>--diagnose</code></td><td>값 없음</td><td>rank 0에서 결정된 설정 출력</td></tr><tr><td><code>--doctor</code></td><td>값 없음</td><td>GPU, CXI, OFI 라이브러리 사전 점검</td></tr><tr><td><code>--dry-run</code></td><td>값 없음</td><td>실행하지 않고 최종 명령 출력</td></tr></tbody></table>
 
@@ -184,7 +306,7 @@ kisti-container [Wrapper 옵션] IMAGE COMMAND [ARG ...]
 
 
 
-### 7. 배치 작업 실행 방식
+### 5.3 배치 작업 실행 방식
 
 #### 7.1 Singularity, Apptainer, Enroot
 
