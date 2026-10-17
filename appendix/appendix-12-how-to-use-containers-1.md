@@ -261,8 +261,31 @@ $ apptainer build --fakeroot pytorch-deepspeed-aarch64.tar.sif docker-archive://
 {% hint style="info" %}
 **KISTI에서 빌드하여  배포하는 Enroot, Singularity/Apptainer 이미지 파일 경로**&#x20;
 
-* Pytorch/Nemo 기본 이미지  :  /apps/common/kisti-container/images
-* Slingshot 고속 네트워크 지원 이미지(Pytorch/Nemo) : /apps/common/kisti-container/images/golden&#x20;
+* _**기본 이미지  :  /apps/common/kisti-container/images**_
+
+$ ls -lh\
+total 106G\
+drwxr-xr-x 2 xxxxx xxxxx 4.0K Oct 17 17:13 golden\
+-rwxr-xr-x 1 xxxxx xxxxx 9.6G Oct 15 13:29 mlperf-llama31\_8b-gh200-aarch64.sif\
+-rw-r--r-- 1 xxxxx xxxxx 9.7G Oct 15 11:41 mlperf-llama31\_8b-gh200-aarch64.sqsh\
+-rwxr-xr-x 1 xxxxx xxxxx 19G Oct 14 11:34 nemo-25.04.00-aarch64.sif\
+-rw-r--r-- 1 xxxxx xxxxx 19G Oct 14 11:34 nemo-25.04.00-aarch64.sqsh\
+-rwxr-xr-x 1 xxxxx xxxxx 64M Oct 16 13:19 omb-7.5.2-aarch64.sif\
+-rwxr-xr-x 1 xxxxx xxxxx 63M Oct 16 13:41 omb-7.5.2-x86\_64.sif\
+-rwxr-xr-x 1 xxxxx xxxxx 11G Oct 14 11:34 pytorch-25.03-py3-aarch64.sif\
+-rw-r--r-- 1 xxxxx xxxxx 11G Oct 14 11:34 pytorch-25.03-py3-aarch64.sqsh\
+-rwxr-xr-x 1 xxxxx xxxxx 11G Oct 14 11:35 pytorch-25.03-py3-x86\_64.sif\
+-rw-r--r-- 1 xxxxx xxxxx 11G Oct 14 11:35 pytorch-25.03-py3-x86\_64.sqsh\
+-rw-r--r-- 1 xxxxx xxxxx 7.8G Oct 14 11:34 pytorch-25.09-py3-aarch64.sqsh
+
+
+
+* **Slingshot 고속 네트워크 지원 이미지  : /apps/common/kisti-container/images/golden**
+
+$ ls -lh\
+total 21G\
+-rwxr-xr-x 1 xxxxx xxxxx 11G Oct 14 11:34 kisti-pytorch-25.03-gh200-r1-aarch64.sif\
+-rw-r--r-- 1 xxxxx xxxxx 11G Oct 14 11:35 kisti-pytorch-25.03-gh200-r1-aarch64.sqsh
 {% endhint %}
 
 
@@ -279,8 +302,6 @@ $ apptainer build --fakeroot pytorch-deepspeed-aarch64.tar.sif docker-archive://
 $ uname -m
 aarch64
 ```
-
-
 
 **2) 이미지 아키텍처 확인**
 
@@ -309,15 +330,17 @@ aarch64
 
 
 
+### 5. 컨테이너 런타임 기반 실행&#x20;
+
+5.1&#x20;
 
 
-4. ### 컨테이너 런타임 기반 실행&#x20;
 
 
 
-### 5. kisti-container 기반 컨테이너 실행
+### 6. kisti-container 기반 컨테이너 실행
 
-#### 5.1 실행 환경&#x20;
+#### 6.1 실행 환경&#x20;
 
 ```bash
 KISTI_CONTAINER=/apps/common/kisti-container/bin/kisti-container
@@ -331,7 +354,7 @@ $ srun --help | grep -- --container-image
 
 
 
-#### 5.2. 기본 명령 형식
+#### 6.2. 기본 명령 형식
 
 ```bash
 kisti-container [Wrapper 옵션] IMAGE COMMAND [ARG ...]
@@ -345,9 +368,9 @@ kisti-container [Wrapper 옵션] IMAGE COMMAND [ARG ...]
 
 
 
-### 5.3 배치 작업 실행 방식
+#### 6.3 배치 작업 실행 방식
 
-#### 7.1 Singularity, Apptainer, Enroot
+**1) Singularity, Apptainer, Enroot**
 
 컨테이너 백엔드에서 `kisti-container`는 Slurm task 안에서 실행되는 Wrapper입니다. 따라서 배치 파일에 `srun`을 사용합니다.
 
@@ -358,7 +381,7 @@ srun --mpi=none \
     IMAGE.sqsh python3 train.py
 ```
 
-#### 7.2 Pyxis
+**2) Pyxis**
 
 Pyxis에서 `kisti-container`는 `srun` 명령을 생성하는 프론트엔드입니다. 배치 스크립트에서 직접 호출합니다.
 
@@ -378,26 +401,60 @@ srun kisti-container --runtime pyxis ...
 
 
 
-### 8. 작업 유형 별 예제
+#### 6.4. 작업 유형 별 예제
 
-예제  파일 배포 위치:
+사용자는 관심 있는 작업 유형의 예제 디렉터리와 예제 실행에 필요한 이미지 파일을 자신의 작업 공간으로 복사합니다.\
+특히, 예제08-MLperf는 llama 모델 데이터가 포함 되어 용량이 크기 때문에 필요한 경우에만 복사합니다.&#x20;
 
-```
-/apps/common/kisti-container/examples
-```
+<pre class="language-bash"><code class="lang-bash"><strong>## 예제 디렉터리
+</strong><strong>$ ls -l /apps/common/kisti-container/examples
+</strong>01-cpu-smoke  
+02-gpu-smoke  
+03-mpi-omb  
+04-pytorch-ddp  
+05-pytorch-fsdp2  
+06-nemo-megatron  
+07-pytorch-deepspeed  
+08-MLperf  
+README.md
 
-사용자는 예제를 자신의 작업 공간으로 복사합니다.
+## Enroot 및 Singularity/Apptainer 이미지 파일디렉터리
+$ ls /apps/common/kisti-container/images  (기본 이미지)
+mlperf-llama31_8b-gh200-aarch64.sqsh  
+nemo-25.04.00-aarch64.sqsh  
+omb-7.5.2-x86_64.sif           
+pytorch-25.03-py3-aarch64.sqsh  
+pytorch-25.03-py3-x86_64.sqsh
+mlperf-llama31_8b-gh200-aarch64.sif  
+nemo-25.04.00-aarch64.sif             
+omb-7.5.2-aarch64.sif       
+pytorch-25.03-py3-aarch64.sif  
+pytorch-25.03-py3-x86_64.sif    
+pytorch-25.09-py3-aarch64.sqsh
+
+$ ls /apps/common/kisti-container/images/golden (Slingshot 고속네트워크 지원 이미지)
+kisti-pytorch-25.03-gh200-r1-aarch64.sif  
+kisti-pytorch-25.03-gh200-r1-aarch64.sqsh
+</code></pre>
 
 ```bash
-mkdir -p /scratch/$USER/kisti-container
-cp -a /apps/common/kisti-container/examples/. \
-  /scratch/$USER/kisti-container/
-cd /scratch/$USER/kisti-container
+# 예제 디렉터리 복사
+$ mkdir -p /scratch/$USER/kisti-container/examples
+
+$ cp -a /apps/common/kisti-container/examples/04-pytorch-ddp. \
+  /scratch/$USER/kisti-container/examples/
+
+# 이미지 파일 복사
+$ mkdir -p /scratch/$USER/kisti-container/images
+cp -a /apps/common/kisti-container/images/pytorch-25.03-py3-aarch64.sif \
+  /scratch/$USER/kisti-container/images/
+cp -a /apps/common/kisti-container/images/pytorch-25.03-py3-aarch64.sqsh \
+  /scratch/$USER/kisti-container/images/
 ```
 
-배치 파일의 `IMAGE`, 파티션, 시간, CPU/GPU 수 등을 확인한 뒤 제출합니다.&#x20;
 
-#### 8.1 일반  CPU/GPU 작업
+
+**1) 일반  CPU/GPU 작업**
 
 &#x20;일반 CPU/GPU 작업에서 kisti-container의 옵션은 `--workload generic` 을 사용합니다. 단일 GPU에서는 `--nccl native` 또는 `--nccl none`을 선택할 수 있습니다.
 
@@ -441,7 +498,9 @@ $ cat gpu-pyxis-20590.out
 GPU_SMOKE_PASS host=gpu0014 gpu=NVIDIA GH200 120GB shape=(2048, 2048) mean=0.011777
 ```
 
-#### 8.2  MPI 작업
+
+
+**2)  MPI 작업**
 
 &#x20;MPI 작업은 `--workload generic`을 사용하며, MPI 유형에 따른 관련 옵션은 아래와 같습니다.&#x20;
 
@@ -587,7 +646,9 @@ srun \
 4194304            193713.41          46184.88
 </code></pre>
 
-#### 8.3 PyTorch DDP
+
+
+**3) PyTorch DDP**
 
 DDP 2노드 8GPU 예제는 노드당 4개의 Slurm rank를 생성합니다. `--nccl auto`는 2노드에서 사이트의 AWS OFI NCCL, Cray Libfabric, CXI 프로파일을 선택합니다.<br>
 
@@ -721,7 +782,9 @@ $ cat checkpoints/ddp-pyxis-20445/ddp-smoke-result.json
 }
 ```
 
-#### 8.3 PyTorch FSDP2
+
+
+**4) PyTorch FSDP2**
 
 FSDP2 예제는 노드당 Slurm task 1개를 만들고, 각 task 안에서 torchrun worker 4개를 실행합니다. 전체 `WORLD_SIZE`는 8입니다.
 
@@ -790,7 +853,7 @@ RESULT backend=nccl workload=fsdp2 world_size=8 precision=bf16 mean_step_ms=22.3
 
 
 
-#### 8.4 NeMo/Megatron&#x20;
+**5) NeMo/Megatron**&#x20;
 
 TP·DP 등 모델 병렬과 데이터 병렬을 조합하는 대규모 모델 학습을 위한 NeMo 예제는 GH200 2노드에서 노드 내부 TP=4, 노드 간 DP=2를 확인합니다.
 
@@ -845,7 +908,7 @@ module load enroot/4.2.0
 작업제출:
 
 ```bash
-sbatch run-pyxis.sbatch
+$ sbatch run-pyxis.sbatch
 ```
 
 결과 파일:
@@ -858,7 +921,7 @@ NEMO_MCORE_TPDP_RESULT status=PASS world_size=8 tp_size=4 dp_size=2 steps=5 last
 
 
 
-#### 8.5 DeepSpeed&#x20;
+**6) DeepSpeed**&#x20;
 
 ZeRO 최적화로 옵티마이저 상태와 그래디언트를 GPU들에 나눠 저장하는 데이터 병렬 학습 예제입니다. GH200 2노드에서 노드당 GPU 4장, 총 8개 rank로 ZeRO-2 학습이 동작하는지 확인합니다.
 
@@ -913,7 +976,7 @@ export XDG_CACHE_HOME=$CACHE_ROOT/xdg
 작업제출:
 
 ```bash
-sbatch run-pyxis.sbatch
+$ sbatch run-pyxis.sbatch
 ```
 
 결과 파일:
@@ -944,42 +1007,13 @@ $ cat ds-pyxis-23707.out
 
 
 
-### 9. 체크포인트  및 마운트
-
-체크포인트에는 계산 노드 모두에서 접근 가능한 절대 경로를 사용합니다.
-
-```bash
-CHECKPOINT_DIR=/scratch/$USER/checkpoints/run01
-mkdir -p "$CHECKPOINT_DIR"
-```
-
-`CHECKPOINT_DIR`를 생략한 예제는 다음 형식으로 작업 별 경로를 만듭니다.
-
-```
-CHECKPOINT_DIR=${SLURM_SUBMIT_DIR}/checkpoints/WORKLOAD-RUNTIME-${SLURM_JOB_ID}
-```
-
-기존 체크포인트에서 재시작 할 때는 동일한 `CHECKPOINT_DIR`를 명시합니다.
-
-추가 데이터 마운트:
-
-```bash
-kisti-container ... \
-  -B /scratch/$USER/dataset:/workspace/dataset:ro \
-  -B /scratch/$USER/output:/workspace/output:rw \
-  IMAGE COMMAND
-```
-
-
-
-### 10. 다중 노드 NCCL-OFI/CXI
+#### 6.5 다중 노드 NCCL-OFI/CXI
 
 2노드 이상 GH200 작업은 다음 모듈을 배치 스크립트에서 로드합니다.
 
-```bash
-module load aws-ofi-nccl/1.20.0
-module load libfabric/2.3.1
-```
+<pre class="language-bash"><code class="lang-bash"><strong>module load aws-ofi-nccl/1.20.0
+</strong>module load libfabric/2.3.1
+</code></pre>
 
 사전 점검:
 
@@ -1004,7 +1038,7 @@ DOCTOR_PASS
 
 
 
-### 11. 문제 해결
+#### 6.6. 문제 해결
 
 | 오류 또는 현상                                  | 확인 항목                                      | 조치                                           |
 | ----------------------------------------- | ------------------------------------------ | -------------------------------------------- |
