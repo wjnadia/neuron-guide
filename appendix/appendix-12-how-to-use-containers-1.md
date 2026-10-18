@@ -259,33 +259,34 @@ $ apptainer build --fakeroot pytorch-deepspeed-aarch64.tar.sif docker-archive://
 </code></pre>
 
 {% hint style="info" %}
-**KISTI에서 빌드하여  배포하는 Enroot, Singularity/Apptainer 이미지 파일 경로**&#x20;
+**KISTI에서 빌드하여  배포하는 Enroot(.sqsh), Singularity/Apptainer(.sif) 이미지 파일 경로**&#x20;
 
 * _**기본 이미지  :  /apps/common/kisti-container/images**_
 
-$ ls -lh\
-total 106G\
-drwxr-xr-x 2 xxxxx xxxxx 4.0K Oct 17 17:13 golden\
--rwxr-xr-x 1 xxxxx xxxxx 9.6G Oct 15 13:29 mlperf-llama31\_8b-gh200-aarch64.sif\
--rw-r--r-- 1 xxxxx xxxxx 9.7G Oct 15 11:41 mlperf-llama31\_8b-gh200-aarch64.sqsh\
--rwxr-xr-x 1 xxxxx xxxxx 19G Oct 14 11:34 nemo-25.04.00-aarch64.sif\
--rw-r--r-- 1 xxxxx xxxxx 19G Oct 14 11:34 nemo-25.04.00-aarch64.sqsh\
--rwxr-xr-x 1 xxxxx xxxxx 64M Oct 16 13:19 omb-7.5.2-aarch64.sif\
--rwxr-xr-x 1 xxxxx xxxxx 63M Oct 16 13:41 omb-7.5.2-x86\_64.sif\
--rwxr-xr-x 1 xxxxx xxxxx 11G Oct 14 11:34 pytorch-25.03-py3-aarch64.sif\
--rw-r--r-- 1 xxxxx xxxxx 11G Oct 14 11:34 pytorch-25.03-py3-aarch64.sqsh\
--rwxr-xr-x 1 xxxxx xxxxx 11G Oct 14 11:35 pytorch-25.03-py3-x86\_64.sif\
--rw-r--r-- 1 xxxxx xxxxx 11G Oct 14 11:35 pytorch-25.03-py3-x86\_64.sqsh\
--rw-r--r-- 1 xxxxx xxxxx 7.8G Oct 14 11:34 pytorch-25.09-py3-aarch64.sqsh
+```
+mlperf-llama31_8b-gh200-aarch64.sqsh  
+nemo-25.04.00-aarch64.sqsh  
+omb-7.5.2-x86_64.sif           
+pytorch-25.03-py3-aarch64.sqsh  
+pytorch-25.03-py3-x86_64.sqsh
+mlperf-llama31_8b-gh200-aarch64.sif  
+nemo-25.04.00-aarch64.sif             
+omb-7.5.2-aarch64.sif       
+pytorch-25.03-py3-aarch64.sif  
+pytorch-25.03-py3-x86_64.sif    
+pytorch-25.09-py3-aarch64.sqsh
+```
 
 
 
-* **Slingshot 고속 네트워크 지원 이미지  : /apps/common/kisti-container/images/golden**
+* **Slingshot 고속 네트워크 지원 이미지  : /apps/common/kisti-container/images/slingshot**
 
-$ ls -lh\
-total 21G\
--rwxr-xr-x 1 xxxxx xxxxx 11G Oct 14 11:34 kisti-pytorch-25.03-gh200-r1-aarch64.sif\
--rw-r--r-- 1 xxxxx xxxxx 11G Oct 14 11:35 kisti-pytorch-25.03-gh200-r1-aarch64.sqsh
+```
+kisti-pytorch-25.03-gh200-r1-aarch64.sif  
+kisti-pytorch-25.03-gh200-r1-aarch64.sqsh
+kisti-nemo-25.04-gh200-r1-aarch64.sif
+kisti-nemo-25.04-gh200-r1-aarch64.sqsh
+```
 {% endhint %}
 
 
@@ -372,7 +373,7 @@ $ podman run --rm --device nvidia.com/gpu=0 \
 
 #### 5.3 kisti-container&#x20;
 
-`kisti-container`는 단독으로 실행하지 않으며 배치 작업&#x20;
+
 
 **1)  기본 명령 형식**
 
@@ -441,25 +442,9 @@ srun kisti-container --runtime pyxis ...
 06-nemo-megatron  
 07-pytorch-deepspeed  
 
-## Enroot 및 Singularity/Apptainer 이미지 파일디렉터리
-$ ls /apps/common/kisti-container/images  (기본 이미지)
-mlperf-llama31_8b-gh200-aarch64.sqsh  
-nemo-25.04.00-aarch64.sqsh  
-omb-7.5.2-x86_64.sif           
-pytorch-25.03-py3-aarch64.sqsh  
-pytorch-25.03-py3-x86_64.sqsh
-mlperf-llama31_8b-gh200-aarch64.sif  
-nemo-25.04.00-aarch64.sif             
-omb-7.5.2-aarch64.sif       
-pytorch-25.03-py3-aarch64.sif  
-pytorch-25.03-py3-x86_64.sif    
-pytorch-25.09-py3-aarch64.sqsh
-
-$ ls /apps/common/kisti-container/images/golden (Slingshot 고속네트워크 지원 이미지)
-kisti-pytorch-25.03-gh200-r1-aarch64.sif  
-kisti-pytorch-25.03-gh200-r1-aarch64.sqsh
-kisti-nemo-25.04-gh200-r1-aarch64.sif
-kisti-nemo-25.04-gh200-r1-aarch64.sqsh
+## 이미지 파일 디렉터리 : Enroot(.sqsh), Singularity/Apptainer(.sif)
+- 기본 이미지 : /apps/common/kisti-container/images  
+- Slingshot 고속네트워크 지원 이미지 : /apps/common/kisti-container/images/slingshot 
 </code></pre>
 
 ```bash
