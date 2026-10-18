@@ -1,6 +1,5 @@
 ---
-description: 수정 중이므로 10월 19일(월) 이후 사용 가능함
-hidden: true
+description: 수정 중
 ---
 
 # (6호기 한강) 컨테이너 활용 가이드
