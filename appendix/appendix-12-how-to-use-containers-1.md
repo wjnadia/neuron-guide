@@ -330,37 +330,59 @@ aarch64
 
 
 
-### 5. 컨테이너 런타임 기반 실행&#x20;
+### 5. 이미지 실행
 
-5.1&#x20;
+생성된 이미지는  Enroot 또는 Singularity/Apptainer 환경에 배포하여 실행할 수 있습니다.
 
-
-
-
-
-### 6. kisti-container 기반 컨테이너 실행
-
-#### 6.1 실행 환경&#x20;
+#### 5.1 Enroot&#x20;
 
 ```bash
-KISTI_CONTAINER=/apps/common/kisti-container/bin/kisti-container
-
-$ KISTI_CONTAINER --version
-$ KISTI_CONTAINER --help
-$ srun --help | grep -- --container-image
+# GPU 계산 노드에서 squashFS 이미지 파일을 로드하고 실행
+# GPU 가속 연동 옵션 필요 없음(자동 연동됨)
+# 공유 이미지 경로 : /apps/common/kisti-container/images
+$ enroot start pytorch-25.03-py3-aarch64.sqsh nvidia-smi
+$ enroot start pytorch-25.03-py3-aarch64.sif python train.py
 ```
 
-마지막 명령에 `--container-image`가 표시되면 Pyxis가 Slurm에 등록된 상태입니다.
-
-
-
-#### 6.2. 기본 명령 형식
+#### 5.2 Singularity/Apptainer
 
 ```bash
-kisti-container [Wrapper 옵션] IMAGE COMMAND [ARG ...]
+# GPU 계산노드에서 Singularity 이미지를 로드하여 실행
+# --nv: GPU 가속 연동 옵션 필수
+# 공유 이미지 경로 : /apps/common/kisti-container/images
+$ singularity exec --nv pytorch-25.03-py3-aarch64.sif nvidia-smi
+$ singularity exec --nv pytorch-25.03-py3-aarch64.sif python train.py
 ```
 
-**1) 주요 옵션**
+{% hint style="info" %}
+#### [Podman에서 ](#user-content-fn-1)[^1]이미지  실행 방법
+
+```shellscript
+# 모든 GPU 사용
+$ podman run --rm --device nvidia.com/gpu=all \
+    nvcr.io/nvidia/pytorch  nvidia-smi
+
+# 여러 장치 중 특정 GPU(예: 0번)만 사용
+$ podman run --rm --device nvidia.com/gpu=0 \
+    nvcr.io/nvidia/pytorch  nvidia-smi
+```
+{% endhint %}
+
+####
+
+#### 5.3 kisti-container&#x20;
+
+`kisti-container`는 Slurm task 안에서 실행되는 Wrapper  프로그램입니다. &#x20;
+
+**1)  기본 명령 형식**
+
+<pre class="language-bash"><code class="lang-bash">$ export PATH=$PATH:/apps/common/kisti-container/bin
+<strong>$ kisti-container [Wrapper 옵션] IMAGE COMMAND [ARG ...]
+</strong></code></pre>
+
+
+
+**2) 주요 옵션**
 
 <table><thead><tr><th width="178.07244873046875">옵션</th><th>값</th><th>설명</th></tr></thead><tbody><tr><td><code>--runtime</code></td><td><code>singularity</code>, <code>apptainer</code>, <code>enroot</code>, <code>pyxis</code></td><td>실행 백엔드</td></tr><tr><td><code>--workload</code></td><td><code>generic</code>, <code>pytorch-dist*</code></td><td>워크로드 별 검증 규칙</td></tr><tr><td><code>--launcher</code></td><td><code>srun-native</code>, <code>torchrun</code></td><td>분산 프로세스 생성 방식</td></tr><tr><td><code>--local-processes</code></td><td>양의 정수</td><td>노드별 torchrun worker 수</td></tr><tr><td><code>--mpi</code></td><td><code>none</code>, <code>cray</code>, <code>openmpi</code>, <code>auto</code></td><td>MPI 구성</td></tr><tr><td><code>--nccl</code></td><td><code>none</code>, <code>native</code>, <code>ofi</code>, <code>auto</code></td><td>NCCL 전송 구성</td></tr><tr><td><code>--checkpoint-dir</code></td><td>절대 경로</td><td>쓰기 가능한 체크포인트 경로</td></tr><tr><td><code>-B</code>, <code>--bind</code></td><td><code>SRC:DST:MODE</code></td><td>추가 마운트</td></tr><tr><td><code>--env</code></td><td><code>NAME=VALUE</code></td><td>컨테이너에 전달할 환경 변수</td></tr><tr><td><code>--diagnose</code></td><td>값 없음</td><td>rank 0에서 결정된 설정 출력</td></tr><tr><td><code>--doctor</code></td><td>값 없음</td><td>GPU, CXI, OFI 라이브러리 사전 점검</td></tr><tr><td><code>--dry-run</code></td><td>값 없음</td><td>실행하지 않고 최종 명령 출력</td></tr></tbody></table>
 
@@ -368,9 +390,9 @@ kisti-container [Wrapper 옵션] IMAGE COMMAND [ARG ...]
 
 
 
-#### 6.3 배치 작업 실행 방식
+**3) 컨테이너 런타임 별 실행 방법**&#x20;
 
-**1) Singularity, Apptainer, Enroot**
+&#x20;   \- Singularity, Apptainer, Enroot
 
 컨테이너 백엔드에서 `kisti-container`는 Slurm task 안에서 실행되는 Wrapper입니다. 따라서 배치 파일에 `srun`을 사용합니다.
 
@@ -381,7 +403,7 @@ srun --mpi=none \
     IMAGE.sqsh python3 train.py
 ```
 
-**2) Pyxis**
+&#x20;   \- Pyxis
 
 Pyxis에서 `kisti-container`는 `srun` 명령을 생성하는 프론트엔드입니다. 배치 스크립트에서 직접 호출합니다.
 
@@ -400,6 +422,8 @@ srun kisti-container --runtime pyxis ...
 이 형식은 이미 생성된 Slurm step 안에서 Pyxis용 새 `srun`을 만들려고 하므로 Wrapper가 오류로 중단합니다.
 
 
+
+6.
 
 #### 6.4. 작업 유형 별 예제
 
@@ -1070,27 +1094,22 @@ grep -hE 'PASS|FAIL|NCCL|Libfabric|CXI|Traceback|BATCH_ERROR' \
 
 ### 12. 참고 자료
 
-#### 12.1 kisti-container 실행 워크플로우
+#### 12.1 kisti-container&#x20;
+
+**1) 실행 워크플로우**&#x20;
 
 사용자 옵션과 Slurm 환경을 해석하여 컨테이너 실행 명령을 구성하는 Bash Wrapper
 
 <figure><img src="../.gitbook/assets/image (19).png" alt=""><figcaption></figcaption></figure>
 
-
-
-#### 12.2 kisti-container 런타임별 실행과 통신 환경
+**2) 런타임별 실행과 통신 환경**
 
 Slurm 작업에서 직접 런타임은 task 안에서 실행하고, Pyxis는 Wrapper가 srun을 생성
 
-<figure><img src="../.gitbook/assets/image (21).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (22).png" alt=""><figcaption></figcaption></figure>
 
-#### 12.3 한강 시스템 컨테이너 OMB 통신 성능 비교<br>
 
-* OMB 7.5.2
-* Native / Singularity
-* GH200 노드 : Slingshot NIC 4ea
-* AMD CPU 노드 : Slingshot NIC 1ea
-* GH200 노드 대역폭(2노드 · 4 Pair · 4 MiB)<br>
 
-<figure><img src="../.gitbook/assets/image (18).png" alt=""><figcaption></figcaption></figure>
 
+
+[^1]: 
