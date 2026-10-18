@@ -372,7 +372,7 @@ $ podman run --rm --device nvidia.com/gpu=0 \
 
 #### 5.3 kisti-container&#x20;
 
-`kisti-container`는 Slurm task 안에서 실행되는 Wrapper  프로그램입니다. &#x20;
+`kisti-container`는 단독으로 실행하지 않으며 배치 작업&#x20;
 
 **1)  기본 명령 형식**
 
@@ -384,7 +384,7 @@ $ podman run --rm --device nvidia.com/gpu=0 \
 
 **2) 주요 옵션**
 
-<table><thead><tr><th width="178.07244873046875">옵션</th><th>값</th><th>설명</th></tr></thead><tbody><tr><td><code>--runtime</code></td><td><code>singularity</code>, <code>apptainer</code>, <code>enroot</code>, <code>pyxis</code></td><td>실행 백엔드</td></tr><tr><td><code>--workload</code></td><td><code>generic</code>, <code>pytorch-dist*</code></td><td>워크로드 별 검증 규칙</td></tr><tr><td><code>--launcher</code></td><td><code>srun-native</code>, <code>torchrun</code></td><td>분산 프로세스 생성 방식</td></tr><tr><td><code>--local-processes</code></td><td>양의 정수</td><td>노드별 torchrun worker 수</td></tr><tr><td><code>--mpi</code></td><td><code>none</code>, <code>cray</code>, <code>openmpi</code>, <code>auto</code></td><td>MPI 구성</td></tr><tr><td><code>--nccl</code></td><td><code>none</code>, <code>native</code>, <code>ofi</code>, <code>auto</code></td><td>NCCL 전송 구성</td></tr><tr><td><code>--checkpoint-dir</code></td><td>절대 경로</td><td>쓰기 가능한 체크포인트 경로</td></tr><tr><td><code>-B</code>, <code>--bind</code></td><td><code>SRC:DST:MODE</code></td><td>추가 마운트</td></tr><tr><td><code>--env</code></td><td><code>NAME=VALUE</code></td><td>컨테이너에 전달할 환경 변수</td></tr><tr><td><code>--diagnose</code></td><td>값 없음</td><td>rank 0에서 결정된 설정 출력</td></tr><tr><td><code>--doctor</code></td><td>값 없음</td><td>GPU, CXI, OFI 라이브러리 사전 점검</td></tr><tr><td><code>--dry-run</code></td><td>값 없음</td><td>실행하지 않고 최종 명령 출력</td></tr></tbody></table>
+<table><thead><tr><th width="178.07244873046875">옵션</th><th>값</th><th>설명</th></tr></thead><tbody><tr><td><code>--runtime</code></td><td><code>singularity</code>, <code>apptainer</code>, <code>enroot</code>, <code>pyxis</code></td><td>실행 백엔드</td></tr><tr><td><code>--workload</code></td><td><code>generic</code>, <code>pytorch-dist*</code></td><td>워크로드 별 검증 규칙</td></tr><tr><td><code>--launcher</code></td><td><code>srun-native</code>, <code>torchrun</code></td><td>분산 프로세스 생성 방식</td></tr><tr><td><code>--local-processes</code></td><td>양의 정수</td><td>노드별 torchrun worker 수</td></tr><tr><td><code>--mpi</code></td><td><code>none</code>, <code>cray</code>, <code>openmpi</code>, <code>auto</code></td><td>MPI 구성</td></tr><tr><td><code>--nccl</code></td><td><code>none</code>, <code>native</code>, <code>ofi</code>, <code>auto</code></td><td>NCCL 전송 구성</td></tr><tr><td><code>-B</code>, <code>--bind</code></td><td><code>SRC:DST:MODE</code></td><td>추가 마운트</td></tr><tr><td><code>--env</code></td><td><code>NAME=VALUE</code></td><td>컨테이너에 전달할 환경 변수</td></tr><tr><td><code>--diagnose</code></td><td>값 없음</td><td>rank 0에서 결정된 설정 출력</td></tr><tr><td><code>--doctor</code></td><td>값 없음</td><td>GPU, CXI, OFI 라이브러리 사전 점검</td></tr><tr><td><code>--dry-run</code></td><td>값 없음</td><td>실행하지 않고 최종 명령 출력</td></tr></tbody></table>
 
 \*pytorch-dist : DDP, FDSP, DeepSpeed, Nemo/Megatron 등 기반의 분산학습 워크로드&#x20;
 
@@ -392,7 +392,7 @@ $ podman run --rm --device nvidia.com/gpu=0 \
 
 **3) 컨테이너 런타임 별 실행 방법**&#x20;
 
-&#x20;   \- Singularity, Apptainer, Enroot
+&#x20;   \- Singularity/Apptainer, Enroot
 
 컨테이너 백엔드에서 `kisti-container`는 Slurm task 안에서 실행되는 Wrapper입니다. 따라서 배치 파일에 `srun`을 사용합니다.
 
@@ -423,12 +423,13 @@ srun kisti-container --runtime pyxis ...
 
 
 
-6.
+### 6. 스케줄러(SLURM)를 통한 작업 실행
 
-#### 6.4. 작업 유형 별 예제
+스케줄러(Slurm)를 통해 컨테이너 작업을 제출하는 방법입니다. 먼저컨테이너  런타임에 따라 스크립트를 작성합니다.
 
-사용자는 관심 있는 작업 유형의 예제 디렉터리와 예제 실행에 필요한 이미지 파일을 자신의 작업 공간으로 복사합니다.\
-특히, 예제08-MLperf는 llama 모델 데이터가 포함 되어 용량이 크기 때문에 필요한 경우에만 복사합니다.&#x20;
+#### 6.1. 작업 유형 별 예제
+
+사용자는 관심 있는 작업 유형의 예제 디렉터리와 예제 실행에 필요한 이미지 파일을 자신의 작업 공간으로 복사합니다.
 
 <pre class="language-bash"><code class="lang-bash"><strong>## 예제 디렉터리
 </strong><strong>$ ls -l /apps/common/kisti-container/examples
@@ -439,8 +440,6 @@ srun kisti-container --runtime pyxis ...
 05-pytorch-fsdp2  
 06-nemo-megatron  
 07-pytorch-deepspeed  
-08-MLperf  
-README.md
 
 ## Enroot 및 Singularity/Apptainer 이미지 파일디렉터리
 $ ls /apps/common/kisti-container/images  (기본 이미지)
@@ -459,6 +458,8 @@ pytorch-25.09-py3-aarch64.sqsh
 $ ls /apps/common/kisti-container/images/golden (Slingshot 고속네트워크 지원 이미지)
 kisti-pytorch-25.03-gh200-r1-aarch64.sif  
 kisti-pytorch-25.03-gh200-r1-aarch64.sqsh
+kisti-nemo-25.04-gh200-r1-aarch64.sif
+kisti-nemo-25.04-gh200-r1-aarch64.sqsh
 </code></pre>
 
 ```bash
@@ -478,55 +479,9 @@ cp -a /apps/common/kisti-container/images/pytorch-25.03-py3-aarch64.sqsh \
 
 
 
-**1) 일반  CPU/GPU 작업**
+**1)  MPI 작업 (kisti-container 사용)**
 
-&#x20;일반 CPU/GPU 작업에서 kisti-container의 옵션은 `--workload generic` 을 사용합니다. 단일 GPU에서는 `--nccl native` 또는 `--nccl none`을 선택할 수 있습니다.
-
-```bash
-## (pyxis) 일반 GPU 작업 스크립트 예제
-## /apps/common/kisti-container/examples/02-gpu-smoke/run-pyxis.sbatch
-
-#!/bin/bash
-#SBATCH --job-name=gpu-pyxis
-#SBATCH --partition=gpu
-#SBATCH --comment="field=misc;appl=pytorch"
-#SBATCH --nodes=1
-#SBATCH --gpus-per-node=4
-#SBATCH --exclusive
-#SBATCH --time=00:05:00
-#SBATCH --output=%x-%j.out
-#SBATCH --error=%x-%j.err
-
-ROOT=/scratch/$USER/kisti-container
-KC="/apps/common/kisti-container/bin/kisti-container"
-IMAGE=$ROOT/images/pytorch-25.03-py3-aarch64.sqsh
-PROGRAM=$ROOT/examples/02-gpu-smoke/gpu_smoke.py
-
-module purge
-module load enroot/4.2.0
-
-"$KC" \
-  --runtime pyxis --workload generic \
-  "$IMAGE" python3 "$PROGRAM"
-```
-
-작업제출:
-
-<pre class="language-bash"><code class="lang-bash"><strong>$ sbatch run-pyxis.sbatch
-</strong></code></pre>
-
-결과파일:
-
-```bash
-$ cat gpu-pyxis-20590.out
-GPU_SMOKE_PASS host=gpu0014 gpu=NVIDIA GH200 120GB shape=(2048, 2048) mean=0.011777
-```
-
-
-
-**2)  MPI 작업**
-
-&#x20;MPI 작업은 `--workload generic`을 사용하며, MPI 유형에 따른 관련 옵션은 아래와 같습니다.&#x20;
+&#x20;kisti-container를 사용하는 MPI 작업은 `--workload generic 옵션을` 사용하며, MPI 유형에 따른 관련 옵션은 아래와 같습니다.&#x20;
 
 |    구분   |       srun 옵션      | kisti-container 옵션 |
 | :-----: | :----------------: | :----------------: |
@@ -534,7 +489,7 @@ GPU_SMOKE_PASS host=gpu0014 gpu=NVIDIA GH200 120GB shape=(2048, 2048) mean=0.011
 | OpenMPI |     --mpi=pmix     |    --mpi openmpi   |
 
 ```bash
-## (Singularity) MPI OMB 작업 스크립트 예제
+## (Singularity) MPI OMB 벤치마크작업 스크립트 예제
 ## /apps/common/kisti-container/examples/03-mpi-omb/run-gh200-singularity.sbatch
 
 #!/bin/bash
@@ -621,21 +576,7 @@ srun \
 2                      16.57        8284756.13
 4                      33.39        8348405.71
 8                      66.63        8328298.94
-16                    132.68        8292748.94
-32                    264.68        8271214.41
-64                    539.18        8424707.26
-128                  1093.55        8543336.87
-256                  2361.93        9226298.30
-512                  4762.16        9301087.75
-1024                 9532.32        9308903.88
-2048                19069.25        9311156.29
-4096                38041.09        9287376.18
-8192                75100.02        9167483.30
-16384              138962.42        8481592.79
-32768              151199.58        4614244.85
-65536              169302.95        2583358.08
-131072             180156.90        1374488.08
-262144             185277.89         706779.06
+--[중략]--
 524288             190569.95         363483.34
 1048576            192158.82         183256.93
 2097152            193140.30          92096.47
@@ -648,22 +589,7 @@ srun \
 1                       5.71        5711864.23
 2                      11.63        5816973.47
 4                      23.18        5793892.90
-8                      46.28        5785194.05
-16                     93.43        5839613.20
-32                    185.89        5809137.39
-64                    376.66        5885318.59
-128                   746.86        5834845.61
-256                  1505.84        5882194.13
-512                  3043.19        5943724.08
-1024                 6050.44        5908636.67
-2048                12102.72        5909531.76
-4096                23954.69        5848312.59
-8192                48628.59        5936107.31
-16384               95052.14        5801522.22
-32768              148685.54        4537522.54
-65536              168811.67        2575861.71
-131072             179137.31        1366709.25
-262144             184658.59         704416.62
+--[중략]--
 524288             190285.40         362940.59
 1048576            191985.38         183091.53
 2097152            193126.48          92089.88
@@ -672,9 +598,9 @@ srun \
 
 
 
-**3) PyTorch DDP**
+**2) PyTorch DDP**
 
-DDP 2노드 8GPU 예제는 노드당 4개의 Slurm rank를 생성합니다. `--nccl auto`는 2노드에서 사이트의 AWS OFI NCCL, Cray Libfabric, CXI 프로파일을 선택합니다.<br>
+DDP 2노드 8GPU 예제는 노드당 4개의 Slurm rank를 생성합니다.&#x20;
 
 {% hint style="info" %}
 **DDP :  Distributed Data Parallel**
@@ -683,12 +609,55 @@ DDP 2노드 8GPU 예제는 노드당 4개의 Slurm rank를 생성합니다. `--n
 {% endhint %}
 
 ```bash
-## (Pyxis) Pytorch DDP 작업 스크립트 예제
+## Pyxis 작업 스크립트 예제
 ## /apps/common/kisti-container/examples/04-pytorch-ddp/run-pyxis.sbatch
 
 #!/bin/bash
 #SBATCH --job-name=ddp-pyxis
-#SBATCH --partition=gpu
+#SBATCH --partition=normal
+#SBATCH --comment="field=sciai;appl=pytorch-ddp"
+#SBATCH --nodes=2
+#SBATCH --ntasks-per-node=4
+#SBATCH --gpus-per-node=4
+#SBATCH --cpus-per-task=4
+#SBATCH --exclusive
+#SBATCH --time=00:15:00
+#SBATCH --output=%x-%j.out
+#SBATCH --error=%x-%j.err
+
+ROOT=/scratch/$USER/kisti-container
+IMAGE=$ROOT/images/slingshot/kisti-pytorch-25.03-gh200-r1-aarch64.sqsh 
+PROGRAM=$ROOT/examples/04-pytorch-ddp/ddp_smoke.py
+
+CHECKPOINT_DIR=$SLURM_SUBMIT_DIR/checkpoints/ddp-pyxis-$SLURM_JOB_ID
+mkdir -p "$CHECKPOINT_DIR"
+
+module purge
+module load enroot/4.2.0
+
+# DDP rendezvous
+export MASTER_ADDR=$(scontrol show hostnames "$SLURM_JOB_NODELIST" | head -n1)
+export MASTER_PORT=$((20000 + SLURM_JOB_ID % 20000))
+export WORLD_SIZE=$SLURM_NTASKS
+
+echo "MASTER=$MASTER_ADDR:$MASTER_PORT WORLD_SIZE=$WORLD_SIZE"
+
+#export NCCL_DEBUG=INFO
+#export NCCL_DEBUG_SUBSYS=INIT,NET
+
+srun --mpi=none --kill-on-bad-exit=1 --distribution=block:block \
+  --gpu-bind=none --gres-flags=allow-task-sharing \
+  --container-image="$IMAGE" \
+  python3 "$PROGRAM"
+```
+
+```bash
+## kisti-container Pyxis 작업 스크립트 예제
+## /apps/common/kisti-container/examples/04-pytorch-ddp/run-kc-pyxis.sbatch
+
+#!/bin/bash
+#SBATCH --job-name=kc-ddp-pyxis
+#SBATCH --partition=normal
 #SBATCH --comment="field=sciai;appl=pytorch-ddp"
 #SBATCH --nodes=2
 #SBATCH --ntasks-per-node=4
@@ -704,7 +673,7 @@ KC="/apps/common/kisti-container/bin/kisti-container"
 IMAGE=$ROOT/images/pytorch-25.03-py3-aarch64.sqsh
 PROGRAM=$ROOT/examples/04-pytorch-ddp/ddp_smoke.py
 
-CHECKPOINT_DIR=$SLURM_SUBMIT_DIR/checkpoints/ddp-pyxis-$SLURM_JOB_ID
+CHECKPOINT_DIR=$SLURM_SUBMIT_DIR/checkpoints/kc-ddp-pyxis-$SLURM_JOB_ID
 mkdir -p "$CHECKPOINT_DIR"
 
 module purge
@@ -714,8 +683,7 @@ module load enroot/4.2.0
 
 "$KC" \
   --runtime pyxis --workload pytorch-dist \
-  --launcher srun-native --nccl ofi \
-  --checkpoint-dir "$CHECKPOINT_DIR" --diagnose \
+  --launcher srun-native --nccl ofi --debug-nccl --diagnose \
   "$IMAGE" python3 "$PROGRAM"
 ```
 
@@ -724,6 +692,7 @@ module load enroot/4.2.0
 작업제출:
 
 <pre class="language-bash"><code class="lang-bash"><strong>$ sbatch run-pyxis.sbatch
+</strong><strong>$ sbatch run-kc-pyxis.sbatch (kisti-container 사용) 
 </strong></code></pre>
 
 
@@ -758,42 +727,7 @@ $ cat checkpoints/ddp-pyxis-20445/ddp-smoke-result.json
       "host": "gpu0014",
       "gpu": "NVIDIA GH200 120GB"
     },
-    {
-      "rank": 1,
-      "local_rank": 1,
-      "host": "gpu0014",
-      "gpu": "NVIDIA GH200 120GB"
-    },
-    {
-      "rank": 2,
-      "local_rank": 2,
-      "host": "gpu0014",
-      "gpu": "NVIDIA GH200 120GB"
-    },
-    {
-      "rank": 3,
-      "local_rank": 3,
-      "host": "gpu0014",
-      "gpu": "NVIDIA GH200 120GB"
-    },
-    {
-      "rank": 4,
-      "local_rank": 0,
-      "host": "gpu0015",
-      "gpu": "NVIDIA GH200 120GB"
-    },
-    {
-      "rank": 5,
-      "local_rank": 1,
-      "host": "gpu0015",
-      "gpu": "NVIDIA GH200 120GB"
-    },
-    {
-      "rank": 6,
-      "local_rank": 2,
-      "host": "gpu0015",
-      "gpu": "NVIDIA GH200 120GB"
-    },
+    --[중략]--
     {
       "rank": 7,
       "local_rank": 3,
@@ -808,80 +742,9 @@ $ cat checkpoints/ddp-pyxis-20445/ddp-smoke-result.json
 
 
 
-**4) PyTorch FSDP2**
+**3) NeMo/Megatron**&#x20;
 
-FSDP2 예제는 노드당 Slurm task 1개를 만들고, 각 task 안에서 torchrun worker 4개를 실행합니다. 전체 `WORLD_SIZE`는 8입니다.
-
-{% hint style="info" %}
-**FSDP2**: **Fully Sharded Data Parallel, version 2**\
-PyTorch의 **완전 분할 데이터 병렬 학습 방식 2세대**입니다. 모델 파라미터, 그래디언트, 옵티마이저 상태를 GPU 간에 분산해 GPU당 메모리 부담을 줄입니다.
-{% endhint %}
-
-```bash
-## (Pyxis) Pytorch FSDP2 작업 스크립트 예제
-## /apps/common/kisti-container/examples/05-pytorch-fsdp2/run-pyxis.sbatch
-
-#!/bin/bash
-#SBATCH --job-name=fsdp-pyxis
-#SBATCH --partition=gpu
-#SBATCH --comment="field=misc;appl=pytorch-fsdp"
-#SBATCH --nodes=2
-#SBATCH --ntasks-per-node=4
-#SBATCH --gpus-per-node=4
-#SBATCH --cpus-per-task=8
-#SBATCH --exclusive
-#SBATCH --time=00:30:00
-#SBATCH --output=%x-%j.out
-#SBATCH --error=%x-%j.err
-
-ROOT="/scratch/$USER/kisti-container"
-KC="/apps/common/kisti-container/bin/kisti-container"
-IMAGE="$ROOT/images/pytorch-25.03-py3-aarch64.sqsh"
-TRAIN_SCRIPT="$ROOT/examples/05-pytorch-fsdp2/fsdp2_train_smoke.py"
-
-module purge
-module load aws-ofi-nccl/1.20.0
-module load libfabric/2.3.1
-module load enroot/4.2.0
-
-"$KC" \
-  --runtime pyxis --workload pytorch-dist \
-  --launcher srun-native --nccl ofi \
-  --diagnose \
-  "$IMAGE" "$TRAIN_SCRIPT"
-```
-
-작업제출:
-
-```bash
-$ sbatch run-pyxis.sbatch
-```
-
-결과 파일:\
-성공 여부는 종료 코드와 `RESULT ... correctness=True` 로그로 확인합니다. 이 프로그램은 합성 데이터 기반 통신·학습 smoke test 용도이며 실제 모델 훈련의 실행을 목적으로 하지 않습니다.
-
-```bash
-$ cat fsdp-pyxis-20459.out
---[중략]--
-step=1/25 loss=1.136039 ms=401.150
-step=2/25 loss=0.601430 ms=28.652
-step=3/25 loss=0.480413 ms=24.631
-step=4/25 loss=0.272872 ms=22.903
---[중략]--
-step=22/25 loss=54.140591 ms=22.411
-step=23/25 loss=35.631592 ms=22.266
-step=24/25 loss=24.416914 ms=22.344
-step=25/25 loss=54.308086 ms=22.022
-RESULT backend=nccl workload=fsdp2 world_size=8 precision=bf16 mean_step_ms=22.373 median_step_ms=22.333 final_check=36.0 expected=36.0 correctness=True
-```
-
-
-
-**5) NeMo/Megatron**&#x20;
-
-TP·DP 등 모델 병렬과 데이터 병렬을 조합하는 대규모 모델 학습을 위한 NeMo 예제는 GH200 2노드에서 노드 내부 TP=4, 노드 간 DP=2를 확인합니다.
-
-컨테이너에는 NeMo, Megatron Core, Transformer Engine 및 호환 PyTorch/CUDA가 설치되어 있어야 합니다. 제공 smoke test의 검증 환경은 NeMo 2.3.0rc5, Megatron Core 0.12.0rc4, Transformer Engine 2.2.0 개발 버전 계열입니다.
+TP·DP 등 모델 병렬과 데이터 병렬을 조합하는 대규모 모델 학습을 위한 NeMo 예제는 GH200 2노드에서 노드 내부 TP=4, 노드 간 DP=2를 사용합니다.&#x20;
 
 {% hint style="info" %}
 **NeMo**: **Neural Modules**에서 유래한 이름\
@@ -889,17 +752,67 @@ NVIDIA의 AI 모델 개발·학습 프레임워크입니다. 현재 예제의 **
 {% endhint %}
 
 ```bash
-## (Pyxis) NeMO Megatron 작업 스크립트 예제
+## Pyxis 작업 스크립트 예제
 ## /apps/common/kisti-container/examples/06-nemo-megatron/run-pyxis.sbatch
 
 #!/bin/bash
 #SBATCH --job-name=nemo-pyxis
-#SBATCH --partition=gpu
+#SBATCH --partition=normal
 #SBATCH --comment="field=misc;appl=megatron-lm"
 #SBATCH --nodes=2
 #SBATCH --ntasks-per-node=1
 #SBATCH --gpus-per-node=4
-#SBATCH --cpus-per-task=32
+#SBATCH --cpus-per-task=72
+#SBATCH --exclusive
+#SBATCH --time=00:30:00
+#SBATCH --output=%x-%j.out
+#SBATCH --error=%x-%j.err
+
+ROOT="/scratch/$USER/kisti-container"
+IMAGE="$ROOT/images/slingshot/kisti-nemo-25.04-gh200-r1-aarch64.sqsh"
+TRAIN_SCRIPT="$ROOT/examples/06-nemo-megatron/nemo_megatron_tp4_dp2_smoke.py"
+
+CHECKPOINT_DIR=${SLURM_SUBMIT_DIR}/checkpoints/nemo-pyxis-${SLURM_JOB_ID}
+mkdir -p "$CHECKPOINT_DIR"
+export CUDA_DEVICE_MAX_CONNECTIONS=${CUDA_DEVICE_MAX_CONNECTIONS:-1}
+
+module purge
+module load enroot/4.2.0
+
+export MASTER_ADDR=$(scontrol show hostnames "$SLURM_JOB_NODELIST" | head -n1)
+export MASTER_PORT=$((20000 + SLURM_JOB_ID % 20000))
+
+#export NCCL_DEBUG=INFO
+#export NCCL_DEBUG_SUBSYS=INIT,NET
+
+echo "MASTER=$MASTER_ADDR:$MASTER_PORT NODES=$SLURM_NNODES"
+
+srun --mpi=none --kill-on-bad-exit=1 --distribution=block:block \
+  --gpu-bind=none --gres-flags=allow-task-sharing \
+  --container-image="$IMAGE" \
+  torchrun \
+    --nnodes=$SLURM_NNODES \
+    --nproc-per-node=4 \
+    --rdzv-backend=c10d \
+    --rdzv-id="$SLURM_JOB_ID" \
+    --rdzv-endpoint="$MASTER_ADDR:$MASTER_PORT" \
+    --max-restarts=0 \
+    "$TRAIN_SCRIPT" --steps 5 --tp-size 4 --expected-dp-size 2 \
+    --checkpoint-dir "$CHECKPOINT_DIR"
+```
+
+```bash
+## kisti-container Pyxis 작업 스크립트 예제
+## /apps/common/kisti-container/examples/06-nemo-megatron/run-kc-pyxis.sbatch
+
+#!/bin/bash
+#SBATCH --job-name=kc-nemo-pyxis
+#SBATCH --partition=normal
+#SBATCH --comment="field=misc;appl=megatron-lm"
+#SBATCH --nodes=2
+#SBATCH --ntasks-per-node=1
+#SBATCH --gpus-per-node=4
+#SBATCH --cpus-per-task=72
 #SBATCH --exclusive
 #SBATCH --time=00:30:00
 #SBATCH --output=%x-%j.out
@@ -910,7 +823,7 @@ KC="/apps/common/kisti-container/bin/kisti-container"
 IMAGE="$ROOT/images/nemo-25.04.00-aarch64.sqsh"
 TRAIN_SCRIPT="$ROOT/examples/06-nemo-megatron/nemo_megatron_tp4_dp2_smoke.py"
 
-CHECKPOINT_DIR=${SLURM_SUBMIT_DIR}/checkpoints/nemo-pyxis-${SLURM_JOB_ID}
+CHECKPOINT_DIR=${SLURM_SUBMIT_DIR}/checkpoints/kc-nemo-pyxis-${SLURM_JOB_ID}
 mkdir -p "$CHECKPOINT_DIR"
 export CUDA_DEVICE_MAX_CONNECTIONS=${CUDA_DEVICE_MAX_CONNECTIONS:-1}
 
@@ -933,6 +846,7 @@ module load enroot/4.2.0
 
 ```bash
 $ sbatch run-pyxis.sbatch
+$ sbatch run-kc-pyxis.sbatch
 ```
 
 결과 파일:
@@ -945,28 +859,79 @@ NEMO_MCORE_TPDP_RESULT status=PASS world_size=8 tp_size=4 dp_size=2 steps=5 last
 
 
 
-**6) DeepSpeed**&#x20;
+**4) DeepSpeed**&#x20;
 
-ZeRO 최적화로 옵티마이저 상태와 그래디언트를 GPU들에 나눠 저장하는 데이터 병렬 학습 예제입니다. GH200 2노드에서 노드당 GPU 4장, 총 8개 rank로 ZeRO-2 학습이 동작하는지 확인합니다.
-
-컨테이너에는 DeepSpeed와 호환 PyTorch/CUDA가 설치되어 있어야 합니다. 제공 예제의 검증 환경은 NGC PyTorch 25.03(PyTorch 2.7.0a0, CUDA 12.8)에 DeepSpeed 0.18.9를 설치한 이미지입니다.&#x20;
+ZeRO 최적화로 옵티마이저 상태와 그래디언트를 GPU들에 나눠 저장하는 데이터 병렬 학습 예제입니다. GH200 2노드에서 노드당 GPU 4장, 총 8개 rank로 ZeRO-2 학습이 동작합니다.
 
 {% hint style="info" %}
 **DeepSpeed**: Microsoft가 개발한 대규모 모델 학습 최적화 라이브러리입니다. 현재 예제의 ZeRO-2(Zero Redundancy Optimizer stage 2)는 각 GPU가 모델 전체를 가지되, 옵티마이저 상태와 그래디언트는 GPU 수만큼 나눠 저장해 GPU당 메모리 사용량을 줄이는 방식입니다.
 {% endhint %}
 
 ```bash
-## (Pyxis) DeepSpeed 작업 스크립트 예제
+## Pyxis 작업 스크립트 예제
 ## /apps/common/kisti-container/examples/07-pytorch-deepspeed/run-pyxis.sbatch
 
 #!/bin/bash
 #SBATCH --job-name=ds-pyxis
-#SBATCH --partition=gpu
+#SBATCH --partition=normal
 #SBATCH --comment="field=misc;appl=deepspeed"
 #SBATCH --nodes=2
 #SBATCH --ntasks-per-node=1
 #SBATCH --gpus-per-node=4
-#SBATCH --cpus-per-task=32
+#SBATCH --cpus-per-task=72
+#SBATCH --exclusive
+#SBATCH --time=00:30:00
+#SBATCH --output=%x-%j.out
+#SBATCH --error=%x-%j.err
+
+ROOT="/scratch/$USER/kisti-container"
+IMAGE="$ROOT/images/slingshot/kisti-pytorch-25.03-gh200-r1-aarch64.sqsh"
+TRAIN_SCRIPT="$ROOT/examples/07-pytorch-deepspeed/train_deepspeed.py"
+
+module purge
+module load enroot/4.2.0
+
+export MASTER_ADDR=$(scontrol show hostnames "$SLURM_JOB_NODELIST" | head -n1)
+export MASTER_PORT=$((20000 + SLURM_JOB_ID % 20000))
+
+#export NCCL_DEBUG=INFO
+#export NCCL_DEBUG_SUBSYS=INIT,NET
+
+echo "MASTER=$MASTER_ADDR:$MASTER_PORT NODES=$SLURM_NNODES"
+
+USER=`id -un`
+export CACHE_ROOT=/scratch/$USER/.cache/job-$SLURM_JOB_ID
+mkdir -p $CACHE_ROOT
+
+export TRITON_CACHE_DIR=$CACHE_ROOT/triton
+export TORCH_EXTENSIONS_DIR=$CACHE_ROOT/torch_extensions
+export XDG_CACHE_HOME=$CACHE_ROOT/xdg
+
+srun --mpi=none --kill-on-bad-exit=1 --distribution=block:block \
+  --gpu-bind=none --gres-flags=allow-task-sharing \
+  --container-image="$IMAGE" \
+  torchrun \
+    --nnodes=$SLURM_NNODES \
+    --nproc-per-node=4 \
+    --rdzv-backend=c10d \
+    --rdzv-id="$SLURM_JOB_ID" \
+    --rdzv-endpoint="$MASTER_ADDR:$MASTER_PORT" \
+    --max-restarts=0 \
+    "$TRAIN_SCRIPT" --deepspeed --deepspeed_config ${SLURM_SUBMIT_DIR}/ds_config.json --epochs 2
+```
+
+```bash
+## kisti-container Pyxis 작업 스크립트 예제
+## /apps/common/kisti-container/examples/07-pytorch-deepspeed/run-kc-pyxis.sbatch
+
+#!/bin/bash
+#SBATCH --job-name=kc-ds-pyxis
+#SBATCH --partition=normal
+#SBATCH --comment="field=misc;appl=deepspeed"
+#SBATCH --nodes=2
+#SBATCH --ntasks-per-node=1
+#SBATCH --gpus-per-node=4
+#SBATCH --cpus-per-task=72
 #SBATCH --exclusive
 #SBATCH --time=00:30:00
 #SBATCH --output=%x-%j.out
@@ -1001,6 +966,7 @@ export XDG_CACHE_HOME=$CACHE_ROOT/xdg
 
 ```bash
 $ sbatch run-pyxis.sbatch
+$ sbatch run-kc-pyxis.sbatch
 ```
 
 결과 파일:
@@ -1031,7 +997,23 @@ $ cat ds-pyxis-23707.out
 
 
 
-#### 6.5 다중 노드 NCCL-OFI/CXI
+### 7. 참고 자료
+
+#### 7.1 kisti-container&#x20;
+
+**1) 실행 워크플로우**&#x20;
+
+사용자 옵션과 Slurm 환경을 해석하여 컨테이너 실행 명령을 구성하는 Bash Wrapper
+
+<figure><img src="../.gitbook/assets/image (19).png" alt=""><figcaption></figcaption></figure>
+
+**2) 런타임별 실행과 통신 환경**
+
+Slurm 작업에서 직접 런타임은 task 안에서 실행하고, Pyxis는 Wrapper가 srun을 생성
+
+<figure><img src="../.gitbook/assets/image (22).png" alt=""><figcaption></figcaption></figure>
+
+**3) 다중 노드 NCCL-OFI/CXI**
 
 2노드 이상 GH200 작업은 다음 모듈을 배치 스크립트에서 로드합니다.
 
@@ -1060,9 +1042,7 @@ LIBCXI=PASS
 DOCTOR_PASS
 ```
 
-
-
-#### 6.6. 문제 해결
+**4) 문제 해결**
 
 | 오류 또는 현상                                  | 확인 항목                                      | 조치                                           |
 | ----------------------------------------- | ------------------------------------------ | -------------------------------------------- |
@@ -1089,27 +1069,5 @@ sacct -j JOBID --format=JobID,JobName%30,State,ExitCode,Elapsed,NodeList%30
 grep -hE 'PASS|FAIL|NCCL|Libfabric|CXI|Traceback|BATCH_ERROR' \
   JOBNAME-JOBID.out JOBNAME-JOBID.err
 ```
-
-
-
-### 12. 참고 자료
-
-#### 12.1 kisti-container&#x20;
-
-**1) 실행 워크플로우**&#x20;
-
-사용자 옵션과 Slurm 환경을 해석하여 컨테이너 실행 명령을 구성하는 Bash Wrapper
-
-<figure><img src="../.gitbook/assets/image (19).png" alt=""><figcaption></figcaption></figure>
-
-**2) 런타임별 실행과 통신 환경**
-
-Slurm 작업에서 직접 런타임은 task 안에서 실행하고, Pyxis는 Wrapper가 srun을 생성
-
-<figure><img src="../.gitbook/assets/image (22).png" alt=""><figcaption></figcaption></figure>
-
-
-
-
 
 [^1]: 
