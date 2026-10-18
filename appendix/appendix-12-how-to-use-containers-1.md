@@ -48,7 +48,7 @@ Podman은 OCI 이미지를 빌드하고 관리하는 도구이고, 계산  작�
 로그인 노드 또는 계산 노드에서 Podman을 사용하여 컨테이너 이미지를 빌드합니다.&#x20;
 
 {% hint style="info" %}
-Sugularity 컨테이너 이미지를 직접빌드 하기 위해서는 [**뉴론 컨테이너 활용 가이드의 가. 컨테이너 이미지 빌드하기**](https://docs-ksc.gitbook.io/neuron-user-guide/appendix/appendix-3-how-to-use-singularity-container#id)를 참조하시기 바랍니다.&#x20;
+Sugularity 컨테이너 이미지를 직접 빌드 하기 위해서는 뉴론 컨테이너 활용 가이드의  [**가. 컨테이너 이미지 빌드하기**](https://docs-ksc.gitbook.io/neuron-user-guide/appendix/appendix-3-how-to-use-singularity-container#id) 를 참조하시기 바랍니다.&#x20;
 {% endhint %}
 
 #### 3.1 Podman 사용 설정
@@ -177,7 +177,7 @@ $ podman login myhub.ksc.re.kr
 {% hint style="info" %}
 myhub 를 사용하기 위해서는 먼저  웹  브라우저에서 [**https://myhub.ksc.re.kr**](https://myhub.ksc.re.kr/)에 슈퍼컴퓨터 계정으로 로그인하여 **사용자 프로젝트**를 생성하고  CLI secret을  복사해 와야 합니다.&#x20;
 
-<i class="fa-linktree">:linktree:</i> 자세한 사용 방법은 [**myhub 사용법**](appendix-12-how-to-use-containers-1.md#myhub)을 참조하시기 바랍니다.&#x20;
+<i class="fa-linktree">:linktree:</i> 자세한 사용 방법은 [**myhub 사용법**](https://docs-ksc.gitbook.io/neuron-user-guide/appendix/appendix-12-how-to-use-containers#myhub)을 참조하시기 바랍니다.&#x20;
 {% endhint %}
 
 #### 3.2 이미지 태그(Tag) 설정
