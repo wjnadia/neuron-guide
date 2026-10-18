@@ -496,7 +496,7 @@ myhub는 Docker Hub와 유사한 내부 컨테이너 이미지 공유 저장소 
 
 웹 브라우저에서 myhub에 접속 후 슈퍼컴퓨터 계정으로 로그인(ID/패스워드/OTP) 합니다.    &#x20;
 
-{% embed url="https://myhub.ksc.re.kr" fullWidth="false" %}
+{% embed url="https://myhub.ksc.re.kr" %}
 
 <figure><img src="../.gitbook/assets/image.png" alt=""><figcaption><p>myhub 로그인 화면</p></figcaption></figure>
 
