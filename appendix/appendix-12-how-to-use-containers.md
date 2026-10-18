@@ -312,7 +312,7 @@ Pyxis는 Slurm의 `srun` 옵션을 확장하여, 사용자가 복잡한 Enroot �
 #SBATCH -J pytorch # job name
 #SBATCH --time=1:00:00 # wall_time
 #SBATCH -p cas_v100_4
-#SBATCH --comment pytorch # application name
+#SBATCH --comment="field=misc;appl=pytorch" # application name
 #SBATCH --nodes=1 
 #SBATCH --ntasks-per-node=1 
 #SBATCH --cpus-per-task=5 
@@ -336,7 +336,7 @@ srun --container-image=./my_pytorch-v1.sqsh \
 #SBATCH -J pytorch # job name
 #SBATCH --time=1:00:00 # wall_time
 #SBATCH -p cas_v100_4
-#SBATCH --comment pytorch # application name
+#SBATCH --comment="field=misc;appl=pytorch" # application name
 #SBATCH --nodes=1 
 #SBATCH --ntasks-per-node=1 
 #SBATCH --cpus-per-task=5 
@@ -358,7 +358,7 @@ python /apps/applications/singularity_images/examples/train.py
 #!/bin/bash
 #SBATCH -J pytorch_horovod_enroot # job name
 #SBATCH --time=24:00:00 # walltime
-#SBATCH --comment=pytorch # application name
+#SBATCH --comment="field=misc;appl=pytorch" # application name
 #SBATCH -p cas_v100nv_8 # partition name 
 #SBATCH --nodes=2 # the number of nodes
 #SBATCH --ntasks-per-node=1 # number of tasks per node
@@ -389,7 +389,7 @@ python $Base/examples/horovod/examples/pytorch/pytorch_imagenet_resnet50.py \
 #!/bin/bash
 #SBATCH -J gemma-nim # job name
 #SBATCH --time=24:00:00 # walltime
-#SBATCH --comment=etc # application name
+#SBATCH --comment="field=misc;appl=pytorch" # application name
 #SBATCH -p amd_a100nv_8 # partition name (queue or class)
 #SBATCH --nodes=1 # the number of nodes
 #SBATCH --ntasks-per-node=1 # number of tasks per node
@@ -432,7 +432,7 @@ srun --container-image=$Base/ngc/gemma-4-31b-it-1.7.0-x86_64.sqsh \
 #SBATCH –J pytorch_horovod_sing # job name
 #SBATCH --time=24:00:00 # wall_time
 #SBATCH -p cas_v100nv_8
-#SBATCH --comment pytorch # application name
+#SBATCH --comment="field=misc;appl=pytorch" # application name
 #SBATCH --nodes=2 
 #SBATCH --ntasks-per-node=1 
 #SBATCH --cpus-per-task=4 
@@ -455,7 +455,7 @@ python $Base/examples/horovod/examples/pytorch/pytorch_imagenet_resnet50.py \
 #!/bin/bash
 #SBATCH -J gemma-nim-sing # job name
 #SBATCH --time=24:00:00 # walltime
-#SBATCH --comment=pytorch # application name
+#SBATCH --comment="field=misc;appl=pytorch" # application name
 ##SBATCH -p amd_a100nv_8 # partition name (queue or class)
 #SBATCH --nodes=1 # the number of nodes
 #SBATCH --ntasks-per-node=1 # number of tasks per node
