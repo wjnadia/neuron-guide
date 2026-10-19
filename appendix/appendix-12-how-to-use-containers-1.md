@@ -150,11 +150,11 @@ $ podman build -t my_pytorch:deepspeed-aarch64 .
 
 
 
-### 3. 이미지 업로드
+### 4. 이미지 업로드
 
 Podman으로 빌드한 이미지를 **외부 저장소인 Docker Hub** 또는 **KISTI 내부 저장소인 myhub**에 업로드하여 관리 및 공유 할 수 있습니다. 특히, 로그인  또는 계산 노드의 로컬 파일시스템에 저장된 이미지는 영구 보관되지  않기  때문에,  외부 또는 내부 저장소에 이미지를 업로드하는 것을 권장합니다.  &#x20;
 
-#### 3.1  Docker Hub 또는 myhub 로그인
+#### 4.1  Docker Hub 또는 myhub 로그인
 
 먼저 Podman을 통해 Docker Hub 또는 myhub 계정으로 인증합니다.
 
@@ -180,7 +180,7 @@ myhub 를 사용하기 위해서는 먼저  웹  브라우저에서 [**https://m
 <i class="fa-linktree">:linktree:</i> 자세한 사용 방법은 [**myhub 사용법**](https://docs-ksc.gitbook.io/neuron-user-guide/appendix/appendix-12-how-to-use-containers#myhub)을 참조하시기 바랍니다.&#x20;
 {% endhint %}
 
-#### 3.2 이미지 태그(Tag) 설정
+#### 4.2 이미지 태그(Tag) 설정
 
 업로드를 위해서는 이미지 이름을 **\[레지스트리주소]/\[Username 또는 프로젝트명]/\[이미지명]:\[버전태그]** 형식으로 지정해야 합니다.
 
@@ -198,7 +198,7 @@ $ podman tag localhost/pytorch:deepspeed-aarch64 docker.io/[Username]/pytorch:de
 $ podman tag localhost/pytorch:deepspeed-aarch64 myhub.ksc.re.kr/[프로젝트명]/pytorch:deepspeed-aarch64
 ```
 
-#### 3.3. 이미지 업로드(Push)
+#### 4.3. 이미지 업로드(Push)
 
 태그가 완료된 이미지를 Docker Hub 또는 myhub로 전송합니다.
 
@@ -214,13 +214,13 @@ $ podman push docker.io/[Username]/pytorch:deepspeed-aarch64
 $ podman push myhub.ksc.re.kr/[프로젝트명]/pytorch:deepspeed-aarch64
 ```
 
-###
 
-### 4. 이미지 변환&#x20;
+
+### 5. 이미지 변환&#x20;
 
 Podman으로 준비한 이미지는 컨테이너 실행 도구에 맞는 변환 과정을 거쳐야  합니다.
 
-#### 4.1 Enroot&#x20;
+#### 5.1 Enroot&#x20;
 
 이미지를 SquashFS 포맷으로 변환하여 로딩 속도를 높이고 GPU 연산 효율을 최적화 합니다.
 
@@ -241,7 +241,7 @@ $ enroot create -n pytorch-deepspeed-aarch64 pytorch-deepspeed-aarch64.sqsh
 
 <table data-header-hidden><thead><tr><th width="86.5999755859375" align="center"></th><th width="142.13336181640625" align="center"></th><th></th></tr></thead><tbody><tr><td align="center"><strong>단계</strong></td><td align="center"><strong>작업 내용</strong></td><td><strong>명령어 / 설정 예시</strong></td></tr><tr><td align="center">이미지 가져오기</td><td align="center"><sub>Docker Hub 및 myhub 등  외부 레지스트리에서 직접 가져오기</sub></td><td><p><sub>$ enroot import -o my_pytorch-v1.sqsh docker://[Username]/my_pytorch:v1</sub></p><p></p><p><sub>$ enroot import -o my_pytorch-v1.sqsh docker://myhub.ksc.re.kr/[프로젝트명]/ubuntu:latest</sub></p></td></tr><tr><td align="center">컨테이너 생성</td><td align="center"><sub>rootfs(unpacked 디렉터리) 생성하기</sub></td><td><p><sub>$ enroot create -n my_pytorch-v1</sub><sup><sub>*</sub></sup><sub> my_pytorch-v1.sqsh</sub>     </p><p><sup><sub>*</sub></sup><sub> 컨테이너(rootfs)는 /tmp/enroot_[UID</sub><sup><sub>**</sub></sup><sub>]/data/my_pytorch-v1 디렉터리에 생성됨</sub>   </p><p><sup><sub>**</sub></sup><sub>  id -u 출력값(숫자)</sub> </p></td></tr><tr><td align="center">컨테이너 <br>리스트</td><td align="center"><sub>enroot create 명령어로 생성한 컨테이너 목록 출력</sub></td><td><p><sub>$ enroot list</sub><sup><sub>*</sub></sup> </p><p><sup><sub>*</sub></sup><sub>컨테이너를 생성한 노드에서만 출력됨</sub></p></td></tr><tr><td align="center">컨테이너 삭제</td><td align="center"><sub>enroot create 명령어로 생성한 컨테이너 제거</sub></td><td><p><sub>$ enroot remove my_pytorch-v1</sub><sup><sub>*</sub></sup></p><p><sup><sub>*</sub></sup><sub>컨테이너를 생성한 노드에서만 제거할 수 있음</sub></p></td></tr></tbody></table>
 
-#### 4.2 Singularity/Apptainer
+#### 5.2 Singularity/Apptainer
 
 기존 작업 방식 유지 또는 타 시스템과의 이미지 공유가 필요한 경우 활용합니다.
 
@@ -290,7 +290,7 @@ kisti-nemo-25.04-gh200-r1-aarch64.sqsh
 
 
 
-#### 4.3 아키텍처와 이미지 호환성
+#### 5.3 아키텍처와 이미지 호환성
 
 컨테이너 이미지의 CPU 아키텍처는 로그인/계산 노드와 같아야 합니다.
 
@@ -330,13 +330,13 @@ aarch64
 
 
 
-### 5. 이미지 실행
+### 6. 이미지 실행
 
 생성된 이미지는  Enroot 또는 Singularity/Apptainer 환경에 배포하여 실행할 수 있습니다.
 
 Slurm 배치 작업으로 실행 시 Enroot 의Pyxis 사용을 권장합니다.
 
-#### 5.1 Enroot&#x20;
+#### 6.1 Enroot&#x20;
 
 ```bash
 # GPU 계산 노드에서 squashFS 이미지 파일을 로드하고 실행
@@ -346,7 +346,7 @@ $ enroot start pytorch-25.03-py3-aarch64.sqsh nvidia-smi
 $ enroot start pytorch-25.03-py3-aarch64.sif python train.py
 ```
 
-#### 5.2 Singularity/Apptainer
+#### 6.2 Singularity/Apptainer
 
 ```bash
 # GPU 계산노드에서 Singularity 이미지를 로드하여 실행
@@ -372,11 +372,13 @@ $ podman run --rm --device nvidia.com/gpu=0 \
 
 
 
-#### 5.3 kisti-container&#x20;
+#### 6.3 kisti-container&#x20;
 
 kisti-container는 컨테이너 런타임을 감싸는 실행 래퍼입니다. MPI나 분산 학습 작업을 컨테이너에서 실행할 때 필요한 설정 — Slingshot 네트워크 라이브러리 연결, NCCL 통신 플러그인 지정, 분산 환경변수 주입 — 을 자동으로 처리합니다.
 
 Singularity/Apptainer, Enroot(Pyxis)를 모두 지원하며, 노드의 CPU 아키텍처와 로드된 모듈을 보고 필요한 설정을 자동으로 선택합니다.
+
+<figure><img src="../.gitbook/assets/image (24).png" alt=""><figcaption><p>kisti-container 워크플로우</p></figcaption></figure>
 
 
 
@@ -390,7 +392,7 @@ Singularity/Apptainer, Enroot(Pyxis)를 모두 지원하며, 노드의 CPU 아�
 
 **2) 주요 옵션**
 
-<table><thead><tr><th width="178.07244873046875">옵션</th><th>값</th><th>설명</th></tr></thead><tbody><tr><td><code>--runtime</code></td><td><code>singularity</code>, <code>apptainer</code>, <code>enroot</code>, <code>pyxis</code></td><td>실행 백엔드</td></tr><tr><td><code>--workload</code></td><td><code>generic</code>, <code>pytorch-dist*</code></td><td>워크로드 별 검증 규칙</td></tr><tr><td><code>--launcher</code></td><td><code>srun-native</code>, <code>torchrun</code></td><td>분산 프로세스 생성 방식**</td></tr><tr><td><code>--local-processes</code></td><td>양의 정수</td><td>노드별 torchrun worker 수</td></tr><tr><td><code>--mpi</code></td><td><code>none</code>, <code>cray</code>, <code>openmpi</code>, <code>auto</code></td><td>MPI 구성</td></tr><tr><td><code>--nccl</code></td><td><code>none</code>, <code>native</code>, <code>ofi</code>, <code>auto</code></td><td>NCCL 전송 구성</td></tr><tr><td><code>--provider</code></td><td>cxi</td><td>MPI/NCCL OFI Provider</td></tr><tr><td><code>-B</code>, <code>--bind</code></td><td><code>SRC:DST:MODE</code></td><td>추가 마운트</td></tr><tr><td><code>--env</code></td><td><code>NAME=VALUE</code></td><td>컨테이너에 전달할 환경 변수</td></tr><tr><td><code>--diagnose</code></td><td>값 없음</td><td>rank 0에서 결정된 설정 출력</td></tr><tr><td><code>--doctor</code></td><td>값 없음</td><td>GPU, CXI, OFI 라이브러리 사전 점검</td></tr><tr><td><code>--dry-run</code></td><td>값 없음</td><td>실행하지 않고 최종 명령 출력</td></tr></tbody></table>
+<table><thead><tr><th width="178.07244873046875">옵션</th><th>값</th><th>설명</th></tr></thead><tbody><tr><td><code>--runtime</code></td><td><code>singularity</code>, <code>apptainer</code>, <code>enroot</code>, <code>pyxis</code></td><td>컨테이너 런타임<br>(Default : Pyxis)</td></tr><tr><td><code>--workload</code></td><td><code>generic</code>, <code>pytorch-dist*</code></td><td>워크로드 구분 <br>(Default : generic)</td></tr><tr><td><code>--launcher</code></td><td><code>srun-native</code>, <code>torchrun</code></td><td>분산 프로세스 생성 방식** <br>(Default : srun-native)</td></tr><tr><td><code>--local-processes</code></td><td>양의 정수</td><td>노드별 torchrun worker 수</td></tr><tr><td><code>--mpi</code></td><td><code>none</code>, <code>cray</code>, <code>openmpi</code>, <code>auto</code></td><td>MPI 구성 <br>(Default : auto)</td></tr><tr><td><code>--nccl</code></td><td><code>none</code>, <code>native</code>, <code>ofi</code>, <code>auto</code></td><td>NCCL 전송 구성 <br>(Default : none)</td></tr><tr><td><code>--provider</code></td><td>cxi</td><td>MPI/NCCL OFI Provider <br>(Default : cxi)</td></tr><tr><td><code>-B</code>, <code>--bind</code></td><td><code>SRC:DST:MODE</code></td><td>추가 마운트</td></tr><tr><td><code>--env</code></td><td><code>NAME=VALUE</code></td><td>컨테이너에 전달할 환경 변수</td></tr><tr><td><code>--diagnose</code></td><td>값 없음</td><td>rank 0에서 결정된 설정 출력</td></tr><tr><td><code>--doctor</code></td><td>값 없음</td><td>GPU, CXI, OFI 라이브러리 사전 점검</td></tr><tr><td><code>--dry-run</code></td><td>값 없음</td><td>실행하지 않고 최종 명령 출력</td></tr></tbody></table>
 
 \***pytorch-dist** : torch.distributed 기반 분산 학습 (DDP, FSDP, DeepSpeed, NeMo/Megatron 등)
 
@@ -400,7 +402,7 @@ Singularity/Apptainer, Enroot(Pyxis)를 모두 지원하며, 노드의 CPU 아�
 
 **3) 컨테이너 런타임 별 실행 방법**&#x20;
 
-&#x20;   \- Singularity/Apptainer, Enroot
+&#x20;   **a. Singularity/Apptainer, Enroot**
 
 컨테이너 백엔드에서 `kisti-container`는 Slurm task 안에서 실행되는 Wrapper입니다. 따라서 배치 파일에 `srun`을 사용합니다.
 
@@ -411,7 +413,7 @@ srun --mpi=none \
     IMAGE.sqsh python3 train.py
 ```
 
-&#x20;   \- Pyxis
+&#x20;   **b. Pyxis**
 
 Pyxis에서 `kisti-container`는 `srun` 명령을 생성하는 프론트엔드입니다. 배치 스크립트에서 직접 호출합니다.
 
@@ -428,6 +430,8 @@ srun kisti-container --runtime pyxis ...
 ```
 
 이 형식은 이미 생성된 Slurm step 안에서 Pyxis용 새 `srun`을 만들려고 하므로 Wrapper가 오류로 중단합니다.
+
+<figure><img src="../.gitbook/assets/image (23).png" alt=""><figcaption><p>런타임 별 kisti-container 실행 방법 및 통신 설정</p></figcaption></figure>
 
 
 
@@ -488,13 +492,51 @@ $ cat kc-node-doctor-*.out
 [kisti-container] DOCTOR_PASS
 ```
 
-###
+\
+**5) 문제 해결**
 
-### 6. 스케줄러(SLURM)를 통한 작업 실행
+**a. 작업 상태와 종료 코드 확인**
+
+```bash
+sacct -j JOBID --format=JobID,JobName%30,State,ExitCode,Elapsed,NodeList%30
+```
+
+
+
+**b. 핵심 로그 검색**
+
+```bash
+grep -hE 'PASS|FAIL|NCCL|Libfabric|CXI|Traceback|BATCH_ERROR' \
+  JOBNAME-JOBID.out JOBNAME-JOBID.err
+```
+
+
+
+**c. 주요 오류 별 조치 방법**
+
+| 오류 또는 현상                                  | 확인 항목                                      | 조치                                                                                                                                    |
+| ----------------------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `Command not found: nvidia-container-cli` | 계산 노드의 libnvidia-container 설치              | 관리자에게 노드 패키지/Enroot hook 확인 요청                                                                                                        |
+| `libfuse3.so.4` 없음                        | `ldd $(command -v squashfuse)`             | 관리자에게 SquashFUSE/FUSE3 설치 확인 요청                                                                                                       |
+| zstd `.sqsh` 마운트 실패                       | `ldd squashfuse`의 `libzstd.so.1`           | <p>enroot 모듈  로드<br>module load enroot/4.2.0 </p>                                                                                     |
+| `Pyxis is not registered`                 | `srun --help`의 `--container-image`         | Slurm SPANK 설정과 계산 노드 플러그인 확인                                                                                                         |
+| `invoke kisti-container directly`         | Pyxis 앞에 외부 `srun` 사용 여부                   | 외부 `srun` 제거                                                                                                                          |
+| `network AWS Libfabric not found`         | OFI plugin과 libfabric 로딩                   | <p>관련 모듈 로드,  <code>--doctor</code> 실행<br><sub>module load aws-ofi-nccl/1.20.0</sub></p><p><sub>module load libfabric/2.3.1</sub></p> |
+| `Couldn't create domain ... -38`          | 컨테이너에서 CXI 환경과 라이브러리 중복                    | Cray libfabric 우선순위와 `/opt/amazon/efa` 혼입 확인                                                                                          |
+| TCPStore 접속 시간 초과                         | `MASTER_ADDR`, `MASTER_PORT`, rank 0 생존 여부 | 최초 rank 오류를 먼저 확인                                                                                                                     |
+| `EADDRINUSE`                              | 동일 포트를 여러 rank 0이 사용                       | Wrapper의 Slurm rank 전달과 중복 launcher 확인                                                                                                |
+
+
+
+
+
+
+
+### 7. 스케줄러(SLURM)를 통한 작업 실행
 
 스케줄러(Slurm)를 통해 컨테이너 작업을 제출하는 방법입니다. 먼저 컨테이너  런타임에 따라 스크립트를 작성합니다.
 
-#### 6.1. 작업 유형 별 예제
+#### 7.1. 작업 유형 별 예제
 
 사용자는 관심 있는 작업 유형의 예제 디렉터리와 예제 실행에 필요한 이미지 파일을 자신의 작업 공간으로 복사합니다.
 
@@ -1103,9 +1145,9 @@ $ cat ds-pyxis-23707.out
 
 
 
-### 7. 참고 자료
+### 8. 참고 자료
 
-#### 7.1 kisti-container 문제 해결
+#### 8.1 kisti-container 문제 해결
 
 **1) 실행 워크플로우**&#x20;
 
