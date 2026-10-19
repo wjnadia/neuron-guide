@@ -390,7 +390,7 @@ Singularity/Apptainer, Enroot(Pyxis)를 모두 지원하며, 노드의 CPU 아�
 
 **2) 주요 옵션**
 
-<table><thead><tr><th width="178.07244873046875">옵션</th><th>값</th><th>설명</th></tr></thead><tbody><tr><td><code>--runtime</code></td><td><code>singularity</code>, <code>apptainer</code>, <code>enroot</code>, <code>pyxis</code></td><td>실행 백엔드</td></tr><tr><td><code>--workload</code></td><td><code>generic</code>, <code>pytorch-dist*</code></td><td>워크로드 별 검증 규칙</td></tr><tr><td><code>--launcher</code></td><td><code>srun-native</code>, <code>torchrun</code></td><td>분산 프로세스 생성 방식**</td></tr><tr><td><code>--local-processes</code></td><td>양의 정수</td><td>노드별 torchrun worker 수</td></tr><tr><td><code>--mpi</code></td><td><code>none</code>, <code>cray</code>, <code>openmpi</code>, <code>auto</code></td><td>MPI 구성</td></tr><tr><td><code>--nccl</code></td><td><code>none</code>, <code>native</code>, <code>ofi</code>, <code>auto</code></td><td>NCCL 전송 구성</td></tr><tr><td><code>--provider</code></td><td></td><td></td></tr><tr><td><code>-B</code>, <code>--bind</code></td><td><code>SRC:DST:MODE</code></td><td>추가 마운트</td></tr><tr><td><code>--env</code></td><td><code>NAME=VALUE</code></td><td>컨테이너에 전달할 환경 변수</td></tr><tr><td><code>--diagnose</code></td><td>값 없음</td><td>rank 0에서 결정된 설정 출력</td></tr><tr><td><code>--doctor</code></td><td>값 없음</td><td>GPU, CXI, OFI 라이브러리 사전 점검</td></tr><tr><td><code>--dry-run</code></td><td>값 없음</td><td>실행하지 않고 최종 명령 출력</td></tr></tbody></table>
+<table><thead><tr><th width="178.07244873046875">옵션</th><th>값</th><th>설명</th></tr></thead><tbody><tr><td><code>--runtime</code></td><td><code>singularity</code>, <code>apptainer</code>, <code>enroot</code>, <code>pyxis</code></td><td>실행 백엔드</td></tr><tr><td><code>--workload</code></td><td><code>generic</code>, <code>pytorch-dist*</code></td><td>워크로드 별 검증 규칙</td></tr><tr><td><code>--launcher</code></td><td><code>srun-native</code>, <code>torchrun</code></td><td>분산 프로세스 생성 방식**</td></tr><tr><td><code>--local-processes</code></td><td>양의 정수</td><td>노드별 torchrun worker 수</td></tr><tr><td><code>--mpi</code></td><td><code>none</code>, <code>cray</code>, <code>openmpi</code>, <code>auto</code></td><td>MPI 구성</td></tr><tr><td><code>--nccl</code></td><td><code>none</code>, <code>native</code>, <code>ofi</code>, <code>auto</code></td><td>NCCL 전송 구성</td></tr><tr><td><code>--provider</code></td><td>cxi</td><td>MPI/NCCL OFI Provider</td></tr><tr><td><code>-B</code>, <code>--bind</code></td><td><code>SRC:DST:MODE</code></td><td>추가 마운트</td></tr><tr><td><code>--env</code></td><td><code>NAME=VALUE</code></td><td>컨테이너에 전달할 환경 변수</td></tr><tr><td><code>--diagnose</code></td><td>값 없음</td><td>rank 0에서 결정된 설정 출력</td></tr><tr><td><code>--doctor</code></td><td>값 없음</td><td>GPU, CXI, OFI 라이브러리 사전 점검</td></tr><tr><td><code>--dry-run</code></td><td>값 없음</td><td>실행하지 않고 최종 명령 출력</td></tr></tbody></table>
 
 \***pytorch-dist** : torch.distributed 기반 분산 학습 (DDP, FSDP, DeepSpeed, NeMo/Megatron 등)
 
@@ -431,34 +431,64 @@ srun kisti-container --runtime pyxis ...
 
 
 
-**4) 다중 노드 NCCL-OFI/CXI**
+**4) 다중 노드 통신 환경 점검**
 
-2노드 이상 GH200 작업은 다음 모듈을 배치 스크립트에서 로드합니다.
+2노드 이상 GPU 계산노드에서 작업은  다음과  같이 배치 스크립트를 실행하여 CXI 및 NCCL 플러그인 등의   통신 환경을 사전 점검할 수 있습니다. aws-ofi-nccl, libfabric, enroot 모듈을 로드하고  kisti-container에서 --nccl ofi --doctor  옵션을 설정해야 합니다.&#x20;
 
-<pre class="language-bash"><code class="lang-bash"><strong>module load aws-ofi-nccl/1.20.0
-</strong>module load libfabric/2.3.1
-</code></pre>
-
-사전 점검:
+**a. 배치 스크립트 예제**
 
 ```bash
+## 다중 노드 통신 환경 점검 배치 스크립트 에제 : kc-node-doctor.sbatch
+#!/bin/bash
+#SBATCH --job-name=kc-node-doctor
+#SBATCH --partition=normal
+#SBATCH --comment="misc;appl=misc"
+#SBATCH --nodes=2
+#SBATCH --ntasks-per-node=2
+#SBATCH --gpus-per-node=4
+#SBATCH --cpus-per-task=72
+#SBATCH --exclusive
+#SBATCH --time=00:30:00
+#SBATCH --output=%x-%j.out
+#SBATCH --error=%x-%j.err
+
+IMAGE=/apps/common/kisti-container/images/pytorch-25.03-py3-aarch64.sqsh
+
+module load aws-ofi-nccl/1.20.0
+module load libfabric/2.3.1
+module load enroot/4.2.0
+
+## 계산노드의 CXI 및 NCC 플러그인 등의 통신 환경 점검을 위해 --nccl ofi --doctor 옵션 설정
 srun --nodes=2 --ntasks=2 --ntasks-per-node=1 \
   --gpus-per-node=4 --gpu-bind=none --gres-flags=allow-task-sharing \
   --mpi=none \
   /apps/common/kisti-container/bin/kisti-container \
-    --runtime enroot --nccl ofi --doctor IMAGE.sqsh
+    --runtime enroot --nccl ofi --doctor \ 
+    "$IMAGE"
 ```
 
-정상 상태에서는 각 노드에서 다음 항목이 `PASS`로 표시됩니다.
+**b. 배치 작업 제출 및 결과 확인**
 
+```bash
+$ sbatch kc-node-doctor.sbatch
 ```
-NVIDIA=PASS
-CXI=PASS
-NCCL_PLUGIN=PASS
-LIBFABRIC=PASS
-LIBCXI=PASS
-DOCTOR_PASS
+
+정상 상태에서는 작업 출력 파일에 CXI, NCCL\_PLUGIN, LIBFABRIC, LIBCXI가 `PASS`로 표시되고 라이브러리 경로도 출력 됩니다.
+
+```bash
+$ cat kc-node-doctor-*.out
+[kisti-container] doctor platform=aarch64-gpu workload=pytorch-dist launcher=srun-native
+[kisti-container] doctor host_arch=aarch64 image_arch=unknown expected_arch=aarch64
+[kisti-container] doctor CXI=PASS
+[kisti-container] doctor NCCL_PLUGIN=PASS /apps/library/aws-ofi-nccl/1.20.0/aarch64/lib/libnccl-net-ofi.so
+[kisti-container] doctor LIBFABRIC=PASS /opt/cray/libfabric/2.3.1/lib64/libfabric.so.1
+[kisti-container] doctor LIBCXI=PASS /usr/lib64/libcxi.so.1
+[kisti-container] doctor /dev/shm=tmpfs           239G   64K  239G   1% /dev/shm
+[kisti-container] doctor memlock=unlimited
+[kisti-container] DOCTOR_PASS
 ```
+
+###
 
 ### 6. 스케줄러(SLURM)를 통한 작업 실행
 
@@ -694,7 +724,7 @@ srun --mpi=none --kill-on-bad-exit=1 --distribution=block:block \
 
 같은 작업을 kisti-container로 실행합니다. 위에서 직접 지정했던 설정을 래퍼가 대신 처리하므로 `MASTER_ADDR`과 `MASTER_PORT` 계산이 필요 없습니다.
 
-`--nccl ofi`는 NCCL이 Slingshot을 쓰도록 통신 플러그인과 라이브러리를 연결합니다. 이 예제가 Slingshot 스택이 없는 일반 이미지를 쓰면서도 동작하는 이유이며, 호스트의 `aws-ofi-nccl`과 `libfabric` 모듈을 로드하는 것도 이 때문입니다. `--diagnose`를 붙이면 적용된 설정이 실행 전에 출력됩니다.
+`--nccl ofi`는 NCCL이 Slingshot을 쓰도록 통신 플러그인과 라이브러리를 연결합니다. 이 예제가 Slingshot 스택이 없는 일반 이미지를 쓰면서도 동작하는 이유이며, 호스트의 `aws-ofi-nccl`과 `libfabric` 모듈을 로드하는 것도 이 때문입니다. `--diagnose`를 붙이면 적용된 설정이 실행 전에 출력됩니다. 통신 설정을 확인하려면   `--debug-nccl` 옵션을 붙이고 출력에서 `Selected provider is cxi`가 나오는지 확인합니다.
 
 ```bash
 ## kisti-container Pyxis 작업 스크립트 예제
@@ -1075,7 +1105,7 @@ $ cat ds-pyxis-23707.out
 
 ### 7. 참고 자료
 
-#### 7.1 kisti-container&#x20;
+#### 7.1 kisti-container 문제 해결
 
 **1) 실행 워크플로우**&#x20;
 
@@ -1088,8 +1118,6 @@ $ cat ds-pyxis-23707.out
 Slurm 작업에서 직접 런타임은 task 안에서 실행하고, Pyxis는 Wrapper가 srun을 생성
 
 <figure><img src="../.gitbook/assets/image (22).png" alt=""><figcaption></figcaption></figure>
-
-
 
 **3) 문제 해결**
 
