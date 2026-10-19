@@ -191,7 +191,7 @@ myhub 를 사용하기 위해서는 먼저  웹  브라우저에서 [**https://m
 $ podman tag localhost/pytorch:deepspeed-aarch64 docker.io/[Username]/pytorch:deepspeed-aarch64
 ```
 
-### **2) myhub**
+#### **2) myhub**
 
 ```
 # 로컬 이미지(pytorch:deepspeed-aarch64)를 myhub 형식으로 태그
@@ -583,7 +583,7 @@ kisti-container를 사용하는 MPI 작업은 --workload=generic 옵션(기본 �
 #!/bin/bash
 #SBATCH --job-name=gh200-omb-sing
 #SBATCH --comment="field=misc;appl=misc"
-#SBATCH --partition=gpu
+#SBATCH --partition=normal
 #SBATCH --nodes=2
 #SBATCH --ntasks-per-node=4
 #SBATCH --gpus-per-node=4
