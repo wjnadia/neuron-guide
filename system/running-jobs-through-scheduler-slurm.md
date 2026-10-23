@@ -381,7 +381,7 @@ exit 0
   **cas\_v100\_4** 파티션의 gpu 2노드(각각 2core, 2gpu)를 interactive 용도로 사용
 
 ```shell-session
-$ salloc --partition=cas_v100_4 --nodes=2 --ntasks-per-node=2 --gres=gpu:2 --comment=="field=<분야>;appl=<프로그램>" #분야 및 프로그램별 SBATCH 옵션 이름표 참고
+$ salloc --partition=cas_v100_4 --nodes=2 --ntasks-per-node=2 --gres=gpu:2 --comment="field=<분야>;appl=<프로그램>" #분야 및 프로그램별 SBATCH 옵션 이름표 참고
 ```
 
 <mark style="color:red;">**※ 인터렉티브 작업의 walltime은 8시간으로 고정됨**</mark>
