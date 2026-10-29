@@ -32,7 +32,7 @@
 
 ## External Link
 
-* [Nurion Guide(Eng)](https://docs-ksc.gitbook.io/nurion-user-guide-eng/)
+* [Hangang Guide(Eng)](https://app.gitbook.com/o/TiymW3ZSKXi5K5jUWvfh/s/L8GwFRvc4RurtCOy3dj9/)
 * [Neuron Guide(Eng)](https://docs-ksc.gitbook.io/neuron-user-guide-eng/)
 
 ***
